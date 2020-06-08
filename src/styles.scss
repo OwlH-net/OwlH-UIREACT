@@ -1,0 +1,28 @@
+//$rojo: yellow;
+
+// h3 {
+//   color: $rojo;
+// }
+
+.card-hover:hover {
+  opacity: 0.5;
+}
+
+.red-text {
+  color: red;
+}
+
+.backgroundLogin {
+  background: GhostWhite;
+  width: 100%;
+  height: 100%;
+}
+
+.hide {
+  display: none;
+}
+
+a.active {
+  text-decoration: none;
+  color: orange;
+}
