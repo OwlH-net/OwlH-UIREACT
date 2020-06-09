@@ -6,19 +6,6 @@ const initialState = {
     "port":"35000"
 }
 
-function addMeme(state, meme) {
-  // meme.id = uuidV4()
-  return {
-    listaMemes: [...state.listaMemes, meme]
-  }
-}
-
-function deleteMeme(state, idMeme) {
-  const nuevaListaMemes = state.listaMemes.filter(meme => meme.id != idMeme);
-  return {
-    listaMemes: nuevaListaMemes
-  }
-}
 
 function loadConfigurationFrom(state, config) {
   return {
