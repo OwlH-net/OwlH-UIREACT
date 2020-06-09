@@ -6,6 +6,9 @@ export const InitialState = {
         "token":""
     },
     "nodes": {
+
+    },
+    "masters":{
         
     }
 }
