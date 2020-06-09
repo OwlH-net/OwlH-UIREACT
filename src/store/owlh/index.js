@@ -1,10 +1,7 @@
 import * as ActionTypes from './action-types';
-import {v4 as uuidV4} from 'uuid'
+import { InitialState } from './initialState'
 
-const initialState = {
-    "master":"3.3.3.3",
-    "port":"35000"
-}
+const initialState = InitialState
 
 
 function loadConfigurationFrom(state, config) {
