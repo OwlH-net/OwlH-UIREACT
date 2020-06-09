@@ -12,6 +12,20 @@
   color: red;
 }
 
+.green-text {
+  color: lightgreen;
+}
+
+.iconBlue {
+  color: dodgerblue;
+  cursor: pointer;
+}
+
+.iconRed {
+  color: red;
+  cursor: pointer;
+}
+
 .backgroundLogin {
   background: GhostWhite;
   width: 100%;
@@ -25,4 +39,9 @@
 a.active {
   text-decoration: none;
   color: orange;
+}
+
+.AlignRight{
+  display: flex; 
+  justify-content: flex-end;
 }

@@ -7,6 +7,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 import configStore from './store/configStore';
 
 
+
+
 const store = configStore();
 
 ReactDOM.render(
