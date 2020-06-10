@@ -8,7 +8,40 @@
   opacity: 0.5;
 }
 
+.red-text {
+  color: red;
+}
+
+.green-text {
+  color: lightgreen;
+}
+
+.iconBlue {
+  color: dodgerblue;
+  cursor: pointer;
+}
+
+.iconRed {
+  color: red;
+  cursor: pointer;
+}
+
+.backgroundLogin {
+  background: GhostWhite;
+  width: 100%;
+  height: 100%;
+}
+
+.hide {
+  display: none;
+}
+
 a.active {
   text-decoration: none;
   color: orange;
+}
+
+.AlignRight{
+  display: flex; 
+  justify-content: flex-end;
 }
