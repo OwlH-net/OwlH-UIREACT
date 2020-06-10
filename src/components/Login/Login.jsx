@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { userLogin, currentConfiguration } from '../../store/owlh/actions'
-import Modal from '../Utils/Modal'
+import { userLogin, currentConfiguration } from '../../store/owlh/actions';
+import Modal from '../Utils/Modal';
 import { Route, Link, BrowserRouter, NavLink } from 'react-router-dom';
-// import logo from './logo2.png';
+import Avatar from './Avatar';
+import { BsGearFill } from "react-icons/bs";
 
 export default class Login extends Component {
     constructor(props) {
@@ -59,8 +60,7 @@ export default class Login extends Component {
                     
                 <div className="d-inline-block w-75 my-5 p-5 bg-white rounded shadow-sm">
                     <div className="mb-3">
-                        {/* <img src={logo} alt="Logo"></img> */}
-                        <img alt="Logo"></img>
+                        <Avatar />
                     </div>
                     <h3 className=" pb-2 mb-0"><b>OwlH Login</b></h3>
                     <div className="media text-muted pt-3">
@@ -81,12 +81,11 @@ export default class Login extends Component {
                     </div>
                 </div>
                 <div>
-                    <NavLink to="/ConfigurationForm" type="button" className="m-3 p-3 w-25 btn btn-success" id="btn-login"><h5>Configuration form</h5></NavLink>
+                    <NavLink to="/ConfigurationForm" type="button" className="border  border-primary m-3 p-3 btn btn-light" id="btn-login"><h5> <BsGearFill size={25} className="iconBlue"/></h5></NavLink>
                     <NavLink to="/Index" type="button" className="m-3 p-3 w-25 btn btn-primary" id="btn-login"><h5>Login</h5></NavLink>
                     {/* <button onClick={() => {}} type="button" className="m-3 p-3 w-25 btn btn-success" id="btn-login"><h5>Configuration form</h5></button>
                     <button onClick={this.Login} type="button" className="m-3 p-3 w-25 btn btn-primary" id="btn-login"><h5>Login</h5></button> */}
                 </div>
-                <br />
                 {/* <a id="check-status-login" className="btn btn-success float-center mt-3 text-white" style="display:none;" onclick="checkStatus()" target="_blank">Check Master API connection</a> */}
             </div>
         );
