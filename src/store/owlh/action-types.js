@@ -1,3 +1,7 @@
 export const ADD_NODE = 'ADD_NODE'
 export const LOAD_CONF = 'LOAD_CONF'
 export const SAVE_CONF = 'SAVE_CONF'
+export const LOAD_MASTERS = 'LOAD_MASTERS'
+export const ADD_MASTER = 'ADD_MASTER'
+export const DELETE_MASTER = 'DELETE_MASTER'
+export const TOGGLE_MASTER = 'TOGGLE_MASTER'

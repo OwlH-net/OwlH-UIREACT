@@ -10,11 +10,46 @@ function loadConfigurationFrom(state, config) {
     port: config["port"]
   }
 }
+function loadCurrentMasters(state, data) {
+  return {
+    masterList: data
+  }
+}
+function addNewMaster(state, data) {
+  console.log("Current STATE")
+  console.log(state)
+  return {
+    masterList: [...state.masterList, data]
+  }
+}
+function deleteMasterElement(state, idMaster) {
+  console.log("deleteMasterElement Current STATE")
+  console.log(state)
+  const newMasterList = state.masterList.filter(master => master.name != idMaster);
+
+  return {
+    masterList: newMasterList 
+  }
+}
+function toggleMasterElement(state, idMaster) {
+  console.log("toggleMasterElement Current STATE")
+  console.log(state)
+  const newMasterList = state.masterList.map(master => {
+    if(master.name == idMaster){
+      master.active = !master.active
+    }
+  })
+        
+  return {
+    masterList: [...state.masterList]
+  }
+}
 
 export default function owlh(state = initialState, action) {
-  // console.log('RED: ', action)
-  // console.log('STATE: ', state)
-  console.log(action)
+  console.log("CONSOLE STATE: ")
+  console.log(state)
+  console.log("CASE ACTION TYPE")
+  console.log(action.type)
   console.log("OWLH REDUCER")
   switch(action.type) {
     case ActionTypes.ADD_NODE:
@@ -24,6 +59,18 @@ export default function owlh(state = initialState, action) {
       console.log(state)
       console.log(action.payload)
       return loadConfigurationFrom(state, action.payload);
+    case ActionTypes.LOAD_MASTERS:
+      console.log("LOAD_MASTERS CASE")
+      return loadCurrentMasters(state, action.payload)
+    case ActionTypes.ADD_MASTER:
+      console.log("ADD_MASTER CASE")
+      return addNewMaster(state, action.payload)
+    case ActionTypes.DELETE_MASTER:
+      console.log("DELETE_MASTER CASE")
+      return deleteMasterElement(state, action.payload)
+    case ActionTypes.TOGGLE_MASTER:
+      console.log("TOGGLE_MASTER CASE")
+      return toggleMasterElement(state, action.payload)
     default:
       return state;
   }
