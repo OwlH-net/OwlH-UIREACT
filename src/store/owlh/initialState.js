@@ -1,4 +1,4 @@
-[
+export const InitialState = [
     {
         "name":"master num 1",
         "ip":"localhost",

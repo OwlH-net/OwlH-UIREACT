@@ -1,61 +1,69 @@
-import React from 'react';
+import React, { Component } from 'react'
 import { Route, Link, BrowserRouter, NavLink } from 'react-router-dom';
 import Master from './Master'
+import { loadCurrentMasters } from '../../store/owlh/actions';
+import { connect } from 'react-redux';
 
+class MasterList extends Component {
+    constructor(props) {
+        super();
+    }
 
-const MasterList = (props) => {
+    componentDidMount(){
+        //Background color
+        console.log("DidMount")
+        this.props.loadMasters()
+    }
 
-    const masterList = [
-            {
-                name: "master 1",
-                ip: "192.160.1.110",
-                port: "50001",
-                description: "first master item",
-                active: true,
-                status: "Online"
-            },
-            {
-                name: "master 3",
-                ip: "192.160.1.111",
-                port: "50001",
-                description: "another master item",
-                active: false,
-                status: "Online"
-            },
-            {
-                name: "master 4",
-                ip: "192.160.1.114",
-                port: "50001",
-                description: "n- master item",
-                active: false,
-                status: "Offline"
-            },
-        ]
+    render() {
+        console.log("MasterList props")
+        console.log(this.props.masterList)
 
-    const currentMasters = masterList.map(s => {
-      return <Master key={s.name} {...s} />
-    })
+        const items = (this.props.masterList || []).map(item =>{
+                return <Master key={item.name} {...item} />           
+            }   
+        );
+        console.log("======================================");
+        console.log(items);
+        console.log(items);
+        console.log("======================================");
+        
 
-  return (
-    <div>
-    <h4>Master List</h4>
-        <table className="table table-hover" >
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>IP</th>
-                    <th>Port</th>
-                    <th>Active</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {currentMasters}
-            </tbody>
-        </table>
-    </div>
-  )
+        return (
+            <div>
+                <h4>Master List</h4>
+                <table className="table table-hover" >
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>IP</th>
+                            <th>Port</th>
+                            <th>Active</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        { items }
+                    </tbody>
+                </table>
+            </div>
+        )
+    }
 }
 
-export default MasterList;
+const mapStateToProps = (state) => {
+    return {
+        masterList: state.owlhReducer.masterList
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    const loadMasters = () => {return loadCurrentMasters()}
+  return {
+    loadMasters: () => dispatch(loadMasters())
+  }
+}
+
+const withProps = connect(mapStateToProps, mapDispatchToProps);
+export default withProps(MasterList)

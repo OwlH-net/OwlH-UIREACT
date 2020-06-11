@@ -4,10 +4,8 @@ import MasterList from './MasterList'
 import NewMaster from './NewMaster'
 
 export default class ConfigurationForm extends Component {
-
-    componentDidMount(){
-        //Background color
-        document.body.style = 'background: GhostWhite;';
+    constructor(props) {
+        super();
     }
 
     render() {
