@@ -1,6 +1,7 @@
 import React from 'react';
-import Login from './Login/Login'
-import Configuration from './Configuration'
+import Login from './Login/Login';
+import ConfigurationForm from './Login/ConfigurationForm';
+import {Switch, BrowserRouter, Route} from 'react-router-dom';
 
 class App extends React.Component {
     constructor (props) {
@@ -8,18 +9,20 @@ class App extends React.Component {
         this.state = {
             logged: false,
         } 
-
     }
 
   render() {
     return (
       <div>
-        {!this.state.logged ? <Login /> : null}
-        <hr />
-        <Configuration />
+      <BrowserRouter>
+          <Switch>
+            <Route path="/" exact component={ Login }/>
+            <Route path="/ConfigurationForm" exact component={ ConfigurationForm }/>
+          </Switch>
+      </BrowserRouter>
       </div>
     )
   }
 }
 
-export default App;
+export default App
