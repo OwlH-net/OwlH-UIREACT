@@ -10,18 +10,27 @@ function loadConfigurationFrom(state, config) {
     port: config["port"]
   }
 }
+
 function loadCurrentMasters(state, data) {
   return {
     masterList: data
   }
 }
-function addNewMaster(state, data) {
+
+function addNewMaster(state, nMaster) {
   console.log("Current STATE")
   console.log(state)
+  console.log("new master")
+  console.log(nMaster)
+    // if data.name exists, then we are editing
+  const newMasterList = state.masterList.filter(master => master.name != nMaster.name);
+  console.log(newMasterList)
+
   return {
-    masterList: [...state.masterList, data]
+    masterList: [...newMasterList, nMaster]
   }
 }
+
 function deleteMasterElement(state, idMaster) {
   console.log("deleteMasterElement Current STATE")
   console.log(state)
@@ -31,6 +40,7 @@ function deleteMasterElement(state, idMaster) {
     masterList: newMasterList 
   }
 }
+
 function toggleMasterElement(state, idMaster) {
   console.log("toggleMasterElement Current STATE")
   console.log(state)
@@ -52,8 +62,6 @@ export default function owlh(state = initialState, action) {
   console.log(action.type)
   console.log("OWLH REDUCER")
   switch(action.type) {
-    case ActionTypes.ADD_NODE:
-      return addMeme(state, action.payload);
     case ActionTypes.LOAD_CONF:
       console.log("LOAD_CONF CASE")
       console.log(state)

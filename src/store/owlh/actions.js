@@ -76,6 +76,7 @@ export function loadCurrentMasters(){
   const data = [
     {
         "name":"master num 1",
+        "desc":"master num 1 desc",
         "ip":"localhost",
         "port":"50001",
         "active":true,
@@ -83,6 +84,7 @@ export function loadCurrentMasters(){
     },
     {
         "name":"master num 2",
+        "desc":"master num 2 desc",
         "ip":"127.0.0.1",
         "port":"50002",
         "active":false,
@@ -110,20 +112,6 @@ function getLoadCurrentMasters(data) {
 }
 
 
-
-
-
-
-// export function newMaster(data){
-//   console.log("newMaster action")
-//   console.log(data)
-//   return (dispatch) => {
-//     dispatch({
-//       type: ActionTypes.ADD_MASTER,
-//       payload: data
-//     })
-//   }
-// }
 export function newMaster(data){
   console.log("newMaster -- action")
   console.log(data)

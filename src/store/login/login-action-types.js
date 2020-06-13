@@ -1,0 +1,1 @@
+export const GET_MASTER_DATA_EDIT = 'GET_MASTER_DATA_EDIT'
