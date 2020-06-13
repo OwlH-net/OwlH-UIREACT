@@ -22,6 +22,8 @@ readConfiguration()
 console.log(url)
 
 function saveConfiguration(data) {
+  console.log("save configuration")
+  console.log(data)
   configuration = JSON.stringify(data);
   fs.writeFileSync(configFile, configuration);
   readConfiguration()

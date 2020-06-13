@@ -1,5 +1,6 @@
 import * as ActionTypes from './action-types';
 import { InitialState } from './initialState'
+import { saveCurrentMasters } from './actions'
 
 const initialState = InitialState
 
@@ -25,9 +26,12 @@ function addNewMaster(state, nMaster) {
     // if data.name exists, then we are editing
   const newMasterList = state.masterList.filter(master => master.name != nMaster.name);
   console.log(newMasterList)
+  const data = [...newMasterList, nMaster]
+  console.log("save new master list")
+  saveCurrentMasters(data)
 
   return {
-    masterList: [...newMasterList, nMaster]
+    masterList: data
   }
 }
 
@@ -35,7 +39,7 @@ function deleteMasterElement(state, idMaster) {
   console.log("deleteMasterElement Current STATE")
   console.log(state)
   const newMasterList = state.masterList.filter(master => master.name != idMaster);
-
+  saveCurrentMasters(newMasterList)
   return {
     masterList: newMasterList 
   }
@@ -66,7 +70,7 @@ export default function owlh(state = initialState, action) {
       console.log("LOAD_CONF CASE")
       console.log(state)
       console.log(action.payload)
-      return loadConfigurationFrom(state, action.payload);
+      return loadCurrentMasters(state, action.payload);
     case ActionTypes.LOAD_MASTERS:
       console.log("LOAD_MASTERS CASE")
       return loadCurrentMasters(state, action.payload)

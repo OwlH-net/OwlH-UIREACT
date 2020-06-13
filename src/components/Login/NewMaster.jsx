@@ -25,8 +25,12 @@ const NewMaster = (props) => {
     })
   }, [props.editMaster]);
 
-  const getFormData = () => {
-    props.addMaster(master)
+  useEffect(() => {
+    resetFormData()
+  }, []);
+
+
+  const resetFormData = () => { 
     setMaster({
       name: "",
       desc: "",
@@ -34,6 +38,12 @@ const NewMaster = (props) => {
       ip: "",
       active: false
     })
+  }
+
+  const getFormData = () => {
+    if (master.name == "") {return}
+    props.addMaster(master)
+    resetFormData()
   };
 
   const handleChange = (e) => {
@@ -53,6 +63,7 @@ const NewMaster = (props) => {
             <Input id="desc" name="desc" caption="Master Description" inputType="text" value={master.desc|| ''} onChange={handleChange}/>
             <div className="AlignRight input-group">
                 {/* <NavLink to="/" type="button" className="m-3 p-2 w-25 btn btn-primary" onClick={getFormData()}><h5>Add</h5></NavLink> */}
+                <button type="button" className="m-3 p-2 w-25 btn btn-danger" onClick={resetFormData}><h5>Cancel</h5></button>
                 <button type="button" className="m-3 p-2 w-25 btn btn-primary" onClick={getFormData}><h5>Add</h5></button>
             </div>
 

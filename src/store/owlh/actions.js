@@ -40,6 +40,16 @@ function getLoadConfiguration(data) {
   }
 }
 
+export function saveCurrentMasters(data){
+  console.log("PUT current Master List")
+  console.log(data)
+    axios.put('/api/config', JSON.stringify(data), config)
+    .then(resp => {
+      console.log("master save action done")
+      console.log(resp)
+    })
+}
+
 export function saveCurrentConfiguration(data){
   console.log("PUT current config")
   console.log(data)
@@ -73,24 +83,6 @@ export function crearAddMemeAction(meme) {
 
 //loadCurrentMasters
 export function loadCurrentMasters(){
-  const data = [
-    {
-        "name":"master num 1",
-        "desc":"master num 1 desc",
-        "ip":"localhost",
-        "port":"50001",
-        "active":true,
-        "status":"Online"
-    },
-    {
-        "name":"master num 2",
-        "desc":"master num 2 desc",
-        "ip":"127.0.0.1",
-        "port":"50002",
-        "active":false,
-        "status":"Online"
-    }
-  ]
   console.log("GET current masters")
   return (dispatch) => {
     // axios.get('/api/config')
