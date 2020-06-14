@@ -11,9 +11,15 @@ let httsAgent = new https.Agent({ rejectUnauthorized: false });
 function readConfiguration() {
   let rawdata = fs.readFileSync(configFile);
   config = JSON.parse(rawdata);
+  
+
+  config.map(master => {
+    if (master.active) {
+      baseUrl = `https://${master.ip}:${master.port}`
+    }
+  })
   console.log(config["master"]);
 
-  const baseUrl = `https://${config["master"]}:${config["port"]}`
   const recurso = '/v1'
   url = `${baseUrl}${recurso}`
 }
@@ -27,14 +33,6 @@ function saveConfiguration(data) {
   configuration = JSON.stringify(data);
   fs.writeFileSync(configFile, configuration);
   readConfiguration()
-}
-
-function trySave() {
-  let configuration = {
-      "master":"195.45.31.219",
-      "port":"50003"
-  };
-  saveConfiguration(configuration)
 }
 
 function getConfiguration() {
