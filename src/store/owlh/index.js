@@ -2,6 +2,7 @@ import * as ActionTypes from './action-types';
 import { InitialState } from './initialState'
 import { saveCurrentMasters } from './actions'
 
+
 const initialState = InitialState
 
 
@@ -45,15 +46,17 @@ function deleteMasterElement(state, idMaster) {
   }
 }
 
-function toggleMasterElement(state, idMaster) {
+function setActiveMaster(state, idMaster) {
   console.log("toggleMasterElement Current STATE")
   console.log(state)
   const newMasterList = state.masterList.map(master => {
     if(master.name == idMaster){
       master.active = !master.active
+    } else {
+      master.active = false
     }
   })
-        
+  saveCurrentMasters(state.masterList)
   return {
     masterList: [...state.masterList]
   }
@@ -68,8 +71,6 @@ export default function owlh(state = initialState, action) {
   switch(action.type) {
     case ActionTypes.LOAD_CONF:
       console.log("LOAD_CONF CASE")
-      console.log(state)
-      console.log(action.payload)
       return loadCurrentMasters(state, action.payload);
     case ActionTypes.LOAD_MASTERS:
       console.log("LOAD_MASTERS CASE")
@@ -80,9 +81,9 @@ export default function owlh(state = initialState, action) {
     case ActionTypes.DELETE_MASTER:
       console.log("DELETE_MASTER CASE")
       return deleteMasterElement(state, action.payload)
-    case ActionTypes.TOGGLE_MASTER:
-      console.log("TOGGLE_MASTER CASE")
-      return toggleMasterElement(state, action.payload)
+    case ActionTypes.SET_ACTIVE_MASTER:
+      console.log("SET_ACTIVE_MASTER CASE")
+      return setActiveMaster(state, action.payload)
     default:
       return state;
   }

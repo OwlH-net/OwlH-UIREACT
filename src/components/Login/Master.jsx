@@ -1,7 +1,7 @@
 import React from 'react';
 import { BsPencilSquare, BsCheck, BsBookmarkFill, BsTrashFill } from "react-icons/bs";
 import { deleteMaster, toggleMaster } from '../../store/owlh/actions';
-import { getMasterDataToEdit } from '../../store/login/actions'
+import { getMasterDataToEdit, loginSetActiveMaster } from '../../store/login/actions'
 import { connect, useStore } from 'react-redux';
 
 
@@ -10,8 +10,13 @@ const Master = (props) => {
     console.log(masterID)
     props.masterDeleteProp(masterID)
   }
-  const activeMaster = (masterID) => {
+
+  const activeMaster = (masterList, masterID) => {
     console.log(masterID)
+    const newActiveMaster = masterList.filter(master => master.name == masterID);
+
+    props.loginSetActiveMaster(newActiveMaster)
+
     props.masterActiveProp(masterID)
   }
   
@@ -39,7 +44,7 @@ const Master = (props) => {
       <td className={props.status == "Online" ? "green-text": "red-text"}>{props.status}</td>
       <td>
           <span onClick={() => {editMaster(masterList, props.name)}}><BsPencilSquare size={25} className="iconBlue"/></span>
-          <span onClick={() => {activeMaster(props.name)}}><BsBookmarkFill size={25} className="iconBlue"/></span>
+          <span onClick={() => {activeMaster(masterList, props.name)}}><BsBookmarkFill size={25} className="iconBlue"/></span>
           <span onClick={() => {masterDelete(props.name)}}><BsTrashFill size={25} className="iconRed"/></span>
       </td>
     </tr>
@@ -52,10 +57,12 @@ const mapDispatchToProps = dispatch => {
   console.log("dispatch to props")
   const rmMaster = (masterID) => {return deleteMaster(masterID)}
   const activeMaster = (masterID) => {return toggleMaster(masterID)}
+  const setActiveMaster = (master) => {return loginSetActiveMaster(master)}
   const midGetMasterDataToEdit = (masterID) => {return getMasterDataToEdit(masterID)}
   return {
     masterDeleteProp: (masterID) => dispatch(rmMaster(masterID)),
     masterActiveProp: (masterID) => dispatch(activeMaster(masterID)),
+    loginSetActiveMaster: (master) => dispatch(setActiveMaster(master)),
     locGetMasterDataToEdit: (masterID) => dispatch(midGetMasterDataToEdit(masterID))
 
   }

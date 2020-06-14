@@ -1,8 +1,6 @@
 import * as ActionTypes from './action-types';
 import axios from 'axios';
 
-const url = 'http://localhost:8081/api/memes'
-
 const config = {
   headers: {
     'Content-Type': 'application/json'
@@ -145,9 +143,10 @@ export function toggleMaster(data){
     dispatch(accToggleMaster(data))
   }
 }
+
 function accToggleMaster(data) {
   return {
-    type: ActionTypes.TOGGLE_MASTER,
+    type: ActionTypes.SET_ACTIVE_MASTER,
     payload: data
   }
 }
