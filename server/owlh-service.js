@@ -12,13 +12,11 @@ function readConfiguration() {
   let rawdata = fs.readFileSync(configFile);
   config = JSON.parse(rawdata);
   
-
   config.map(master => {
     if (master.active) {
       baseUrl = `https://${master.ip}:${master.port}`
     }
   })
-  console.log(config["master"]);
 
   const recurso = '/v1'
   url = `${baseUrl}${recurso}`
