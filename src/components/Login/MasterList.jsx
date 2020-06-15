@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Route, Link, BrowserRouter, NavLink } from 'react-router-dom';
 import Master from './Master'
-import { loadCurrentMasters } from '../../store/owlh/actions';
+import { currentConfiguration } from '../../store/owlh/actions';
 import { connect } from 'react-redux';
 
 class MasterList extends Component {
@@ -59,7 +59,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = dispatch => {
-    const loadMasters = () => {return loadCurrentMasters()}
+    const loadMasters = () => {return currentConfiguration()}
   return {
     loadMasters: () => dispatch(loadMasters())
   }

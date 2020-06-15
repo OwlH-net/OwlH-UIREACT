@@ -1,8 +1,6 @@
 import * as ActionTypes from './action-types';
 import axios from 'axios';
 
-const url = 'http://localhost:8081/api/memes'
-
 const config = {
   headers: {
     'Content-Type': 'application/json'
@@ -40,6 +38,16 @@ function getLoadConfiguration(data) {
   }
 }
 
+export function saveCurrentMasters(data){
+  console.log("PUT current Master List")
+  console.log(data)
+    axios.put('/api/config', JSON.stringify(data), config)
+    .then(resp => {
+      console.log("master save action done")
+      console.log(resp)
+    })
+}
+
 export function saveCurrentConfiguration(data){
   console.log("PUT current config")
   console.log(data)
@@ -73,22 +81,6 @@ export function crearAddMemeAction(meme) {
 
 //loadCurrentMasters
 export function loadCurrentMasters(){
-  const data = [
-    {
-        "name":"master num 1",
-        "ip":"localhost",
-        "port":"50001",
-        "active":true,
-        "status":"Online"
-    },
-    {
-        "name":"master num 2",
-        "ip":"127.0.0.1",
-        "port":"50002",
-        "active":false,
-        "status":"Online"
-    }
-  ]
   console.log("GET current masters")
   return (dispatch) => {
     // axios.get('/api/config')
@@ -110,20 +102,6 @@ function getLoadCurrentMasters(data) {
 }
 
 
-
-
-
-
-// export function newMaster(data){
-//   console.log("newMaster action")
-//   console.log(data)
-//   return (dispatch) => {
-//     dispatch({
-//       type: ActionTypes.ADD_MASTER,
-//       payload: data
-//     })
-//   }
-// }
 export function newMaster(data){
   console.log("newMaster -- action")
   console.log(data)
@@ -165,9 +143,10 @@ export function toggleMaster(data){
     dispatch(accToggleMaster(data))
   }
 }
+
 function accToggleMaster(data) {
   return {
-    type: ActionTypes.TOGGLE_MASTER,
+    type: ActionTypes.SET_ACTIVE_MASTER,
     payload: data
   }
 }

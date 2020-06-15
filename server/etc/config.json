@@ -1,16 +1,17 @@
 [
     {
-        "name":"master num 1",
+        "name":"master num 10",
         "ip":"localhost",
         "port":"50001",
         "active":true,
-        "status":"Online"
+        "desc":"master initial"
     },
     {
-        "name":"master num 2",
+        "name":"master num 21",
         "ip":"127.0.0.1",
         "port":"50002",
         "active":false,
-        "status":"Online"
+        "desc":"master initial"
+
     }
 ]
