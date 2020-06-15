@@ -4,16 +4,17 @@ import Groups from './Groups'
 import OpenRules from './OpenRules'
 import Master from './Master'
 import Config from './Config'
+import { Route, Link, BrowserRouter, NavLink } from 'react-router-dom';
 
 const Menu = () => {
     return (
         <div>
             <nav className="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
                 <img className="mr-3" src="/assets/img/AvatarOwlHOrange.png" alt="" height="30" />
-                <a className="navbar-brand mr-auto mr-lg-0" href="nodes.html">
+                <NavLink to="/Nodes" className="navbar-brand mr-auto mr-lg-0">
                     <small>Master </small>
                     <i id="menu-title" className="text-warning">Test</i> | 
-                </a>  
+                </NavLink>  
             
                 <div className="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
                     <ul className="navbar-nav mr-auto">
@@ -48,7 +49,7 @@ const Menu = () => {
                         </div>
                     </div>
                 </div>
-                <p id="current-version-text" className="text-justify align-middle text-white">v:</p><p className="text-justify text-white mr-4" id="current-version-show">0.15</p>
+                <a className="text-justify align-middle text-white">v:</a><a href="https://github.com/OwlH-net/NEWS/blob/master/README.md" className="text-justify text-white mr-4" >0.15</a>
             </nav>
         </div>
     )

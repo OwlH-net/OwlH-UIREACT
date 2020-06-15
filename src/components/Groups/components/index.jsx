@@ -7,11 +7,7 @@ const index = () => {
         <div>
             <Menu />   
             <br />
-            <Banner />     
-            <h1>Groups</h1>
-            <h1>Groups</h1>
-            <h1>Groups</h1>
-            <h1>Groups</h1>
+            <Banner title="Groups" subtitle="Summary" />     
             <h1>Groups</h1>
         </div>
     )

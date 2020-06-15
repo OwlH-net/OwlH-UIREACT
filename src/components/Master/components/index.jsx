@@ -7,7 +7,7 @@ const index = () => {
         <div>
             <Menu />
             <br />
-            <Banner />
+            <Banner title="Master" subtitle="Summary" />
             <h1>Master</h1>
             <h1>Master</h1>
             <h1>Master</h1>
