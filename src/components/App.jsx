@@ -8,7 +8,9 @@ class App extends React.Component {
         super();
         this.state = {
             logged: false,
-        } 
+        }
+
+         
     }
 
 
