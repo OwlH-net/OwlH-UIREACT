@@ -8,7 +8,9 @@ const index = () => {
             <Menu />   
             <br />
             <Banner title="Groups" subtitle="Summary" />     
-            <h1>Groups</h1>
+            <div className="m-3 p-3">
+                <h1>Groups</h1>
+            </div>
         </div>
     )
 }

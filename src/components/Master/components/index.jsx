@@ -8,11 +8,9 @@ const index = () => {
             <Menu />
             <br />
             <Banner title="Master" subtitle="Summary" />
-            <h1>Master</h1>
-            <h1>Master</h1>
-            <h1>Master</h1>
-            <h1>Master</h1>
-            <h1>Master</h1>
+            <div className="m-3 p-3">
+                <h1>Master</h1>
+            </div>
         </div>
     )
 }

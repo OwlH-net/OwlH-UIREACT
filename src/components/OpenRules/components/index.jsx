@@ -8,10 +8,9 @@ const index = () => {
             <Menu />
             <br />
             <Banner title="OpenRules" subtitle="Summary" />
-            <h1>OpenRules</h1>
-            <h1>OpenRules</h1>
-            <h1>OpenRules</h1>
-            <h1>OpenRules</h1>
+            <div className="m-3 p-3">
+                <h1>OpenRules</h1>
+            </div>
         </div>
     )
 }

@@ -7,10 +7,17 @@ import Config from './Config'
 import { Route, Link, BrowserRouter, NavLink } from 'react-router-dom';
 
 const Menu = () => {
+    const styles ={
+        "borderRadius": "20%",
+        "border": "3px solid black",
+        "height": "30px"
+    }
+    var boxes = document.getElementsByTagName('li');
+
     return (
         <div>
             <nav className="navbar navbar-expand-lg fixed-top navbar-dark bg-dark">
-                <img className="mr-3" src="/assets/img/AvatarOwlHOrange.png" alt="" height="30" />
+                <img className="mr-3" style={styles} src="/assets/img/AvatarOwlHOrange.png" alt="OwlH Logo" height="30" />
                 <NavLink to="/Nodes" className="navbar-brand mr-auto mr-lg-0">
                     <small>Master </small>
                     <i id="menu-title" className="text-warning">Test</i> | 
@@ -18,7 +25,7 @@ const Menu = () => {
             
                 <div className="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
                     <ul className="navbar-nav mr-auto">
-                        <li className="nav-item">
+                        <li className="nav-item active">
                             <Nodes/>                            
                             {/* <a className="nav-link" href="nodes.html">Nodes</a> */}
                         </li>
