@@ -72,8 +72,12 @@ class Login extends Component {
                     </div>
                     <div>
                         <NavLink to="/ConfigurationForm" type="button" className="border border-primary m-3 p-2 w-25 btn btn-light" id="btn-masters"><h5> <BsGearFill size={20} className="iconBlue"/></h5></NavLink>
+<<<<<<< HEAD
                         <NavLink to="/Welcome" type="button" className="border border-primary m-3 p-2 w-25 btn btn-primary" id="btn-masters"><h5> Login </h5></NavLink>
                         {/* <button type="submit" className="m-3 p-2 w-25 btn btn-primary">Login</button> */}
+=======
+                        <button type="submit" className="m-3 p-2 w-25 btn btn-primary">Login</button>
+>>>>>>> 349e2f7e6b34dd60bcb0c2301530944c94a5dcd7
                     </div>
                 </form>
             </div>
