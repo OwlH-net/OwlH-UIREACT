@@ -12,7 +12,8 @@ class Login extends Component {
         super();
         this.state = {
             user: "",
-            pass: ""
+            pass: "",
+            token: ""
         }
         this.handleSubmit = this.handleSubmit.bind(this)
         this.handleChange = this.handleChange.bind(this)
@@ -25,9 +26,10 @@ class Login extends Component {
             pass: this.state.pass
         }
         console.log("Sending data")
-        console.log(data)
-
+        console.log(this.props)
+        
         userLogin(data)
+        console.log(this.props)
     }
 
     handleChange(e) {
@@ -72,8 +74,8 @@ class Login extends Component {
                     </div>
                     <div>
                         <NavLink to="/ConfigurationForm" type="button" className="border border-primary m-3 p-2 w-25 btn btn-light" id="btn-masters"><h5> <BsGearFill size={20} className="iconBlue"/></h5></NavLink>
-                        <NavLink to="/Welcome" type="button" className="border border-primary m-3 p-2 w-25 btn btn-primary" id="btn-masters"><h5> Login </h5></NavLink>
-                        {/* <button type="submit" className="m-3 p-2 w-25 btn btn-primary">Login</button> */}
+                        {/* <NavLink to="/Welcome" type="button" className="border border-primary m-3 p-2 w-25 btn btn-primary" id="btn-masters"><h5> Login </h5></NavLink> */}
+                        <button type="submit" className="m-3 p-2 w-25 btn btn-primary">Login</button>
                     </div>
                 </form>
             </div>
@@ -81,6 +83,9 @@ class Login extends Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    return {...state}
+}
 
 const mapDispatchToProps = dispatch => {
     console.log("dispatch to props")

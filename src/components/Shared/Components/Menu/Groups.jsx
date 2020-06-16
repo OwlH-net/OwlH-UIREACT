@@ -4,7 +4,7 @@ import { Route, Link, BrowserRouter, NavLink } from 'react-router-dom';
 
 const Groups = () => {
     return (
-        <NavLink to="/Groups" className="nav-link text-white">Groups</NavLink>
+        <NavLink to="Groups" className="nav-link">Groups</NavLink>
     )
 }
 

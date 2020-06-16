@@ -7,14 +7,25 @@ const config = {
   }
 }
 
-export function userLogin(data) {
-    console.log("Send User data")
-    console.log(data)
-    axios.put('/api/login', JSON.stringify(data), config)
-      .then(resp => {
-        console.log(resp)
-        return resp.data
-      })
+//GetLoginToken
+export function userLogin(credentials) {
+  console.log("Send User data action")
+  console.log(credentials)
+  axios.put('/api/login', JSON.stringify(credentials), config)
+    .then(resp => {
+      console.log(dispatch)
+      // return resp.data
+      const config = resp.data
+      dispatch(getLoginToken(config))
+  })
+}
+function getLoginToken(data) {
+  console.log(data)
+  console.log("run Action LOGIN_TOKEN")
+  return {
+    type: ActionTypes.LOGIN_TOKEN,
+    payload: data
+  }
 }
 
 export function currentConfiguration(){

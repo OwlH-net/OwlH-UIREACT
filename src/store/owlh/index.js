@@ -13,6 +13,10 @@ function loadConfigurationFrom(state, config) {
   }
 }
 
+function loadToken(state, data) {
+  return {...state, data}
+}
+
 function loadCurrentMasters(state, data) {
   return {
     masterList: data
@@ -72,6 +76,9 @@ export default function owlh(state = initialState, action) {
     case ActionTypes.LOAD_CONF:
       console.log("LOAD_CONF CASE")
       return loadCurrentMasters(state, action.payload);
+    case ActionTypes.LOGIN_TOKEN:
+      console.log("LOGIN_TOKEN CASE")
+      return loadToken(state, action.payload);
     case ActionTypes.LOAD_MASTERS:
       console.log("LOAD_MASTERS CASE")
       return loadCurrentMasters(state, action.payload)

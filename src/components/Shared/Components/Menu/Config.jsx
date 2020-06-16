@@ -4,7 +4,7 @@ import { Route, Link, BrowserRouter, NavLink } from 'react-router-dom';
 
 const Config = () => {
     return (
-        <NavLink to="/Config" className="nav-link text-white">Config</NavLink>
+        <NavLink to="Config" className="nav-link">Config</NavLink>
     )
 }
 

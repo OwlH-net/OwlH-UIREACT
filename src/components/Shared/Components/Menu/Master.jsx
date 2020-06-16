@@ -4,7 +4,7 @@ import { Route, Link, BrowserRouter, NavLink } from 'react-router-dom';
 
 const Master = () => {
     return (
-        <NavLink to="/Master" className="nav-link text-white">Master</NavLink>
+        <NavLink to="Master" className="nav-link">Master</NavLink>
     )
 }
 

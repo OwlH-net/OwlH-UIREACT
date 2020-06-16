@@ -4,7 +4,7 @@ import { Route, Link, BrowserRouter, NavLink } from 'react-router-dom';
 
 const OpenRules = () => {
     return (
-        <NavLink to="/OpenRules" className="nav-link text-white">OpenRules</NavLink>
+        <NavLink to="OpenRules" className="nav-link">OpenRules</NavLink>
     )
 }
 
