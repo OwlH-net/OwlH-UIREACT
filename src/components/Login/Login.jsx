@@ -83,12 +83,9 @@ class Login extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {...state}
-}
-
 const mapDispatchToProps = dispatch => {
     console.log("dispatch to props")
+    const loadConfig1 = () => {return currentConfiguration()}
     const loadConfig1 = () => {return currentConfiguration()}
 
   return {
