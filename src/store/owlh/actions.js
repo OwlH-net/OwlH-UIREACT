@@ -1,5 +1,6 @@
 import * as ActionTypes from './action-types';
-import axios from 'axios';
+import axios from 'axios'
+import {SetToken, RemoveToken} from '../../components/Shared/CheckToken'
 
 const config = {
   headers: {
@@ -11,17 +12,32 @@ const config = {
 export function userLogin(credentials) {
   console.log("Send User data action")
   console.log(credentials)
-  axios.put('/api/login', JSON.stringify(credentials), config)
-    .then(resp => {
-      console.log(dispatch)
-      // return resp.data
-      const config = resp.data
-      dispatch(getLoginToken(config))
-  })
+  console.log("credentials")
+
+  return (dispatch)  => {
+    axios.put('/api/login', JSON.stringify(credentials), config)
+      .then(resp => {
+        // const config = resp.data
+
+        console.log("userLogin resp.data")
+        console.log(resp.data.ack)
+        console.log(resp.data.ack)
+        console.log(resp.data.ack)
+
+        //set token
+        resp.data.ack == "true" ? SetToken(resp.data.token) : RemoveToken()
+        
+        //dispatch
+        dispatch(getLoginToken(resp.data))
+    })
+  }
 }
 function getLoginToken(data) {
-  console.log(data)
   console.log("run Action LOGIN_TOKEN")
+  console.log(data)
+
+  //set token
+
   return {
     type: ActionTypes.LOGIN_TOKEN,
     payload: data

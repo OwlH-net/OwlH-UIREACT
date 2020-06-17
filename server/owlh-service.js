@@ -45,12 +45,13 @@ function getLogin(data) {
   console.log("USR DATA")
   console.log(data)
   const auth = {
-    username: data.usr,
-    password: data.pass
+    username: data.user,
+    password: data.password
   }
 
   console.log("GET LOGIN")
-  return axios.put(`${url}/master/login`,{},
+  // return axios.put(`${url}/master/login`,{},
+  return axios.put(`${url}/master/auth`,{},
                     {
                       httpsAgent: httsAgent,
                       auth: auth

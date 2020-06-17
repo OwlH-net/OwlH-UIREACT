@@ -3,7 +3,10 @@ import { InitialState } from './initialState'
 import { saveCurrentMasters } from './actions'
 
 
-const initialState = InitialState
+// const initialState = InitialState
+const initialState = {
+    masterList: [InitialState]
+}
 
 
 function loadConfigurationFrom(state, config) {
@@ -14,7 +17,7 @@ function loadConfigurationFrom(state, config) {
 }
 
 function loadToken(state, data) {
-  return {...state, data}
+  return state
 }
 
 function loadCurrentMasters(state, data) {

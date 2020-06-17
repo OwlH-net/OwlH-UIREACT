@@ -60,9 +60,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
     const loadMasters = () => {return currentConfiguration()}
-  return {
-    loadMasters: () => dispatch(loadMasters())
-  }
+    return {
+        loadMasters: () => dispatch(loadMasters())
+    }
 }
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);

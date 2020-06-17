@@ -5,15 +5,17 @@ import Avatar from './Avatar';
 // import Welcome from '../Welcome/Welcome';
 import { BsGearFill } from "react-icons/bs";
 import { connect } from 'react-redux';
+import Cookie from 'cookie-universal'
+import {GetToken} from '../../components/Shared/CheckToken'
 
+const cookies = Cookie()
 
 class Login extends Component {
     constructor(props) {
         super();
         this.state = {
             user: "",
-            pass: "",
-            token: ""
+            password: ""
         }
         this.handleSubmit = this.handleSubmit.bind(this)
         this.handleChange = this.handleChange.bind(this)
@@ -22,18 +24,24 @@ class Login extends Component {
     handleSubmit(e) {
         event.preventDefault()
         const data = {
-            usr: this.state.user,
-            pass: this.state.pass
+            user: this.state.user,
+            password: this.state.password
         }
-        console.log("Sending data")
-        console.log(this.props)
-        
-        userLogin(data)
-        console.log(this.props)
+        console.log("Sending data")        
+        this.props.userLoginToken(data)
+
+        // const cookieRes = cookies.get('token')
+        // console.log(cookieRes);
+        //CheckToken
+        const status = GetToken()
+        console.log("Login token status")
+        console.log(status)
+        console.log(status)
+        console.log(status)
+
     }
 
     handleChange(e) {
-        console.log("change")
         this.setState({
             [event.target.name]: event.target.value
         })
@@ -64,7 +72,7 @@ class Login extends Component {
                         <div className="media text-muted py-3 mb-3">
                             <div className="input-group">
                                 <span className="input-group-text">Password</span>
-                                <input type="password" id="pass" name="pass" className="form-control" value={this.state.pass} onChange={this.handleChange}/>
+                                <input type="password" id="password" name="password" className="form-control" value={this.state.password} onChange={this.handleChange}/>
                             </div>
                         </div>
                         <div className="hide" id="default-user-credentials" >
@@ -86,10 +94,11 @@ class Login extends Component {
 const mapDispatchToProps = dispatch => {
     console.log("dispatch to props")
     const loadConfig1 = () => {return currentConfiguration()}
-    const loadConfig1 = () => {return currentConfiguration()}
+    const getLogin = (data) => {return userLogin(data)}
 
   return {
     loadConfig: () => dispatch(loadConfig1()),
+    userLoginToken: (data) => dispatch(getLogin(data)),
   }
 }
 
