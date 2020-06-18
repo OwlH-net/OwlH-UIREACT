@@ -67,8 +67,29 @@ function getLogin(data) {
     })
 }
 
+function getAbout(data) {
+  console.log("USR DATA")
+  console.log(data)
+  console.log("GET LOGIN")
+  // return axios.put(`${url}/master/login`,{},
+  return axios.get(`${url}/home`,
+                    {
+                      httpsAgent: httsAgent
+                    }
+                  )
+    .then(resp => {
+      console.log(resp.data)
+      return resp.data
+    })
+    .catch(resp => {
+      console.log(resp)
+      return resp.data
+    })
+}
+
 module.exports = {
   getLogin,
+  getAbout,
   getConfiguration,
   setConfiguration
 }

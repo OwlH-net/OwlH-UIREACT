@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { userLogin, currentConfiguration } from '../../store/owlh/actions';
+import { showSpinner, defaultCredentials } from '../../store/webUtilities/actions';
 import { Route, Link, BrowserRouter, NavLink } from 'react-router-dom';
 import Avatar from './Avatar';
 // import Welcome from '../Welcome/Welcome';
@@ -7,6 +8,7 @@ import { BsGearFill } from "react-icons/bs";
 import { connect } from 'react-redux';
 import Cookie from 'cookie-universal'
 import {GetToken} from '../../components/Shared/CheckToken'
+import Spinner from '../../components/Shared/Spinner'
 
 const cookies = Cookie()
 
@@ -27,18 +29,18 @@ class Login extends Component {
             user: this.state.user,
             password: this.state.password
         }
+        //display token
+        console.log("display sipinner")        
+        this.props.displaySpinner()
+
+        //get token from server
         console.log("Sending data")        
         this.props.userLoginToken(data)
 
-        // const cookieRes = cookies.get('token')
-        // console.log(cookieRes);
         //CheckToken
         const status = GetToken()
         console.log("Login token status")
         console.log(status)
-        console.log(status)
-        console.log(status)
-
     }
 
     handleChange(e) {
@@ -48,9 +50,14 @@ class Login extends Component {
     }
 
     componentDidMount() {
-        console.log("currentconfig")
-        console.log(this.props)
         this.props.loadConfig()
+        //load message when admin credentials are default
+        this.props.checkDefaultCredentials()
+        {
+            this.props.defaults == "true" ? 
+            document.getElementById("default-user-credentials").style.display = "block" :
+            document.getElementById("default-user-credentials").style.display = "none"
+        }
     }
 
 
@@ -83,7 +90,7 @@ class Login extends Component {
                     <div>
                         <NavLink to="/ConfigurationForm" type="button" className="border border-primary m-3 p-2 w-25 btn btn-light" id="btn-masters"><h5> <BsGearFill size={20} className="iconBlue"/></h5></NavLink>
                         {/* <NavLink to="/Welcome" type="button" className="border border-primary m-3 p-2 w-25 btn btn-primary" id="btn-masters"><h5> Login </h5></NavLink> */}
-                        <button type="submit" className="m-3 p-2 w-25 btn btn-primary">Login</button>
+                        <button type="submit" className="m-3 p-2 w-25 btn btn-primary"><div style={{display: 'flex', justifyContent: 'center' ,alignItems: 'center'}}>Login {this.props.spinner ? <span className="mx-3"><Spinner /></span> : null}</div></button>
                     </div>
                 </form>
             </div>
@@ -91,18 +98,26 @@ class Login extends Component {
     }
 }
 
+const mapStateToProps = (state) => {
+    return {
+        spinner: state.webUtilities.spinner
+    }
+}
+
 const mapDispatchToProps = dispatch => {
     console.log("dispatch to props")
     const loadConfig1 = () => {return currentConfiguration()}
     const getLogin = (data) => {return userLogin(data)}
+    const getSpinner = () => {return showSpinner()}
+    const getDefaultCredentials = () => {return defaultCredentials()}
 
   return {
     loadConfig: () => dispatch(loadConfig1()),
     userLoginToken: (data) => dispatch(getLogin(data)),
+    displaySpinner: () => dispatch(getSpinner()),
+    checkDefaultCredentials: () => dispatch(getDefaultCredentials()),
   }
 }
 
-const withProps = connect(null, mapDispatchToProps);
+const withProps = connect(mapStateToProps, mapDispatchToProps);
 export default withProps(Login)
-
-

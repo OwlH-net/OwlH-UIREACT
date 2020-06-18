@@ -1,6 +1,8 @@
 import * as ActionTypes from './action-types';
 import axios from 'axios'
 import {SetToken, RemoveToken} from '../../components/Shared/CheckToken'
+import {hideSpinner} from '../webUtilities/actions'
+// import Spinner from '../../components/Shared/Spinner'
 
 const config = {
   headers: {
@@ -10,23 +12,19 @@ const config = {
 
 //GetLoginToken
 export function userLogin(credentials) {
-  console.log("Send User data action")
-  console.log(credentials)
-  console.log("credentials")
-
   return (dispatch)  => {
     axios.put('/api/login', JSON.stringify(credentials), config)
       .then(resp => {
-        // const config = resp.data
+        // const config = resp.data    
 
         console.log("userLogin resp.data")
-        console.log(resp.data.ack)
-        console.log(resp.data.ack)
         console.log(resp.data.ack)
 
         //set token
         resp.data.ack == "true" ? SetToken(resp.data.token) : RemoveToken()
         
+        dispatch(hideSpinner())
+
         //dispatch
         dispatch(getLoginToken(resp.data))
     })
@@ -35,8 +33,6 @@ export function userLogin(credentials) {
 function getLoginToken(data) {
   console.log("run Action LOGIN_TOKEN")
   console.log(data)
-
-  //set token
 
   return {
     type: ActionTypes.LOGIN_TOKEN,
