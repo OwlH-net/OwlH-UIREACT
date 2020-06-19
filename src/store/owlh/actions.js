@@ -1,5 +1,8 @@
 import * as ActionTypes from './action-types';
-import axios from 'axios';
+import axios from 'axios'
+import {SetToken, RemoveToken} from '../../components/Shared/CheckToken'
+import {hideSpinner} from '../webUtilities/actions'
+// import Spinner from '../../components/Shared/Spinner'
 
 const config = {
   headers: {
@@ -7,14 +10,34 @@ const config = {
   }
 }
 
-export function userLogin(data) {
-    console.log("Send User data")
-    console.log(data)
-    axios.put('/api/login', JSON.stringify(data), config)
+//GetLoginToken
+export function userLogin(credentials) {
+  return (dispatch)  => {
+    axios.put('/api/login', JSON.stringify(credentials), config)
       .then(resp => {
-        console.log(resp)
-        return resp.data
-      })
+        // const config = resp.data    
+
+        console.log("userLogin resp.data")
+        console.log(resp.data.ack)
+
+        //set token
+        resp.data.ack == "true" ? SetToken(resp.data.token) : RemoveToken()
+        
+        dispatch(hideSpinner())
+
+        //dispatch
+        dispatch(getLoginToken(resp.data))
+    })
+  }
+}
+function getLoginToken(data) {
+  console.log("run Action LOGIN_TOKEN")
+  console.log(data)
+
+  return {
+    type: ActionTypes.LOGIN_TOKEN,
+    payload: data
+  }
 }
 
 export function currentConfiguration(){

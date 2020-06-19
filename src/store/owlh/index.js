@@ -3,7 +3,10 @@ import { InitialState } from './initialState'
 import { saveCurrentMasters } from './actions'
 
 
-const initialState = InitialState
+// const initialState = InitialState
+const initialState = {
+    masterList: [InitialState]
+}
 
 
 function loadConfigurationFrom(state, config) {
@@ -11,6 +14,10 @@ function loadConfigurationFrom(state, config) {
     master: config["master"],
     port: config["port"]
   }
+}
+
+function loadToken(state, data) {
+  return state
 }
 
 function loadCurrentMasters(state, data) {
@@ -72,6 +79,9 @@ export default function owlh(state = initialState, action) {
     case ActionTypes.LOAD_CONF:
       console.log("LOAD_CONF CASE")
       return loadCurrentMasters(state, action.payload);
+    case ActionTypes.LOGIN_TOKEN:
+      console.log("LOGIN_TOKEN CASE")
+      return loadToken(state, action.payload);
     case ActionTypes.LOAD_MASTERS:
       console.log("LOAD_MASTERS CASE")
       return loadCurrentMasters(state, action.payload)

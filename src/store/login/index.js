@@ -1,13 +1,9 @@
 import * as ActionTypes from './login-action-types';
 
-
-
 const initialState = {
     currentMaster: {},
     activeMaster: {}
 }
-
-
 
 function fulfilMasterDetails(state, master) {
     console.log("Edit Master - State")

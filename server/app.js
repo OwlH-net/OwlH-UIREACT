@@ -32,7 +32,8 @@ app.get('/', (req, res, next) => {
   res.sendFile('index.html');
 })
 
-app.use('/login', apiRoutes)
+// app.use('/login', apiRoutes)
+app.use('/', apiRoutes)
 
 app.use('/config', localRoutes)
 
