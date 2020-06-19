@@ -7,7 +7,7 @@ import Avatar from './Avatar';
 import { BsGearFill } from "react-icons/bs";
 import { connect } from 'react-redux';
 import Cookie from 'cookie-universal'
-import {GetToken} from '../../components/Shared/CheckToken'
+import {SetToken} from '../../components/Shared/CheckToken'
 import Spinner from '../../components/Shared/Spinner'
 
 const cookies = Cookie()
@@ -36,11 +36,6 @@ class Login extends Component {
         //get token from server
         console.log("Sending data")        
         this.props.userLoginToken(data)
-
-        //CheckToken
-        const status = GetToken()
-        console.log("Login token status")
-        console.log(status)
     }
 
     handleChange(e) {
@@ -51,13 +46,9 @@ class Login extends Component {
 
     componentDidMount() {
         this.props.loadConfig()
+        
         //load message when admin credentials are default
         this.props.checkDefaultCredentials()
-        {
-            this.props.defaults == "true" ? 
-            document.getElementById("default-user-credentials").style.display = "block" :
-            document.getElementById("default-user-credentials").style.display = "none"
-        }
     }
 
 
@@ -82,10 +73,13 @@ class Login extends Component {
                                 <input type="password" id="password" name="password" className="form-control" value={this.state.password} onChange={this.handleChange}/>
                             </div>
                         </div>
-                        <div className="hide" id="default-user-credentials" >
-                            <p>WARNING If this is your first login, remember default credentials are admin/admin</p>
-                            <p className="red-text">Please, change default credentials as soon as possible</p>
-                        </div>
+                        {                            
+                            this.props.defaults ? 
+                            <div id="default-user-credentials" >
+                                <p>WARNING If this is your first login, remember default credentials are admin/admin</p>
+                                <p className="red-text">Please, change default credentials as soon as possible</p>
+                            </div> : null
+                        }
                     </div>
                     <div>
                         <NavLink to="/ConfigurationForm" type="button" className="border border-primary m-3 p-2 w-25 btn btn-light" id="btn-masters"><h5> <BsGearFill size={20} className="iconBlue"/></h5></NavLink>
@@ -100,7 +94,8 @@ class Login extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        spinner: state.webUtilities.spinner
+        spinner: state.webUtilities.spinner,
+        defaults: state.webUtilities.defaults
     }
 }
 

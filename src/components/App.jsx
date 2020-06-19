@@ -19,21 +19,17 @@ class App extends React.Component {
         super();
         this.state = {
             logged: false,
-        }
-
-         
+        }         
     }
-
-
 
   render() {
     return (
       <div className="container">
       <BrowserRouter>
           <Switch>
-            <Route path="/" exact component={ Login }/>
+            <Route path="/Login" exact component={ Login }/>
             <Route path="/ConfigurationForm" exact component={ ConfigurationForm }/>
-            <Route path="/Welcome" exact component={ Welcome }/>
+            <Route path="/" exact component={ Welcome }/>
             <Route path="/Master" exact component={ Master }/>
             <Route path="/Config" exact component={ Config }/>
             <Route path="/Groups" exact component={ Groups }/>

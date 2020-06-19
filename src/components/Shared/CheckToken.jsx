@@ -1,21 +1,37 @@
 import React from 'react'
 import Cookie from 'cookie-universal'
+
 const cookies = Cookie()
 
 export const SetToken = (token) =>  {
-    console.log("INSIDE SetToken")
-    console.log(token)
     cookies.set('token', token)
-    window.location.href = "/Welcome";
+    window.location.href = "/";
 }
 
-export const GetToken = () => {
-    const cookieRes = cookies.get('token')
-    console.log("cookieRes")
-    console.log(cookieRes)
-    return cookieRes != "" || cookieRes != null || cookieRes != undefined ? true : false    
+export const CheckToken = () => {
+    const cookieRes = cookies.get('token')   
+    {
+        (cookieRes == "" || cookieRes == null || cookieRes == undefined) ? 
+        RemoveToken() : 
+        true
+    }
 }
 
-export const RemoveToken = () => {
+export const GetUserName = () => { 
+    let currentToken = cookies.get('token')
+    let splittedToken = currentToken.split('.');
+    //Check token length
+    { splittedToken.length != 3 ? RemoveToken() : null }
+    let payload = JSON.parse(atob(splittedToken[1]));
+
+    return payload.user
+}
+
+export const GetToken = () => { 
+    return cookies.get('token')
+}
+
+export const RemoveToken = () => {    
     const cookieRes = cookies.remove('token') 
+    window.location.href = "/Login"
 }

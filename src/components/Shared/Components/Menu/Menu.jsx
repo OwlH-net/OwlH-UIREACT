@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import Nodes from './Nodes'
 import Groups from './Groups'
 import OpenRules from './OpenRules'
@@ -7,9 +7,8 @@ import Config from './Config'
 import { Route, Link, BrowserRouter, NavLink } from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
-import Container from 'react-bootstrap/Container';
 import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
+import {CheckToken, RemoveToken, GetUserName} from '../../CheckToken'
 
 const Menu = () => {
     const styles ={
@@ -17,7 +16,17 @@ const Menu = () => {
         "border": "3px solid black",
         "height": "30px"
     }
-    var boxes = document.getElementsByTagName('li');
+
+    const [userName, setUserNmae] = useState("")
+    let username = " -- ";
+    useEffect(() => {
+        //Check token
+        CheckToken()
+
+        //Get username
+        username = GetUserName()
+        setUserNmae(username)
+    },[]);
 
     return (
         <div>
@@ -39,14 +48,14 @@ const Menu = () => {
                         <Nav.Link><Config/></Nav.Link>
                     </Nav>
                     <Dropdown className="pr-3 mr-3">
-                        <Dropdown.Toggle variant="dark" id="dropdown-basic">
-                            Logued as: <b>admin</b>
+                        <Dropdown.Toggle variant="dark" id="dropdown-basic">                        
+                            Logued as: <b>{userName}</b>
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu>
                             <Dropdown.Item href="">Change password</Dropdown.Item>
                             <Dropdown.Divider />
-                            <Dropdown.Item href="">Logout</Dropdown.Item>
+                            <Dropdown.Item href="" onClick={() => RemoveToken()}>Logout</Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
                     <a href="https://github.com/OwlH-net/NEWS/blob/master/README.md" className="text-justify text-white mr-4" ><b>v: 0.15</b></a>
