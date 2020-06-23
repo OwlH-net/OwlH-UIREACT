@@ -6,7 +6,6 @@ const index = () => {
     return (
         <div>
             <Menu />
-            <br />
             <Banner title="Master" subtitle="Summary" />
             <div className="m-3 p-3">
                 <h1>Master</h1>

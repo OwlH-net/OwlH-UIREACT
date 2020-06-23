@@ -92,15 +92,15 @@ function accSaveConfiguration(data) {
   }
 }
 
-export function crearAddMemeAction(meme) {
-  return (dispatch)  => {
-    axios.post(url, JSON.stringify(meme), config)
-      .then(resp => {
-        const meme = resp.data
-        dispatch(getAddAction(meme))
-      })
-  }
-}
+// export function crearAddMemeAction(meme) {
+//   return (dispatch)  => {
+//     axios.post(url, JSON.stringify(meme), config)
+//       .then(resp => {
+//         const meme = resp.data
+//         dispatch(getAddAction(meme))
+//       })
+//   }
+// }
 
 //loadCurrentMasters
 export function loadCurrentMasters(){

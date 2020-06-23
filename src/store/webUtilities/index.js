@@ -2,17 +2,21 @@ import * as ActionTypes from './utils-action-types';
 
 const initialState = {
     spinner: false,
-    defaults: false
+    defaults: false,
+    passwordChange: ''
 }
 
 function defaultCredentials(state, data) {
-  console.log("defaultCredentials")
-  console.log(state)
-  console.log(data)
-  console.log("SHOW CREDENTIALS...")
   return {
     ...state, 
     defaults: data
+  }
+}
+
+function changeUserPassword(state, data) {
+  return {
+    ...state, 
+    passwordChange: data
   }
 }
 
@@ -45,6 +49,8 @@ export default function webUtilities(state = initialState, action) {
       return defaultCredentials(state, action.payload);
     case ActionTypes.HIDE_SPINNER:  
       return hideSpinner(state, action.payload);
+    case ActionTypes.CHANGE_PASSWORD:  
+      return changeUserPassword(state, action.payload);
     default:
       return state;
   }

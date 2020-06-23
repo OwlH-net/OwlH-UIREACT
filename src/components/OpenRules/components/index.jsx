@@ -6,7 +6,6 @@ const index = () => {
     return (
         <div>
             <Menu />
-            <br />
             <Banner title="OpenRules" subtitle="Summary" />
             <div className="m-3 p-3">
                 <h1>OpenRules</h1>

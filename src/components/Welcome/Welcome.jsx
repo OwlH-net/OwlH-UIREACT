@@ -7,11 +7,7 @@ const Welcome = () => {
     return (
         <div>
             <Menu />            
-            <br />
             <Banner title="Welcome" subtitle="Main menu" />
-            <br />
-            <br />
-            <br />
             <div className="text-center">
                 <NavLink to="Nodes" type="button" className="btn btn-primary px-3 mx-2 text-white">Nodes</NavLink>
                 <NavLink to="Groups" type="button" className="btn btn-primary px-3 mx-2 text-white">Groups</NavLink>
