@@ -1,4 +1,5 @@
 import * as ActionTypes from './utils-action-types';
+import {GetUserName, GetToken} from '../../components/Shared/CheckToken'
 import axios from 'axios'
 
 const config = {
@@ -19,6 +20,33 @@ export function defaultCredentials() {
 function getDefaultCredentials(data) {
   return {
     type: ActionTypes.SHOW_CREDENTIALS_ALERT,
+    payload: data
+  }
+}
+
+export function changePassword(data) {
+
+  const token = GetToken()
+  const username = GetUserName()
+
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
+  }
+  let newConfig = {headers: newHeaders}
+
+  return (dispatch) => {    
+    //check default credentials
+    axios.put('/api/pass', JSON.stringify(data), newConfig)
+    .then(resp => {
+      dispatch(setChangePassword(resp.data))
+    })
+  }
+}
+function setChangePassword(data) {
+  return {
+    type: ActionTypes.CHANGE_PASSWORD,
     payload: data
   }
 }

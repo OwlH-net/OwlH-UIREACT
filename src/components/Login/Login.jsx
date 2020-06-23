@@ -3,14 +3,9 @@ import { userLogin, currentConfiguration } from '../../store/owlh/actions';
 import { showSpinner, defaultCredentials } from '../../store/webUtilities/actions';
 import { Route, Link, BrowserRouter, NavLink } from 'react-router-dom';
 import Avatar from './Avatar';
-// import Welcome from '../Welcome/Welcome';
 import { BsGearFill } from "react-icons/bs";
 import { connect } from 'react-redux';
-import Cookie from 'cookie-universal'
-import {SetToken} from '../../components/Shared/CheckToken'
 import Spinner from '../../components/Shared/Spinner'
-
-const cookies = Cookie()
 
 class Login extends Component {
     constructor(props) {

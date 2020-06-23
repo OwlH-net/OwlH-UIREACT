@@ -20,7 +20,7 @@
     return isValid
   }
 
-  export  const validateForm = (master) => {
+  export const validateForm = (master) => {
     let validationResult = {}
     let hasError = false
     Object.keys(master).map(key => {

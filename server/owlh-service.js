@@ -67,6 +67,32 @@ function getLogin(data) {
     })
 }
 
+function setPassword(req) {
+  let token = req.headers.token
+  let username = req.headers.user
+
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': token,
+    'user': username
+  }
+
+  return axios.put(`${url}/master/changePassword`,req.body,
+                    {
+                      httpsAgent: httsAgent,
+                      headers: newHeader
+                    }
+                  )
+    .then(resp => {
+      console.log(resp.data)
+      return resp.data
+    })
+    .catch(resp => {
+      console.log(resp)
+      return resp.data
+    })
+}
+
 function getAbout(data) {
   console.log("USR DATA")
   console.log(data)
@@ -91,5 +117,6 @@ module.exports = {
   getLogin,
   getAbout,
   getConfiguration,
-  setConfiguration
+  setConfiguration,
+  setPassword
 }

@@ -15,14 +15,11 @@ class Configuration extends Component {
     }
 
     componentDidMount() {
-        console.log("currentconfig")
-        console.log(this.props)
         this.props.loadConfig()
     }
 
     handleSubmit(e){
         e.preventDefault()
-        console.log("submit")
         this.props.saveConfig({
             master: this.state.master, 
             port: this.state.port
@@ -31,7 +28,6 @@ class Configuration extends Component {
     }
 
     handleChange(e){
-        console.log("change")
         this.setState({
             [event.target.name]: event.target.value
         })
@@ -61,8 +57,6 @@ class Configuration extends Component {
 }
 
 const mapStateToProps = (state) => {
-    console.log("map state to props")
-    console.log(state)
     return {
         master: state.owlhReducer.master,
         port: state.owlhReducer.port
@@ -70,7 +64,6 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = dispatch => {
-    console.log("dispatch to props")
     const loadConfig1 = () => {return currentConfiguration()}
     const saveConfig = (data) => {return saveCurrentConfiguration(data)}
 

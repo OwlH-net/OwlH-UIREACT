@@ -85,7 +85,7 @@ const NewMaster = (props) => {
             <Input id="port" name="port" caption="Master Port" inputType="text" value={master.port|| ''} onChange={handleChange}/>
             {!validationFields.port ? <span style={{color:'red'}}>Port should be a number</span> : null}
             <Input id="desc" name="desc" caption="Master Description" inputType="text" value={master.desc|| ''} onChange={handleChange}/>
-            {!validationFields.desc ? <span style={{color:'red'}}>Description shuld has more than 3 chars</span> : null}
+            {!validationFields.desc ? <span style={{color:'red'}}>Description should has more than 3 chars</span> : null}
             <div className="AlignRight input-group">
                 {/* <NavLink to="/" type="button" className="m-3 p-2 w-25 btn btn-primary" onClick={getFormData()}><h5>Add</h5></NavLink> */}
                 <button type="button" className="m-3 p-2 w-25 btn btn-danger" onClick={resetFormData}><h5>Cancel</h5></button>
