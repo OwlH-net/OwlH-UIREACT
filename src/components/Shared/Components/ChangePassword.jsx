@@ -4,24 +4,46 @@ import Banner from '../../Shared/Components/Banner/Banner'
 import { connect } from 'react-redux';
 import { changePassword } from '../../../store/webUtilities/actions';
 import {GetUserName} from '../CheckToken';
+import { validateChangePasswordForm } from '../validation'
+import ReactPasswordStrength from 'react-password-strength';
+import AlertDialog from '../AlertDialog'
 
 const ChangePassword = (props) => {
 
     const [passwords, setPass] = useState({})
+    const [isDiff, setNewPass] = useState(false)
     const [userName, setUserName] = useState("")
-
+    const [validationFields, setValidationFields] = useState({
+        current: true,
+        new: true,
+        again: true 
+    })
+    
     const formChangePass = () => {
-        props.changePass(passwords)
+        //remove username for validate input fields
+        let {["user"]: _, ...result} = passwords
+
+        //check if both new passwords are equals
+        if(result["new"] == result["again"]){            
+            const [hasError, validationResult] = validateChangePasswordForm(result)
+            setValidationFields({
+              ...validationResult
+            })
+        
+            if(!hasError){
+                props.changePass(passwords)
+            }
+    
+        }else{
+            setNewPass(true)
+        }
+
     };
 
     useEffect(() => {
         //Get username
         let username = GetUserName()
         setUserName(username)
-
-        // const username = GetUserName()
-        // console.log('PASS modified')    
-        // console.log(username)    
         
         setPass({
             user: username,
@@ -38,31 +60,58 @@ const ChangePassword = (props) => {
         })
     };
 
-    return (
+    return (        
         <div>
             <Menu />
+            {isDiff ? <AlertDialog id="diff-pass" title="Change password" error="The new passwords must be equals" variant="danger"/> : null}
+            {!validationFields.new || !validationFields.again ? <AlertDialog id="change-pass" title="Change password" error="Incorrect password character" variant="danger"/> : null}
             <Banner title="Change password for user:" subtitle='Change user password' data={userName}/>
-            {/* <Banner title="Change Password" subtitle='Summary' /> */}
             <form className="m-3 p-5" style={{justifyContent:'center'}}>
                 <div className="media text-muted p-1 m-1">                      
                     <div className="input-group">
                         <span className="w-25 input-group-text">Current password</span>
-                        <input name="current" type="password" placeholder={"Insert current password"} value={passwords.current || ''} onChange={handleChange} className="form-control" />
+                        {/* <input name="current" type="password" placeholder={"Insert current password"} value={passwords.current || ''} onChange={handleChange} className="form-control" /> */}
+                        <ReactPasswordStrength
+                            className="customClass PasswordValidation"
+                            minLength={3}
+                            minScore={2}
+                            scoreWords={['weak', 'okay', 'good', 'strong', 'stronger']}
+                            inputProps={{ name: "current"}}
+                            changeCallback={handleChange}
+                        />
                     </div>
                 </div>
+
+
+
                 <div className="media text-muted p-1 m-1">                      
                     <div className="input-group">
                         <span className="w-25 input-group-text">New password</span>
-                        <input name="new" type="password" placeholder={"Insert new password"} value={passwords.new || ''} onChange={handleChange} className="form-control" />
+                        {/* <input name="new" type="password" placeholder={"Insert new password"} value={passwords.new || ''} onChange={handleChange} className="form-control" /> */}
+                        <ReactPasswordStrength
+                            className="customClass PasswordValidation"
+                            minLength={3}
+                            minScore={2}
+                            scoreWords={['weak', 'okay', 'good', 'strong', 'stronger']}
+                            inputProps={{ name: "new"}}
+                            changeCallback={handleChange}
+                        />
                     </div>
                 </div>
                 <div className="media text-muted p-1 m-1">                      
                     <div className="input-group">
                         <span className="w-25 input-group-text">Repeat new password</span>
-                        <input name="again" type="password" placeholder={"Insert current password again"} value={passwords.again || ''} onChange={handleChange} className="form-control" />
+                        {/* <input name="again" type="password" placeholder={"Insert current password again"} value={passwords.again || ''} onChange={handleChange} className="form-control" /> */}
+                        <ReactPasswordStrength
+                            className="customClass PasswordValidation"
+                            minLength={3}
+                            minScore={2}
+                            scoreWords={['weak', 'okay', 'good', 'strong', 'stronger']}
+                            inputProps={{ name: "again"}}
+                            changeCallback={handleChange}
+                        />
                     </div>
                 </div>
-
 
                 {/* <span className="w-25 input-group-text">Current password</span>
                 <input name="current" placeholder={"Insert current password"} value={passwords.current || ''} onChange={handleChange}/>

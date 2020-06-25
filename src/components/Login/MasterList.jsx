@@ -22,12 +22,7 @@ class MasterList extends Component {
         const items = (this.props.masterList || []).map(item =>{
                 return <Master key={item.name} {...item} />           
             }   
-        );
-        console.log("======================================");
-        console.log(items);
-        console.log(items);
-        console.log("======================================");
-        
+        );      
 
         return (
             <div>
