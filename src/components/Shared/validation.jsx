@@ -35,7 +35,8 @@ export const validateForm = (master) => {
 
 //PASSWORD VALIDATION
 export const passValidations = {
-  current: [new RegExp('^(?![0-9]+$)[A-Za-z0-9_-]{3,}$')],
+  // current: [new RegExp('^(?![0-9]+$)[A-Za-z0-9_-]{3,}$')],
+  current: [new RegExp('[a-zA-Z0-9 _-]{3,}')],
   new: [new RegExp('^(?![0-9]+$)[A-Za-z0-9_-]{3,}$')],
   again: [new RegExp('^(?![0-9]+$)[A-Za-z0-9_-]{3,}$')]
 }
@@ -44,7 +45,6 @@ export const validateChangePasswordForm = (form) => {
   let hasError = false
 
   Object.keys(form).map(key => {
-    // if (key == "user") {return}
     let isValid = validateField(form[key], passValidations[key]||[])
     
     if (!isValid) {hasError = true}
@@ -53,19 +53,6 @@ export const validateChangePasswordForm = (form) => {
       [key]: isValid
     }
   })
-
-  // if(form["new"] == form["again"]){
-  //   //check new password
-  //   let isValid = validateField(form["new"], passValidations["new"]||[])
-  //   if (!isValid) {hasError = true}
-  //   validationResult = {...validationResult,["new"]: isValid}
-  //   //check new password again
-  //   isValid = validateField(form["again"], passValidations["again"]||[])
-  //   if (!isValid) {hasError = true}
-  //   validationResult = {...validationResult,["again"]: isValid}
-  // }else{
-  //   hasError = true
-  // }
   
   return [hasError, validationResult]
 }

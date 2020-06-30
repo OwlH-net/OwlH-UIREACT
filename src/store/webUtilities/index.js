@@ -3,14 +3,14 @@ import * as ActionTypes from './utils-action-types';
 const initialState = {
     spinner: false,
     defaults: false,
-    errorBannerShow: false,
+    errorAlertShow: false,
     passwordChange: {}
 }
 
 function toggleAlertStatus(state, data) {
   return {
     ...state,
-    errorBannerShow: data
+    errorAlertShow: data
   }
 }
 
@@ -47,10 +47,10 @@ function hideSpinner(state, data) {
   }
 }
 
-function resetChangePassAxiosData(state) {
+function resetChangePassAxiosData(state, data) {
   return {
-        ...state, 
-        passwordChange: {}
+    ...state, 
+    passwordChange: data
   }
 }
 
@@ -66,8 +66,8 @@ export default function webUtilities(state = initialState, action) {
       return changeUserPassword(state, action.payload);
     case ActionTypes.TOGGLE_ALERT:  
       return toggleAlertStatus(state, action.payload);
-    case ActionTypes.ResetAxiosChangePass:  
-      return resetChangePassAxiosData(state);
+    case ActionTypes.RESET_CHANGE_PASS_DATA:  
+      return resetChangePassAxiosData(state, action.payload);
     default:
       return state;
   }

@@ -19,10 +19,12 @@ const ChangePassword = (props) => {
         again: true 
     })
     
-    const formChangePass = () => {
-        //reset axios ack for changePassword
+    useEffect(() => {
+        console.log(props.passwordChange)
         props.clearAxiosResponse()
+    }, []);
 
+    const formChangePass = () => {       
         //remove username for validate input fields
         let {["user"]: _, ...result} = passwords
 
@@ -45,14 +47,14 @@ const ChangePassword = (props) => {
             }
     
         }else{
-                //Change state for show only one alert. 
-                //Maybe this state is wrong, 
-                //but if both pass aren't equals, shopw first equals Alert.
-                setValidationFields({
-                    current: true,
-                    new: true,
-                    again: true 
-                })
+            //Change state for show only one alert. 
+            //Maybe this state is wrong, 
+            //but if both pass aren't equals, shopw first equals Alert.
+            setValidationFields({
+                current: true,
+                new: true,
+                again: true 
+            })
 
             //Passwords aren't equals. Change reducer state for show dialog
             areNewPassDiff(true)
@@ -83,11 +85,11 @@ const ChangePassword = (props) => {
     return (        
         <div>
             <Menu />
-
-            {props.passwordChange["ack"]==="true" ? <AlertDialog id="correct-alert-dialog" title="Change password" subtitle="Password change successfully!" variant="success"/> : null}
-            {props.passwordChange["ack"]==="false" ? <AlertDialog id="correct-alert-dialog" title="Change password Alert!" subtitle={props.passwordChange["error"]} variant="warning"/> : null}
-            {isDiff ? <AlertDialog id="diff-alert-dialog" title="Change password Error!" subtitle="The new passwords must be equals" variant="danger"/> : null}
-            {!validationFields.new || !validationFields.again ? <AlertDialog id="change-alert-dialog" title="Change password Error!" subtitle="Incorrect password character" variant="danger"/> : null}
+        
+            {props.passwordChange["ack"]==="true" ? <AlertDialog id="correct" title="Change password" subtitle="Password change successfully!" variant="success"/> : null}
+            {props.passwordChange["ack"]==="false" ? <AlertDialog id="wrong" title="Change password Alert!" subtitle={props.passwordChange["error"]} variant="warning"/> : null}
+            {isDiff ? <AlertDialog id="diff" title="Change password Error!" subtitle="The new passwords must be equals" variant="danger"/> : null}
+            {!validationFields.new || !validationFields.again ? <AlertDialog id="change" title="Change password Error!" subtitle="Incorrect password character" variant="danger"/> : null}
             
             <Banner title="Change password for user:" subtitle='Change user password' data={userName}/>
             <form className="m-3 p-5" style={{justifyContent:'center'}}>
@@ -146,7 +148,8 @@ const ChangePassword = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        passwordChange: state.webUtilities.passwordChange
+        passwordChange: state.webUtilities.passwordChange,
+        errorAlertShow: state.webUtilities.errorAlertShow
     }
 }
 

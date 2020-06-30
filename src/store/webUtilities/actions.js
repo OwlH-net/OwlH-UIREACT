@@ -65,6 +65,7 @@ export function hideSpinner() {
   }
 }
   
+  
 export function toggleAlert(data) {
   return {
     type: ActionTypes.TOGGLE_ALERT,
@@ -74,6 +75,7 @@ export function toggleAlert(data) {
   
 export function ResetAxiosChangePass() {
   return {
-    type: ActionTypes.RESET_CHANGE_PASS_DATA
+    type: ActionTypes.RESET_CHANGE_PASS_DATA,
+    payload: {}
   }
 }
