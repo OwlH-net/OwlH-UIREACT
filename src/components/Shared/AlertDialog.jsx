@@ -1,33 +1,23 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import Alert from 'react-bootstrap/Alert'
-import { toggleAlert, ResetAxiosChangePass } from '../../store/webUtilities/actions';
-// import { AlertList, Alert, AlertContainer } from "react-bs-notifier";
+import { toggleAlert, ResetAxiosChangePass, DeleteAlertToAlertList } from '../../store/webUtilities/actions';
 
 const AlertDialog = (props) => {
-    var banners = [];
-
     useEffect (() => {
-        //check if alert is allowed to be shown
-        props.errorAlertShow
-        ?  banners[`${props.id}-alert-dialog`] = setTimeout(function(){ disableAlert(banners[`${props.id}-alert-dialog`]) }, 4000) 
-        :  disableAlert(banners[`${props.id}-alert-dialog`])
-    }, [props.errorAlertShow])
+        const alertTimeout = setTimeout(function(){ disableAlert(props.id) }, 4000)
+    }, [])
 
     const disableAlert = (alertId) => {
-        clearTimeout(alertId)
-        props.handleToggleStatus(false)
-        props.clearAxiosData()
+        props.deleteAlert(alertId)
     }
 
     return(
         <div>
-            {props.errorAlertShow ? <Alert id={props.id} variant={props.variant} onClick={() => disableAlert(banners[`${props.id}-alert-dialog`])} dismissible><b>{props.title}</b> {props.subtitle}</Alert> : null}
+            {props.errorAlertShow ? <Alert id={props.id} variant={props.variant} onClick={() => disableAlert(props.id)} dismissible><b>{props.title}</b> {props.subtitle}</Alert> : null}
         </div>
     )
-
 }
-
 
 const mapStateToProps = (state) => {
     return {
@@ -38,7 +28,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
     handleToggleStatus: (status) => dispatch(toggleAlert(status)),
-    clearAxiosData: () => dispatch(ResetAxiosChangePass())
+    clearAxiosData: () => dispatch(ResetAxiosChangePass()),
+    deleteAlert: (alertId) => dispatch(DeleteAlertToAlertList(alertId))
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);

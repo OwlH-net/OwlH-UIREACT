@@ -1,17 +1,43 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Menu from '../../Shared/Components/Menu/Menu'
 import Banner from '../../Shared/Components/Banner/Banner'
+import { getAllNodes } from '../../../store/node/actions'
+import { connect } from 'react-redux';
+import NodesList from './NodesList'
 
-const index = () => {
+const index = (props) => {
+
+    //getAllNodes
+    useEffect(() => {
+        props.getNodes()
+    }, []);
+
     return (
         <div>
             <Menu />
-            <Banner title="Nodes" subtitle="Summary" />
+            <Banner title="Nodes" subtitle="All nodes list" />
             <div className="m-3 p-3">
-                <h1>Nodes</h1>
+                <NodesList key="nodes" allNodesList={props.allNodesList} />
             </div>
         </div>
     )
 }
 
-export default index
+const mapStateToProps = (state) => {
+    return {
+        allNodesList: state.node.allNodesList,
+    }
+}
+const mapDispatchToProps = (dispatch) => ({
+    getNodes: () => dispatch(getAllNodes())
+})
+
+// const mapDispatchToProps = dispatch => {
+//     const getAllNodesFromMaster = () => {return getAllNodes()}
+//     return {
+//         getNodes : () => dispatch(getAllNodesFromMaster())
+//     }
+// }
+
+const withProps = connect(mapStateToProps, mapDispatchToProps);
+export default withProps(index)

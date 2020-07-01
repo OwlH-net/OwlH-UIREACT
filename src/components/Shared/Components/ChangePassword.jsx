@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react'
 import Menu from '../../Shared/Components/Menu/Menu'
 import Banner from '../../Shared/Components/Banner/Banner'
 import { connect } from 'react-redux';
-import { changePassword, toggleAlert, ResetAxiosChangePass } from '../../../store/webUtilities/actions';
+import { changePassword, toggleAlert, ResetAxiosChangePass, AddAlertToAlertList } from '../../../store/webUtilities/actions';
 import {GetUserName} from '../CheckToken';
 import { validateChangePasswordForm } from '../validation'
 import ReactPasswordStrength from 'react-password-strength';
 import AlertDialog from '../AlertDialog'
 
 const ChangePassword = (props) => {
-
+    const [alerts, setAlert] = useState([])
     const [passwords, setPass] = useState({})
     const [isDiff, areNewPassDiff] = useState(false)
     const [userName, setUserName] = useState("")
@@ -19,24 +19,65 @@ const ChangePassword = (props) => {
         again: true 
     })
     
+    //Alerts for passwordChange Axios
+    useEffect(() => {   
+        if(!props.passwordChange["ack"]){return}
+
+        //save current time
+        const now = new Date() / 1000
+
+        var idAlert = now+'-'+props.passwordChange["ack"]
+        var titleAlert = props.passwordChange["ack"]==="true" ? 'Change password: ' : 'Change password alert! '
+        var subtitleAlert = props.passwordChange["ack"]==="false" ? props.passwordChange["error"] : "Password changed successfully!"
+        var variantAlert = props.passwordChange["ack"]==="true" ? 'success' : 'warning'
+
+        const alert = {
+            id: idAlert,
+            title: titleAlert,
+            subtitle: subtitleAlert,
+            variant: variantAlert
+        }
+        props.addAlertToState(alert)
+
+    }, [props.passwordChange]);
+    
+    //clear axios data
     useEffect(() => {
-        console.log(props.passwordChange)
         props.clearAxiosResponse()
     }, []);
 
-    const formChangePass = () => {       
-        //remove username for validate input fields
-        let {["user"]: _, ...result} = passwords
+    //check for diff passwords
+    useEffect(() => {
+        if(!isDiff){return}
 
+        //save current time
+        const now = new Date() / 1000
+
+        var idAlert = now+'-diff'
+        var titleAlert = 'Change password Error! '
+        var subtitleAlert = "Passwords must be equals"
+        var variantAlert = 'danger'
+
+        const alert = {
+            id: idAlert,
+            title: titleAlert,
+            subtitle: subtitleAlert,
+            variant: variantAlert
+        }
+        areNewPassDiff(false)
+        props.addAlertToState(alert)
+    }, [isDiff]);
+
+    const formChangePass = () => {     
         //allow alert dialog to show         
         props.ChangeCurrentAlertStatus(true)
         
         //check if both new passwords are equals
-        if(result["new"] == result["again"]){  
+        if(passwords["new"] == passwords["again"]){  
             //set pass diff to false becasue bath new passwords are equals
             areNewPassDiff(false)
 
-            const [hasError, validationResult] = validateChangePasswordForm(result)
+            const [hasError, validationResult] = validateChangePasswordForm(passwords)
             setValidationFields({
               ...validationResult
             })
@@ -44,6 +85,22 @@ const ChangePassword = (props) => {
             if(!hasError){
                 //change reducer state with the new passwords status
                 props.changePass(passwords)
+            }else{
+                //save current time
+                const now = new Date() / 1000
+
+                var idAlert = now+'-valid'
+                var titleAlert = 'Change password Error! '
+                var subtitleAlert = "New password has invalid characters"
+                var variantAlert = 'danger'
+
+                const alert = {
+                    id: idAlert,
+                    title: titleAlert,
+                    subtitle: subtitleAlert,
+                    variant: variantAlert
+                }
+                props.addAlertToState(alert)
             }
     
         }else{
@@ -82,14 +139,17 @@ const ChangePassword = (props) => {
         })
     };
 
+    //Call alert list for every map item
+    const alertItems = (props.alertList || []).map(alert => {
+        return <AlertDialog key={alert.id} id={alert.id} title={alert.title} subtitle={alert.subtitle} variant={alert.variant}/>
+    })
+
     return (        
         <div>
-            <Menu />
-        
-            {props.passwordChange["ack"]==="true" ? <AlertDialog id="correct" title="Change password" subtitle="Password change successfully!" variant="success"/> : null}
-            {props.passwordChange["ack"]==="false" ? <AlertDialog id="wrong" title="Change password Alert!" subtitle={props.passwordChange["error"]} variant="warning"/> : null}
-            {isDiff ? <AlertDialog id="diff" title="Change password Error!" subtitle="The new passwords must be equals" variant="danger"/> : null}
-            {!validationFields.new || !validationFields.again ? <AlertDialog id="change" title="Change password Error!" subtitle="Incorrect password character" variant="danger"/> : null}
+            <Menu /> 
+            
+            {/* Alerts list */}
+            {alertItems}
             
             <Banner title="Change password for user:" subtitle='Change user password' data={userName}/>
             <form className="m-3 p-5" style={{justifyContent:'center'}}>
@@ -103,10 +163,9 @@ const ChangePassword = (props) => {
                 <div className="media text-muted p-1 m-1">                      
                     <div className="input-group">
                         <span className="w-25 input-group-text">New password</span>
-                        {/* <input name="new" type="password" placeholder={"Insert new password"} value={passwords.new || ''} onChange={handleChange} className="form-control" /> */}
                         <ReactPasswordStrength
                             className="customClass PasswordValidation"
-                            minLength={3}
+                            minLength={7}
                             minScore={2}
                             scoreWords={['weak', 'okay', 'good', 'strong', 'stronger']}
                             inputProps={{ name: "new"}}
@@ -117,26 +176,9 @@ const ChangePassword = (props) => {
                 <div className="media text-muted p-1 m-1">                      
                     <div className="input-group">
                         <span className="w-25 input-group-text">Repeat new password</span>
-                        {/* <input name="again" type="password" placeholder={"Insert current password again"} value={passwords.again || ''} onChange={handleChange} className="form-control" /> */}
-                        <ReactPasswordStrength
-                            className="customClass PasswordValidation"
-                            minLength={3}
-                            minScore={2}
-                            scoreWords={['weak', 'okay', 'good', 'strong', 'stronger']}
-                            inputProps={{ name: "again"}}
-                            changeCallback={handleChange}
-                        />
+                        <input name="again" type="password" placeholder={"Repeat password"} value={passwords.again || ''} onChange={handleChange} className="form-control" />
                     </div>
                 </div>
-
-                {/* <span className="w-25 input-group-text">Current password</span>
-                <input name="current" placeholder={"Insert current password"} value={passwords.current || ''} onChange={handleChange}/>
-                
-                <span className="w-25 input-group-text">New password</span>
-                <input name="new" placeholder="Insert new password" value={passwords.new || ''} onChange={handleChange}/>
-                
-                <span className="w-25 input-group-text">Repeat New password</span>
-                <input  name="again" placeholder="Insert new password again" value={passwords.again || ''} onChange={handleChange}/> */}
                 
                 <div className="AlignRight input-group">
                     <button type="button" className="m-3 p-1 btn btn-primary" onClick={formChangePass}><h5>Change</h5></button>
@@ -149,19 +191,21 @@ const ChangePassword = (props) => {
 const mapStateToProps = (state) => {
     return {
         passwordChange: state.webUtilities.passwordChange,
-        errorAlertShow: state.webUtilities.errorAlertShow
+        errorAlertShow: state.webUtilities.errorAlertShow,
+        alertList: state.webUtilities.alertList
     }
 }
 
 const mapDispatchToProps = dispatch => {
-    console.log("dispatch to props")
     const changeCurrentPassword = (passwords) => {return changePassword(passwords)}
     const changeCurrentStatus = (data) => {return toggleAlert(data)}
     const changePassAxiosStatus = () => {return ResetAxiosChangePass()}
+    const addAlert = (alert) => {return AddAlertToAlertList(alert)}
     return {
         changePass: (passwords) => dispatch(changeCurrentPassword(passwords)),
         ChangeCurrentAlertStatus: (data) => dispatch(changeCurrentStatus(data)),
         clearAxiosResponse: () => dispatch(changePassAxiosStatus()),
+        addAlertToState: (alert) => dispatch(addAlert(alert)),
     }
 }
 

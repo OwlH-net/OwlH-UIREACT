@@ -113,10 +113,35 @@ function getAbout(data) {
     })
 }
 
+function getNodes(req) {
+  let token = req.headers.token
+  let username = req.headers.user
+
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': token,
+    'user': username
+  }
+
+  return axios.get(`${url}/node/GetAllNodes2`,
+                    {
+                      httpsAgent: httsAgent,
+                      headers: newHeader
+                    }
+                  )
+    .then(resp => {
+      return resp.data
+    })
+    .catch(resp => {
+      return resp.data
+    })
+}
+
 module.exports = {
   getLogin,
   getAbout,
   getConfiguration,
   setConfiguration,
-  setPassword
+  setPassword,
+  getNodes
 }

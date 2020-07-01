@@ -1,0 +1,1 @@
+export const GET_ALL_NODES = 'GET_ALL_NODES'

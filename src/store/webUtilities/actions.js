@@ -79,3 +79,17 @@ export function ResetAxiosChangePass() {
     payload: {}
   }
 }
+  
+export function AddAlertToAlertList(alert) {
+  return {
+    type: ActionTypes.ADD_ALERT_TO_ALERT_LIST,
+    payload: alert
+  }
+}
+  
+export function DeleteAlertToAlertList(alert) {
+  return {
+    type: ActionTypes.DELETE_ALERT_TO_ALERT_LIST,
+    payload: alert
+  }
+}

@@ -50,9 +50,18 @@ a.active {
   color: orange;
 }
 
+.table-layout-fixed{
+  table-layout: fixed;
+}
+
 .AlignRight{
   display: flex; 
   justify-content: flex-end;
+}
+
+.line{
+  color:dodgerblue; 
+  border-top: "10px solid";
 }
 
 .bg-purple { background-color: #6f42c1; }

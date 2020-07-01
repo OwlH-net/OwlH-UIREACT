@@ -35,4 +35,9 @@ router.put('/pass', async (req, res, next) => {
   res.status(200).json(pass)
 })
 
+router.get('/nodes', async (req, res, next) => {
+  const pass = await OwlHService.getNodes(req)
+  res.status(200).json(pass)
+})
+
 module.exports = router

@@ -4,6 +4,7 @@ const initialState = {
     spinner: false,
     defaults: false,
     errorAlertShow: false,
+    alertList: [],
     passwordChange: {}
 }
 
@@ -54,6 +55,20 @@ function resetChangePassAxiosData(state, data) {
   }
 }
 
+function addAlertToAlertList(state, data) {
+  return {
+    ...state, 
+    alertList: [...state.alertList, data]
+  }
+}
+
+function deleteAlertToAlertList(state, data) {
+  return {
+    ...state, 
+    alertList: state.alertList.filter(alert => alert.id != data)
+  }
+}
+
 export default function webUtilities(state = initialState, action) {
   switch(action.type) {
     case ActionTypes.SHOW_SPINNER:  
@@ -68,6 +83,10 @@ export default function webUtilities(state = initialState, action) {
       return toggleAlertStatus(state, action.payload);
     case ActionTypes.RESET_CHANGE_PASS_DATA:  
       return resetChangePassAxiosData(state, action.payload);
+    case ActionTypes.ADD_ALERT_TO_ALERT_LIST:  
+      return addAlertToAlertList(state, action.payload);
+    case ActionTypes.DELETE_ALERT_TO_ALERT_LIST:  
+      return deleteAlertToAlertList(state, action.payload);
     default:
       return state;
   }
