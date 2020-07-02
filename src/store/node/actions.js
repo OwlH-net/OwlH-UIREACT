@@ -9,7 +9,6 @@ const config = {
 }
 
 export function getAllNodes() {
-  console.log("============> actions getAllNodes <<<<<<<<<<<<<<<<")
     const token = GetToken()
     const username = GetUserName()
   
@@ -31,5 +30,30 @@ function accGetAllNodes(data) {
     return {
       type: ActionTypes.GET_ALL_NODES,
       payload: data
+    }
+}
+
+export function PingNode(nodeUUIDS) {
+    const token = GetToken()
+    const username = GetUserName()
+
+    let newHeaders = {
+      ...config.headers, 
+      'user': username,
+      'token': token
+    }
+    let newConfig = {headers: newHeaders}
+  
+    return (dispatch) => {
+      axios.get('/api/pingNode/'+nodeUUIDS, newConfig)
+      .then(resp => {
+        dispatch(accPingNode(resp.data, nodeUUIDS))
+      })
+    }
+  }
+function accPingNode(data, nodeUUIDS) {
+    return {
+      type: ActionTypes.PING_NODE,
+      payload: {id:nodeUUIDS, data:data}
     }
 }

@@ -61,9 +61,11 @@ a.active {
 
 .line{
   color:dodgerblue; 
-  border-top: "10px solid";
+  background-color: "dodgerblue";
+  height: 1;
 }
 
+.bg-dodgerblue { background-color:dodgerblue; }
 .bg-purple { background-color: #6f42c1; }
 .bg-red { background-color: #F44336; }
 .bg-light-green { background-color: #8BC34A; }
