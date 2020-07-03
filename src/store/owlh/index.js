@@ -27,15 +27,9 @@ function loadCurrentMasters(state, data) {
 }
 
 function addNewMaster(state, nMaster) {
-  console.log("Current STATE")
-  console.log(state)
-  console.log("new master")
-  console.log(nMaster)
     // if data.name exists, then we are editing
   const newMasterList = state.masterList.filter(master => master.name != nMaster.name);
-  console.log(newMasterList)
   const data = [...newMasterList, nMaster]
-  console.log("save new master list")
   saveCurrentMasters(data)
 
   return {

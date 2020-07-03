@@ -1,8 +1,7 @@
 import * as ActionTypes from './node-action-types';
 
 const initialState = {
-  allNodesList: {},
-  nodeStatus: []
+  allNodesList: {}
 }
 
 function getAllNodes(state, data) {
@@ -13,10 +12,36 @@ function getAllNodes(state, data) {
 }
 
 function pingNode(state, data) {
+
+  //filter by id and add node status (unregistered status has token == wait)
+  // const newAllNodeList = Object.entries(state.allNodesList).filter(node => {
+  //   console.log(node[0] != data.id)
+  //   node[0] != data.id
+  // });
+  const newNode = Object.entries(state.allNodesList || {}).filter(node => {
+    return node[0] == data.id
+  });
+  console.log(newNode)
+
+
+  const nodeModified = {
+    ...newNode[0][1], 
+    status: data.status
+  }
+
+  const finalNodeList = Object.entries(state.allNodesList || {}).map((item) => {
+    if(item[0] == data.id){   
+      item[1] = nodeModified
+      return item
+    }
+    return item
+  })  
+
   return {
     ...state,
-    nodeStatus: [...state.nodeStatus, data]
+    allNodesList: finalNodeList
   }
+  // return{state}
 }
 
 export default function webUtilities(state = initialState, action) {

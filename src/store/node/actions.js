@@ -22,6 +22,9 @@ export function getAllNodes() {
     return (dispatch) => {
       axios.get('/api/nodes', newConfig)
       .then(resp => {
+
+        //check token for pending reg
+
         dispatch(accGetAllNodes(resp.data))
       })
     }
@@ -33,7 +36,7 @@ function accGetAllNodes(data) {
     }
 }
 
-export function PingNode(nodeUUIDS) {
+export function PingNode(nodeUUID) {
     const token = GetToken()
     const username = GetUserName()
 
@@ -43,17 +46,22 @@ export function PingNode(nodeUUIDS) {
       'token': token
     }
     let newConfig = {headers: newHeaders}
-  
+      
     return (dispatch) => {
-      axios.get('/api/pingNode/'+nodeUUIDS, newConfig)
+      axios.get('/api/pingNode/'+nodeUUID, newConfig)
       .then(resp => {
-        dispatch(accPingNode(resp.data, nodeUUIDS))
+        //manage node status request
+        if("ack" in resp.data){
+          dispatch(accPingNode("offline", nodeUUID))
+        }else{
+          dispatch(accPingNode("online", nodeUUID))
+        }
       })
     }
   }
-function accPingNode(data, nodeUUIDS) {
+function accPingNode(data, nodeUUID) {
     return {
       type: ActionTypes.PING_NODE,
-      payload: {id:nodeUUIDS, data:data}
+      payload: {id:nodeUUID, status:data}
     }
 }

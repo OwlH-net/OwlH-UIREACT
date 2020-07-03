@@ -10,8 +10,8 @@ function fulfilMasterDetails(state, master) {
     console.log(state)
     console.log(master)
   return {
-        ...state, 
-        currentMaster: master
+    ...state, 
+    currentMaster: master
   }
 }
 
