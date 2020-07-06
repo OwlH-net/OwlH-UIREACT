@@ -11,6 +11,21 @@ function getAllNodes(state, data) {
   }
 }
 
+function deleteNode(state, data) {
+console.log(state.allNodesList)
+console.log(data)
+  //filter
+  const newNodesList = Object.entries(state.allNodesList || {}).filter(node => !node.includes(data));
+  console.log(newNodesList)
+  console.log(newNodesList)
+  console.log(newNodesList)
+  console.log(newNodesList)
+  // return {
+  //   ...state,
+  //   allNodesList: data
+  // }
+}
+
 function pingNode(state, data) {
 
   const newNode = Object.entries(state.allNodesList || {}).filter(key => {
@@ -83,6 +98,8 @@ export default function webUtilities(state = initialState, action) {
         return resetLoadingNode(state, action.payload);
       case ActionTypes.SET_LOADING_NODE:  
         return setLoadingNode(state, action.payload);
+      case ActionTypes.DELETE_NODE:  
+        return deleteNode(state, action.payload);
       default:
         return state;
     }

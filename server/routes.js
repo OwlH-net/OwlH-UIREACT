@@ -36,4 +36,9 @@ router.get('/pingNode/:uuid', async (req, res, next) => {
   res.status(200).json(pass)
 })
 
+router.delete('/deleteNode/:uuid', async (req, res, next) => {
+  const pass = await OwlHService.deleteNode(req)
+  res.status(200).json(pass)
+})
+
 module.exports = router

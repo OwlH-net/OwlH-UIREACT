@@ -26,8 +26,6 @@ readConfiguration()
 console.log(url)
 
 function saveConfiguration(data) {
-  console.log("save configuration")
-  console.log(data)
   configuration = JSON.stringify(data);
   fs.writeFileSync(configFile, configuration);
   readConfiguration()
@@ -94,9 +92,6 @@ function setPassword(req) {
 }
 
 function getAbout(data) {
-  console.log("USR DATA")
-  console.log(data)
-  console.log("GET LOGIN")
   // return axios.put(`${url}/master/login`,{},
   return axios.get(`${url}/home`,
                     {
@@ -161,6 +156,30 @@ function pingNode(req) {
     })
 }
 
+function deleteNode(req) {
+  let token = req.headers.token
+  let username = req.headers.user
+
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': token,
+    'user': username
+  }
+
+  return axios.delete(`${url}/node/${req.params.uuid}`,
+                  {
+                    httpsAgent: httsAgent,
+                    headers: newHeader
+                  }
+                )
+  .then(resp => {
+    return resp.data
+  })
+  .catch(resp => {
+    return resp.data
+  })
+}
+
 module.exports = {
   getLogin,
   getAbout,
@@ -168,5 +187,6 @@ module.exports = {
   setConfiguration,
   setPassword,
   getNodes,
-  pingNode
+  pingNode,
+  deleteNode
 }

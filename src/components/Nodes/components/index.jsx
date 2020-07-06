@@ -26,7 +26,6 @@ const index = (props) => {
 const mapStateToProps = (state) => {
     return {
         allNodesList: state.node.allNodesList,
-        nodeStatus: state.node.nodeStatus,
     }
 }
 const mapDispatchToProps = (dispatch) => ({

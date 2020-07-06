@@ -24,7 +24,6 @@ export function getAllNodes() {
       .then(resp => {
 
         //check token for pending reg
-      console.log(resp.data)
         dispatch(accGetAllNodes(resp.data))
       })
     }
@@ -93,5 +92,30 @@ function resetLoadingNode(id) {
     return {
       type: ActionTypes.RESET_LOADING_NODE,
       payload: id
+    }
+}
+      
+export function DeleteNode(nodeUUID) {
+    const token = GetToken()
+    const username = GetUserName()
+
+    let newHeaders = {
+      ...config.headers, 
+      'user': username,
+      'token': token
+    }
+    let newConfig = {headers: newHeaders}
+      
+    return (dispatch) => {
+      axios.delete('/api/deleteNode/'+nodeUUID, newConfig)
+      .then(resp => {
+        dispatch(accDeleteNode(nodeUUID))
+      })
+    }
+  }
+function accDeleteNode(data) {
+    return {
+      type: ActionTypes.DELETE_NODE,
+      payload: data
     }
 }
