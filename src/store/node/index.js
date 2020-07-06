@@ -11,6 +11,21 @@ function getAllNodes(state, data) {
   }
 }
 
+function deleteNode(state, data) {
+console.log(state.allNodesList)
+console.log(data)
+  //filter
+  const newNodesList = Object.entries(state.allNodesList || {}).filter(node => !node.includes(data));
+  console.log(newNodesList)
+  console.log(newNodesList)
+  console.log(newNodesList)
+  console.log(newNodesList)
+  // return {
+  //   ...state,
+  //   allNodesList: data
+  // }
+}
+
 function pingNode(state, data) {
 
   //filter by id and add node status (unregistered status has token == wait)
@@ -21,8 +36,6 @@ function pingNode(state, data) {
   const newNode = Object.entries(state.allNodesList || {}).filter(node => {
     return node[0] == data.id
   });
-  console.log(newNode)
-
 
   const nodeModified = {
     ...newNode[0][1], 
@@ -50,6 +63,8 @@ export default function webUtilities(state = initialState, action) {
         return getAllNodes(state, action.payload);
       case ActionTypes.PING_NODE:  
         return pingNode(state, action.payload);
+      case ActionTypes.DELETE_NODE:  
+        return deleteNode(state, action.payload);
       default:
         return state;
     }

@@ -17,7 +17,8 @@ const index = (props) => {
             <Menu />
             <Banner title="Nodes" subtitle="All nodes list" />
             <div className="m-3 p-3">
-                <NodesList key="nodes" allNodesList={props.allNodesList} />
+                {/* <NodesList key="nodes" allNodesList={props.allNodesList} /> */}
+                <NodesList key="nodes" />
             </div>
         </div>
     )
@@ -26,7 +27,6 @@ const index = (props) => {
 const mapStateToProps = (state) => {
     return {
         allNodesList: state.node.allNodesList,
-        nodeStatus: state.node.nodeStatus,
     }
 }
 const mapDispatchToProps = (dispatch) => ({
