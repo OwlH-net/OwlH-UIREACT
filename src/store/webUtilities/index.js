@@ -2,10 +2,19 @@ import * as ActionTypes from './utils-action-types';
 
 const initialState = {
     spinner: false,
+    nodeSelected: '',
+    modal: false,
     defaults: false,
     errorAlertShow: false,
     alertList: [],
     passwordChange: {}
+}
+
+function toggleModalWindowStatus(state, data) {
+  return {
+    ...state,
+    modal: data
+  }
 }
 
 function toggleAlertStatus(state, data) {
@@ -33,6 +42,13 @@ function showSpinner(state, data) {
   return {
     ...state, 
     spinner: data
+  }
+}
+
+function setNodeSelected(state, data) {
+  return {
+    ...state, 
+    nodeSelected: data
   }
 }
 
@@ -87,6 +103,10 @@ export default function webUtilities(state = initialState, action) {
       return addAlertToAlertList(state, action.payload);
     case ActionTypes.DELETE_ALERT_TO_ALERT_LIST:  
       return deleteAlertToAlertList(state, action.payload);
+    case ActionTypes.TOGGLE_MODAL:  
+      return toggleModalWindowStatus(state, action.payload);
+    case ActionTypes.GET_NODE_SELECTED:  
+      return setNodeSelected(state, action.payload);
     default:
       return state;
   }

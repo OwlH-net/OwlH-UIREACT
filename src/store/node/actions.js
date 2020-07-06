@@ -65,6 +65,36 @@ function accPingNode(data, nodeUUID) {
     }
 }
 
+export function SetLoading(id) {
+    console.log("JAL - Set Loading action")
+    console.log(id)
+    return (dispatch) => {
+        dispatch(setLoadingNode(id))
+    }
+  }
+function setLoadingNode(id) {
+    return {
+      type: ActionTypes.SET_LOADING_NODE,
+      payload: id
+    }
+}
+
+
+export function ResetLoading(id) {
+    console.log("JAL - Reset Loading action")
+    console.log(id)
+
+    return (dispatch) => {
+        dispatch(resetLoadingNode(id))
+    }
+  }
+function resetLoadingNode(id) {
+    return {
+      type: ActionTypes.RESET_LOADING_NODE,
+      payload: id
+    }
+}
+      
 export function DeleteNode(nodeUUID) {
     const token = GetToken()
     const username = GetUserName()

@@ -22,7 +22,6 @@ export function userLogin(credentials) {
 
         //set token
         resp.data.ack == "true" ? SetToken(resp.data.token) : RemoveToken()
-        
         dispatch(hideSpinner())
 
         //dispatch
@@ -30,6 +29,7 @@ export function userLogin(credentials) {
     })
   }
 }
+
 function getLoginToken(data) {
   console.log("run Action LOGIN_TOKEN")
   console.log(data)

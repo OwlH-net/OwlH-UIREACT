@@ -15,10 +15,4 @@ router.put('/', async (req, res, next) => {
   res.status(200).json(config)
 })
 
-router.delete('/', async (req, res, next) => {
-  console.log('DELETE CONFIG')
-  const config = await OwlHService.setConfiguration(req.body)
-  res.status(200).json(config)
-})
-
 module.exports = router

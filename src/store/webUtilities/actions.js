@@ -93,3 +93,17 @@ export function DeleteAlertToAlertList(alert) {
     payload: alert
   }
 }
+  
+export function ToggleModalWindow(status) {
+  return {
+    type: ActionTypes.TOGGLE_MODAL,
+    payload: status
+  }
+}
+  
+export function NodeSelected(id) {
+  return {
+    type: ActionTypes.GET_NODE_SELECTED,
+    payload: id
+  }
+}
