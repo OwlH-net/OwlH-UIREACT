@@ -20,11 +20,17 @@ const NodeStatus = (props) => {
     //     }
     // }
     
+<<<<<<< HEAD
     
 
     // return (        
     //     <p>{props.status}</p>
     // )
+=======
+    return (
+        <p>{props.status}</p>
+    )
+>>>>>>> aeac102cedcf81929d9361a9f2c11b2297aa0f86
 }
 
 export default NodeStatus

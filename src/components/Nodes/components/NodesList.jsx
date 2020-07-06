@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react'
 import { FaBoxOpen, FaCogs, FaTrashAlt } from "react-icons/fa";
 import NodeStatus from './NodeStatus'
+<<<<<<< HEAD
 import ModalWindow from '../../Shared/ModalWindow'
 import { PingNode, SetLoading } from '../../../store/node/actions'
 import { ToggleModalWindow, NodeSelected } from '../../../store/webUtilities/actions'
+=======
+import { PingNode, SetLoading, DeleteNode } from '../../../store/node/actions'
+>>>>>>> aeac102cedcf81929d9361a9f2c11b2297aa0f86
 import { connect } from 'react-redux';
 import {Modal, Button} from "react-bootstrap";
 
@@ -26,6 +30,16 @@ const NodesList = (props) => {
         {
             var nStatus = '';
 
+<<<<<<< HEAD
+=======
+    
+    const nodesData = () => {
+        const totalList = Object.entries(props.allNodesList || {}).map(([id , val]) =>
+        {
+
+            var nStatus = '';
+
+>>>>>>> aeac102cedcf81929d9361a9f2c11b2297aa0f86
             if(props.allNodesList[id]["token"] == "wait"){nStatus = "PENDING REGISTRATION"}
             else {nStatus = props.allNodesList[id]["status"]}
 
@@ -39,6 +53,10 @@ const NodesList = (props) => {
                     </td>
                     <td key={id+'-status'}>
                         <NodeStatus key={id+'-node'} status={nStatus}/>        
+<<<<<<< HEAD
+=======
+                        {/* <NodeStatus key={id+'-node'} {...nodeStatus[0]} token={val.token}/>         */}
+>>>>>>> aeac102cedcf81929d9361a9f2c11b2297aa0f86
                     </td>
                     <td key={id+'-actions'}>
                         <span>
@@ -54,6 +72,13 @@ const NodesList = (props) => {
         )
         return totalList
     }
+<<<<<<< HEAD
+=======
+    
+    const deleteCurrentNode = (nodeUUID) => {
+        props.deleteNode(nodeUUID)
+    }
+>>>>>>> aeac102cedcf81929d9361a9f2c11b2297aa0f86
 
     // var nodeId;
     const deleteCurrentNode = (id) => {
@@ -92,9 +117,13 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
     getPingNode: (node) => dispatch(PingNode(node)),
     setLoading: (id) => dispatch(SetLoading(id)),
+<<<<<<< HEAD
     deleteNode: (node) => dispatch(DeleteNode(node)),
     toggleModal: (status) => dispatch(ToggleModalWindow(status)),
     nodeSelected: (id) => dispatch(NodeSelected(id))
+=======
+    deleteNode: (node) => dispatch(DeleteNode(node))
+>>>>>>> aeac102cedcf81929d9361a9f2c11b2297aa0f86
 
 })
 
