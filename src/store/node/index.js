@@ -13,35 +13,64 @@ function getAllNodes(state, data) {
 
 function pingNode(state, data) {
 
-  //filter by id and add node status (unregistered status has token == wait)
-  // const newAllNodeList = Object.entries(state.allNodesList).filter(node => {
-  //   console.log(node[0] != data.id)
-  //   node[0] != data.id
-  // });
-  const newNode = Object.entries(state.allNodesList || {}).filter(node => {
-    return node[0] == data.id
-  });
-  console.log(newNode)
+  const newNode = Object.entries(state.allNodesList || {}).filter(key => {
+    
+    key[1] = {
+      ...key[1],
+      status: data.status
+    }
+
+    return key[0] == data.id
+  })
 
 
-  const nodeModified = {
-    ...newNode[0][1], 
-    status: data.status
+  if (newNode.length != 0){  
+    const newStateAllNodes = {
+      ...state.allNodesList, 
+      [`${newNode[0][0]}`]: newNode[0][1]
+    }
+
+    return {
+      ...state,
+      allNodesList: newStateAllNodes
+    }
   }
+  return {
+    ...state,
+  }
+}
 
+function resetLoadingNode(state, id) {
   const finalNodeList = Object.entries(state.allNodesList || {}).map((item) => {
-    if(item[0] == data.id){   
-      item[1] = nodeModified
+    if(item[0] == id){   
+      item[1] = {
+        ...item[1],
+        loading: false
+      }
       return item
     }
     return item
   })  
-
   return {
-    ...state,
-    allNodesList: finalNodeList
+    ...state
   }
-  // return{state}
+}
+
+function setLoadingNode(state, id) {
+  console.log("")
+  const finalNodeList = Object.entries(state.allNodesList || {}).map((item) => {
+    if(item[0] == id){   
+      item[1] = {
+        ...item[1],
+        loading: true
+      }
+      return item
+    }
+    return item
+  })  
+  return {
+    ...state
+  }
 }
 
 export default function webUtilities(state = initialState, action) {
@@ -50,6 +79,10 @@ export default function webUtilities(state = initialState, action) {
         return getAllNodes(state, action.payload);
       case ActionTypes.PING_NODE:  
         return pingNode(state, action.payload);
+      case ActionTypes.RESET_LOADING_NODE:  
+        return resetLoadingNode(state, action.payload);
+      case ActionTypes.SET_LOADING_NODE:  
+        return setLoadingNode(state, action.payload);
       default:
         return state;
     }

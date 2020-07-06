@@ -19,7 +19,7 @@ const NodeStatus = (props) => {
     // }
     
     return (
-        <p></p>
+        <p>{props.status}</p>
     )
 }
 

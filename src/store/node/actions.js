@@ -24,7 +24,7 @@ export function getAllNodes() {
       .then(resp => {
 
         //check token for pending reg
-
+      console.log(resp.data)
         dispatch(accGetAllNodes(resp.data))
       })
     }
@@ -63,5 +63,35 @@ function accPingNode(data, nodeUUID) {
     return {
       type: ActionTypes.PING_NODE,
       payload: {id:nodeUUID, status:data}
+    }
+}
+
+export function SetLoading(id) {
+    console.log("JAL - Set Loading action")
+    console.log(id)
+    return (dispatch) => {
+        dispatch(setLoadingNode(id))
+    }
+  }
+function setLoadingNode(id) {
+    return {
+      type: ActionTypes.SET_LOADING_NODE,
+      payload: id
+    }
+}
+
+
+export function ResetLoading(id) {
+    console.log("JAL - Reset Loading action")
+    console.log(id)
+
+    return (dispatch) => {
+        dispatch(resetLoadingNode(id))
+    }
+  }
+function resetLoadingNode(id) {
+    return {
+      type: ActionTypes.RESET_LOADING_NODE,
+      payload: id
     }
 }

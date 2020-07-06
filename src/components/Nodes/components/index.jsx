@@ -17,7 +17,7 @@ const index = (props) => {
             <Menu />
             <Banner title="Nodes" subtitle="All nodes list" />
             <div className="m-3 p-3">
-                <NodesList key="nodes" allNodesList={props.allNodesList} />
+                <NodesList />
             </div>
         </div>
     )
@@ -30,9 +30,7 @@ const mapStateToProps = (state) => {
     }
 }
 const mapDispatchToProps = (dispatch) => ({
-    getNodes: () => dispatch(getAllNodes()),
-    getPingNodes: (node) => dispatch(PingNode(node))
-
+    getNodes: () => dispatch(getAllNodes())
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);
