@@ -101,9 +101,9 @@ export function ToggleModalWindow(status) {
   }
 }
   
-export function NodeSelected(id) {
+export function ModalButtonClicked(option) {
   return {
-    type: ActionTypes.GET_NODE_SELECTED,
-    payload: id
+    type: ActionTypes.MODAL_ACTION_SELECTED,
+    payload: option
   }
 }

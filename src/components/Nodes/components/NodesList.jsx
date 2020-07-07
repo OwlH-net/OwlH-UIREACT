@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { FaBoxOpen, FaCogs, FaTrashAlt } from "react-icons/fa";
 import NodeStatus from './NodeStatus'
-<<<<<<< HEAD
 import ModalWindow from '../../Shared/ModalWindow'
-import { PingNode, SetLoading } from '../../../store/node/actions'
-import { ToggleModalWindow, NodeSelected } from '../../../store/webUtilities/actions'
-=======
-import { PingNode, SetLoading, DeleteNode } from '../../../store/node/actions'
->>>>>>> aeac102cedcf81929d9361a9f2c11b2297aa0f86
+import { PingNode, SetLoading, getAllNodes,DeleteNode } from '../../../store/node/actions'
+import { ToggleModalWindow, ModalButtonClicked } from '../../../store/webUtilities/actions'
 import { connect } from 'react-redux';
-import {Modal, Button} from "react-bootstrap";
 
 const NodesList = (props) => {
 
+    const [nodeSelected, setNodeSelected] = useState('')
+
     useEffect(() => {
-        const NodeStatusReload = setTimeout(function(){ nodeStatusReload() }, 3000)
+        // const NodeStatusReload = setTimeout(function(){ nodeStatusReload() }, 3000)
     }, [props.allNodesList]);
 
     const nodeStatusReload = () => {
@@ -25,21 +22,31 @@ const NodesList = (props) => {
         )
     }
     
-    const nodesData = () => {
-        const totalList = Object.entries(props.allNodesList || {}).map(([id , val]) =>
-        {
-            var nStatus = '';
+    useEffect(() => {
+        if(props.modalActionSelected){            
+            //call delete node and get all nodes at axios
+            props.deleteNode(nodeSelected)
+            // //call getAllNodes
+            // props.getNodes()
+            //setState for delete node uuid selected
+            setNodeSelected('')
+        }
+        //disable modal action
+        props.modalButtonClicked(false)
+    }, [props.modalActionSelected]);
 
-<<<<<<< HEAD
-=======
+    //Set current node uuid
+    const deleteCurrentNode = (id) => {
+        setNodeSelected(id)
+        props.toggleModal(true)  
+    }
+
     
     const nodesData = () => {
         const totalList = Object.entries(props.allNodesList || {}).map(([id , val]) =>
         {
-
             var nStatus = '';
 
->>>>>>> aeac102cedcf81929d9361a9f2c11b2297aa0f86
             if(props.allNodesList[id]["token"] == "wait"){nStatus = "PENDING REGISTRATION"}
             else {nStatus = props.allNodesList[id]["status"]}
 
@@ -52,11 +59,7 @@ const NodesList = (props) => {
                         </span>
                     </td>
                     <td key={id+'-status'}>
-                        <NodeStatus key={id+'-node'} status={nStatus}/>        
-<<<<<<< HEAD
-=======
-                        {/* <NodeStatus key={id+'-node'} {...nodeStatus[0]} token={val.token}/>         */}
->>>>>>> aeac102cedcf81929d9361a9f2c11b2297aa0f86
+                        <NodeStatus key={id+'-node'} status={nStatus} nodeUUID={id}/>        
                     </td>
                     <td key={id+'-actions'}>
                         <span>
@@ -68,42 +71,33 @@ const NodesList = (props) => {
                     </td>
                 </tr>
             )
-        }
-        )
+        })
         return totalList
     }
-<<<<<<< HEAD
-=======
-    
-    const deleteCurrentNode = (nodeUUID) => {
-        props.deleteNode(nodeUUID)
-    }
->>>>>>> aeac102cedcf81929d9361a9f2c11b2297aa0f86
-
-    // var nodeId;
-    const deleteCurrentNode = (id) => {
-        props.toggleModal(true)  
-        props.nodeSelected(id)  
-    }
-
 
     return (        
         <div>
             {/* modal window */}
-            <ModalWindow title='Delete node' subtitle='Are you sure you want to delete this node?' variantColor='danger' btn='Delete' id='deleteNode'/>
+            <ModalWindow title='Delete node' subtitle='Are you sure you want to delete this node?' 
+                variantColor='danger' btn='Delete' id='deleteNode' />
 
-            <table className="table table-hover table-layout-fixed">
-                <thead>
-                    <tr>
-                        <th>Node name</th>
-                        <th>Node status</th>
-                        <th width="25%">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {nodesData()}
-                </tbody>
-            </table>
+            {Object.keys(props.allNodesList).length <= 0 
+                ?
+                    <div></div>
+                :
+                    <table className="table table-hover table-layout-fixed">
+                        <thead>
+                            <tr>
+                                <th>Node name</th>
+                                <th>Node status</th>
+                                <th width="25%">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {nodesData()}
+                        </tbody>
+                    </table>
+            }
         </div>
     )
 }
@@ -111,20 +105,17 @@ const NodesList = (props) => {
 const mapStateToProps = (state) => {
     return {
         allNodesList: state.node.allNodesList,
-        modal: state.webUtilities.modal
+        modal: state.webUtilities.modal,
+        modalActionSelected: state.webUtilities.modalActionSelected,
     }
 }
 const mapDispatchToProps = (dispatch) => ({
     getPingNode: (node) => dispatch(PingNode(node)),
     setLoading: (id) => dispatch(SetLoading(id)),
-<<<<<<< HEAD
     deleteNode: (node) => dispatch(DeleteNode(node)),
     toggleModal: (status) => dispatch(ToggleModalWindow(status)),
-    nodeSelected: (id) => dispatch(NodeSelected(id))
-=======
-    deleteNode: (node) => dispatch(DeleteNode(node))
->>>>>>> aeac102cedcf81929d9361a9f2c11b2297aa0f86
-
+    modalButtonClicked: (option) => dispatch(ModalButtonClicked(option)),
+    getNodes: () => dispatch(getAllNodes())
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);

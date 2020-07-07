@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from 'react'
+import { RegisterNode } from '../../../store/node/actions'
 import { connect } from 'react-redux';
 
 const NodeStatus = (props) => {
     if(props.status == "PENDING REGISTRATION"){
-        return (<span className="badge bg-warning align-text-bottom text-white">PENDING REGISTRATION</span>)
+        return (
+            <div>
+                <span className="badge bg-warning align-text-bottom text-white">PENDING REGISTRATION</span> <br/>
+                {/* <span class="badge bg-primary align-text-bottom text-white float-" style="cursor: pointer;" onclick="registerNode(\''+uuid+'\')">Try registration now</span> */}
+                <span className="badge bg-primary align-text-bottom text-white pointer" onClick={() => {props.registerNode(props.nodeUUID)}}>Try registration now</span>
+            </div>
+        )
     }else if(props.status == "online"){
         return (<span className="badge bg-success align-text-bottom text-white">ONLINE</span>)
     }else if(props.status == "offline"){
@@ -11,26 +18,11 @@ const NodeStatus = (props) => {
     }else{
         return (<span className="badge bg-dark align-text-bottom text-white">N/A</span>)
     }
-    // //check if key "data" exist into the object props
-    // if('data' in props){
-    //     if('ping' in props.data){
-            
-    //     }
-    //     if('ack' in props.data){
-    //     }
-    // }
-    
-<<<<<<< HEAD
-    
-
-    // return (        
-    //     <p>{props.status}</p>
-    // )
-=======
-    return (
-        <p>{props.status}</p>
-    )
->>>>>>> aeac102cedcf81929d9361a9f2c11b2297aa0f86
 }
 
-export default NodeStatus
+const mapDispatchToProps = (dispatch) => ({
+    registerNode: (node) => dispatch(RegisterNode(node)),
+})
+
+const withProps = connect(null, mapDispatchToProps);
+export default withProps(NodeStatus)

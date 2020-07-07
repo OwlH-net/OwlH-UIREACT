@@ -41,4 +41,9 @@ router.delete('/deleteNode/:uuid', async (req, res, next) => {
   res.status(200).json(pass)
 })
 
+router.put('/nodeRegistration', async (req, res, next) => {
+  const pass = await OwlHService.registerNode(req)
+  res.status(200).json(pass)
+})
+
 module.exports = router

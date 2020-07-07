@@ -22,7 +22,7 @@ export function getAllNodes() {
     return (dispatch) => {
       axios.get('/api/nodes', newConfig)
       .then(resp => {
-
+        console.log(resp)
         //check token for pending reg
         dispatch(accGetAllNodes(resp.data))
       })
@@ -42,7 +42,7 @@ export function PingNode(nodeUUID) {
     let newHeaders = {
       ...config.headers, 
       'user': username,
-      'token': token
+      'token': token,
     }
     let newConfig = {headers: newHeaders}
       
@@ -96,26 +96,42 @@ function resetLoadingNode(id) {
 }
       
 export function DeleteNode(nodeUUID) {
-    const token = GetToken()
-    const username = GetUserName()
+  const token = GetToken()
+  const username = GetUserName()
 
-    let newHeaders = {
-      ...config.headers, 
-      'user': username,
-      'token': token
-    }
-    let newConfig = {headers: newHeaders}
-      
-    return (dispatch) => {
-      axios.delete('/api/deleteNode/'+nodeUUID, newConfig)
-      .then(resp => {
-        dispatch(accDeleteNode(nodeUUID))
-      })
-    }
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
   }
-function accDeleteNode(data) {
-    return {
-      type: ActionTypes.DELETE_NODE,
-      payload: data
-    }
+  let newConfig = {headers: newHeaders}
+    
+  return (dispatch) => {
+    axios.delete('/api/deleteNode/'+nodeUUID, newConfig)
+    .then(resp => {
+      console.log(resp)
+      dispatch(getAllNodes())
+    })
+  }
+}
+
+export function RegisterNode(nodeUUID) {
+  const token = GetToken()
+  const username = GetUserName()
+
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token,
+    'uuid': nodeUUID
+  }
+  let newConfig = {headers: newHeaders}
+
+  return (dispatch)  => {
+    axios.put('/api/nodeRegistration', newConfig)
+      .then(resp => {
+        console.log(resp)
+        dispatch(getAllNodes())
+    })
+  }
 }

@@ -109,6 +109,8 @@ function getAbout(data) {
 }
 
 function getNodes(req) {
+  console.log(req.headers)
+  console.log(`${url}/node/GetAllNodes2`)
   let token = req.headers.token
   let username = req.headers.user
 
@@ -157,6 +159,8 @@ function pingNode(req) {
 }
 
 function deleteNode(req) {
+  console.log(req.headers)
+  console.log(`${url}/node/${req.params.uuid}`)
   let token = req.headers.token
   let username = req.headers.user
 
@@ -180,6 +184,33 @@ function deleteNode(req) {
   })
 }
 
+function registerNode(req) {
+  console.log(req.headers)
+  console.log(`${url}/node/registerNode/${req.headers.uuid}`)
+  let token = req.headers.token
+  let username = req.headers.user
+
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': token,
+    'user': username
+  }
+
+  return axios.put(`${url}/node/node/registerNode/${req.headers.uuid}`,
+                  {
+                    httpsAgent: httsAgent,
+                    headers: newHeader
+                  }
+                )
+  .then(resp => {
+    console.log(resp.data)
+    return resp.data
+  })
+  .catch(resp => {
+    return resp.data
+  })
+}
+
 module.exports = {
   getLogin,
   getAbout,
@@ -188,5 +219,6 @@ module.exports = {
   setPassword,
   getNodes,
   pingNode,
-  deleteNode
+  deleteNode,
+  registerNode
 }

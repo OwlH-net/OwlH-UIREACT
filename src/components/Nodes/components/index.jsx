@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Menu from '../../Shared/Components/Menu/Menu'
 import Banner from '../../Shared/Components/Banner/Banner'
-import { getAllNodes, PingNode } from '../../../store/node/actions'
+import { getAllNodes } from '../../../store/node/actions'
 import { connect } from 'react-redux';
 import NodesList from './NodesList'
 

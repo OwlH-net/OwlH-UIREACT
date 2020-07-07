@@ -2,7 +2,7 @@ import * as ActionTypes from './utils-action-types';
 
 const initialState = {
     spinner: false,
-    nodeSelected: '',
+    modalActionSelected: false,
     modal: false,
     defaults: false,
     errorAlertShow: false,
@@ -45,13 +45,6 @@ function showSpinner(state, data) {
   }
 }
 
-function setNodeSelected(state, data) {
-  return {
-    ...state, 
-    nodeSelected: data
-  }
-}
-
 //This function should return true or false, depending on the action
 //This function should return true or false, depending on the action
 //This function should return true or false, depending on the action
@@ -78,12 +71,19 @@ function addAlertToAlertList(state, data) {
   }
 }
 
-function deleteAlertToAlertList(state, data) {
+function getModalActionSelected(state, data) {
   return {
     ...state, 
-    alertList: state.alertList.filter(alert => alert.id != data)
+    modalActionSelected: data
   }
 }
+
+// function deleteAlertToAlertList(state, data) {
+//   return {
+//     ...state, 
+//     alertList: state.alertList.filter(alert => alert.id != data)
+//   }
+// }
 
 export default function webUtilities(state = initialState, action) {
   switch(action.type) {
@@ -105,8 +105,8 @@ export default function webUtilities(state = initialState, action) {
       return deleteAlertToAlertList(state, action.payload);
     case ActionTypes.TOGGLE_MODAL:  
       return toggleModalWindowStatus(state, action.payload);
-    case ActionTypes.GET_NODE_SELECTED:  
-      return setNodeSelected(state, action.payload);
+    case ActionTypes.MODAL_ACTION_SELECTED:  
+      return getModalActionSelected(state, action.payload);
     default:
       return state;
   }

@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import {Modal, Button} from "react-bootstrap";
 import { connect } from 'react-redux';
-import { ToggleModalWindow } from '../../store/webUtilities/actions'
-import { DeleteNode } from '../../store/node/actions'
-
+import { ToggleModalWindow, ModalButtonClicked } from '../../store/webUtilities/actions'
 
 const ModalWindow = (props) => {
 
@@ -17,8 +15,8 @@ const ModalWindow = (props) => {
                     <Modal.Header>{props.title}</Modal.Header>
                     <Modal.Body>{props.subtitle}</Modal.Body>
                     <Modal.Footer>
-                        <Button variant='secondary' onClick={handleClose}>Close</Button>
-                        {'btn' in props && props.id=='deleteNode' ? <Button variant={props.variantColor} onClick={() => {props.deleteNode(props.nodeSelected); props.toggleModal(false)}}>{props.btn}</Button> : null}
+                        <Button variant='secondary' onClick={ ()=> {props.toggleModal(false)}} >Close</Button>
+                        {'btn' in props && props.id=='deleteNode' ? <Button variant={props.variantColor} onClick={() => { props.toggleModal(false); props.modalButtonClicked(true) }}>{props.btn}</Button> : null}
                     </Modal.Footer>
                 </Modal>
                 : null
@@ -29,13 +27,12 @@ const ModalWindow = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        modal: state.webUtilities.modal,
-        nodeSelected: state.webUtilities.nodeSelected
+        modal: state.webUtilities.modal
     }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    deleteNode: (node) => dispatch(DeleteNode(node)),
+    modalButtonClicked: (option) => dispatch(ModalButtonClicked(option)),
     toggleModal: (status) => dispatch(ToggleModalWindow(status))
 })
 
