@@ -17,8 +17,8 @@ router.put('/login', async (req, res, next) => {
 })
 
 router.get('/about', async (req, res, next) => {
-  const login = await OwlHService.getAbout(req.body)
-  res.status(200).json(login)
+  const about = await OwlHService.getAbout(req.body)
+  res.status(200).json(about)
 })
 
 router.put('/pass', async (req, res, next) => {
@@ -27,23 +27,23 @@ router.put('/pass', async (req, res, next) => {
 })
 
 router.get('/nodes', async (req, res, next) => {
-  const pass = await OwlHService.getNodes(req)
-  res.status(200).json(pass)
+  const nodes = await OwlHService.getNodes(req)
+  res.status(200).json(nodes)
 })
 
 router.get('/pingNode/:uuid', async (req, res, next) => {
-  const pass = await OwlHService.pingNode(req)
-  res.status(200).json(pass)
+  const ping = await OwlHService.pingNode(req)
+  res.status(200).json(ping)
 })
 
 router.delete('/deleteNode/:uuid', async (req, res, next) => {
-  const pass = await OwlHService.deleteNode(req)
-  res.status(200).json(pass)
+  const del = await OwlHService.deleteNode(req)
+  res.status(200).json(del)
 })
 
-router.put('/nodeRegistration', async (req, res, next) => {
-  const pass = await OwlHService.registerNode(req)
-  res.status(200).json(pass)
+router.put('/registerNode/:uuid', async (req, res, next) => {
+  const reg = await OwlHService.regNode(req)
+  res.status(200).json(reg)
 })
 
 module.exports = router

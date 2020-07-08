@@ -3,7 +3,7 @@ import { FaBoxOpen, FaCogs, FaTrashAlt } from "react-icons/fa";
 import NodeStatus from './NodeStatus'
 import ModalWindow from '../../Shared/ModalWindow'
 import { PingNode, SetLoading, getAllNodes,DeleteNode } from '../../../store/node/actions'
-import { ToggleModalWindow, ModalButtonClicked } from '../../../store/webUtilities/actions'
+import { ToggleModalWindow, ModalButtonClicked, ToggleProgressBar } from '../../../store/webUtilities/actions'
 import { connect } from 'react-redux';
 
 const NodesList = (props) => {
@@ -11,29 +11,30 @@ const NodesList = (props) => {
     const [nodeSelected, setNodeSelected] = useState('')
 
     useEffect(() => {
-        // const NodeStatusReload = setTimeout(function(){ nodeStatusReload() }, 3000)
+        const NodeStatusReload = setTimeout(function(){ nodeStatusReload() }, 10000)
     }, [props.allNodesList]);
 
     const nodeStatusReload = () => {
-        Object.entries(props.allNodesList || {}).map(([id , val]) =>    
-            {
-                props.getPingNode(id)
-            }
-        )
+        props.toggleProgressBar(true)
+        props.getNodes()
+        console.log(props.allNodesList.length)
+        // Object.entries(props.allNodesList || {}).map(([id , val]) =>    
+        //     {
+        //         props.getPingNode(id)
+        //     }
+        // )
     }
     
     useEffect(() => {
-        if(props.modalActionSelected){            
+        if(props.modalActionSelected.status){            
             //call delete node and get all nodes at axios
             props.deleteNode(nodeSelected)
-            // //call getAllNodes
-            // props.getNodes()
             //setState for delete node uuid selected
             setNodeSelected('')
         }
         //disable modal action
-        props.modalButtonClicked(false)
-    }, [props.modalActionSelected]);
+        props.modalButtonClicked({status:false, id:props.modalActionSelected.id})
+    }, [props.modalActionSelected.status]);
 
     //Set current node uuid
     const deleteCurrentNode = (id) => {
@@ -45,11 +46,6 @@ const NodesList = (props) => {
     const nodesData = () => {
         const totalList = Object.entries(props.allNodesList || {}).map(([id , val]) =>
         {
-            var nStatus = '';
-
-            if(props.allNodesList[id]["token"] == "wait"){nStatus = "PENDING REGISTRATION"}
-            else {nStatus = props.allNodesList[id]["status"]}
-
             return (
                 <tr key={id}>
                     <td key={id+'-name'}>
@@ -59,7 +55,7 @@ const NodesList = (props) => {
                         </span>
                     </td>
                     <td key={id+'-status'}>
-                        <NodeStatus key={id+'-node'} status={nStatus} nodeUUID={id}/>        
+                        <NodeStatus key={id+'-node'} registrationStatus={props.allNodesList[id]["token"]} status={props.allNodesList[id]["status"]} nodeUUID={id}/>        
                     </td>
                     <td key={id+'-actions'}>
                         <span>
@@ -110,12 +106,13 @@ const mapStateToProps = (state) => {
     }
 }
 const mapDispatchToProps = (dispatch) => ({
-    getPingNode: (node) => dispatch(PingNode(node)),
+    // getPingNode: (node) => dispatch(PingNode(node)),
     setLoading: (id) => dispatch(SetLoading(id)),
     deleteNode: (node) => dispatch(DeleteNode(node)),
     toggleModal: (status) => dispatch(ToggleModalWindow(status)),
     modalButtonClicked: (option) => dispatch(ModalButtonClicked(option)),
-    getNodes: () => dispatch(getAllNodes())
+    getNodes: () => dispatch(getAllNodes()),
+    toggleProgressBar: (status) => dispatch(ToggleProgressBar(status))
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);

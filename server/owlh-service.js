@@ -109,8 +109,6 @@ function getAbout(data) {
 }
 
 function getNodes(req) {
-  console.log(req.headers)
-  console.log(`${url}/node/GetAllNodes2`)
   let token = req.headers.token
   let username = req.headers.user
 
@@ -120,7 +118,7 @@ function getNodes(req) {
     'user': username
   }
 
-  return axios.get(`${url}/node/GetAllNodes2`,
+  return axios.get(`${url}/node/getAllNodesReact`,
                     {
                       httpsAgent: httsAgent,
                       headers: newHeader
@@ -184,9 +182,13 @@ function deleteNode(req) {
   })
 }
 
-function registerNode(req) {
+function regNode(req) {
   console.log(req.headers)
-  console.log(`${url}/node/registerNode/${req.headers.uuid}`)
+  console.log(req.headers.token)
+  console.log(req.headers.user)
+  const connectUrl = `${url}/node/registerNode/${req.params.uuid}`
+  console.log(connectUrl)
+
   let token = req.headers.token
   let username = req.headers.user
 
@@ -196,7 +198,8 @@ function registerNode(req) {
     'user': username
   }
 
-  return axios.put(`${url}/node/node/registerNode/${req.headers.uuid}`,
+  // return axios.put(`${url}/node/registerNode/${req.params.uuid}`,
+  return axios.put(connectUrl,req.body, 
                   {
                     httpsAgent: httsAgent,
                     headers: newHeader
@@ -220,5 +223,5 @@ module.exports = {
   getNodes,
   pingNode,
   deleteNode,
-  registerNode
+  regNode
 }

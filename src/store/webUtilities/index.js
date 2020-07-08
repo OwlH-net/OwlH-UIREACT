@@ -2,7 +2,8 @@ import * as ActionTypes from './utils-action-types';
 
 const initialState = {
     spinner: false,
-    modalActionSelected: false,
+    progressBar: false,
+    modalActionSelected: {},
     modal: false,
     defaults: false,
     errorAlertShow: false,
@@ -64,6 +65,13 @@ function resetChangePassAxiosData(state, data) {
   }
 }
 
+function toggleProgressBarStatus(state, data) {
+  return {
+    ...state, 
+    progressBar: data
+  }
+}
+
 function addAlertToAlertList(state, data) {
   return {
     ...state, 
@@ -97,6 +105,8 @@ export default function webUtilities(state = initialState, action) {
       return changeUserPassword(state, action.payload);
     case ActionTypes.TOGGLE_ALERT:  
       return toggleAlertStatus(state, action.payload);
+    case ActionTypes.TOGGLE_PROGRESS:  
+      return toggleProgressBarStatus(state, action.payload);
     case ActionTypes.RESET_CHANGE_PASS_DATA:  
       return resetChangePassAxiosData(state, action.payload);
     case ActionTypes.ADD_ALERT_TO_ALERT_LIST:  

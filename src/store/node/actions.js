@@ -106,10 +106,11 @@ export function DeleteNode(nodeUUID) {
   }
   let newConfig = {headers: newHeaders}
     
+  console.log(newConfig)
+
   return (dispatch) => {
     axios.delete('/api/deleteNode/'+nodeUUID, newConfig)
     .then(resp => {
-      console.log(resp)
       dispatch(getAllNodes())
     })
   }
@@ -122,13 +123,13 @@ export function RegisterNode(nodeUUID) {
   let newHeaders = {
     ...config.headers, 
     'user': username,
-    'token': token,
-    'uuid': nodeUUID
+    'token': token
   }
+  
   let newConfig = {headers: newHeaders}
 
   return (dispatch)  => {
-    axios.put('/api/nodeRegistration', newConfig)
+    axios.put('/api/registerNode/'+nodeUUID, {} ,newConfig)
       .then(resp => {
         console.log(resp)
         dispatch(getAllNodes())

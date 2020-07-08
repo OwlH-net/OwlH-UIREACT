@@ -107,3 +107,10 @@ export function ModalButtonClicked(option) {
     payload: option
   }
 }
+  
+export function ToggleProgressBar(status) {
+  return {
+    type: ActionTypes.TOGGLE_PROGRESS,
+    payload: status
+  }
+}
