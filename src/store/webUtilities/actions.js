@@ -114,3 +114,9 @@ export function ToggleProgressBar(status) {
     payload: status
   }
 }
+  
+export function ToggleAddNodeForm() {
+  return {
+    type: ActionTypes.TOGGLE_ADD_NODE
+  }
+}

@@ -46,4 +46,14 @@ router.put('/registerNode/:uuid', async (req, res, next) => {
   res.status(200).json(reg)
 })
 
+router.post('/addNode', async (req, res, next) => {
+  const reg = await OwlHService.addNode(req)
+  res.status(200).json(reg)
+})
+
+router.get('/groups', async (req, res, next) => {
+  const reg = await OwlHService.getGroups(req)
+  res.status(200).json(reg)
+})
+
 module.exports = router

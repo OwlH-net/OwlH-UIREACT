@@ -15,11 +15,6 @@ export function userLogin(credentials) {
   return (dispatch)  => {
     axios.put('/api/login', JSON.stringify(credentials), config)
       .then(resp => {
-        // const config = resp.data    
-
-        console.log("userLogin resp.data")
-        console.log(resp.data.ack)
-
         //set token
         resp.data.ack == "true" ? SetToken(resp.data.token) : RemoveToken()
         dispatch(hideSpinner())

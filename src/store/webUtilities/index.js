@@ -2,6 +2,7 @@ import * as ActionTypes from './utils-action-types';
 
 const initialState = {
     spinner: false,
+    addNodeForm: false,
     progressBar: false,
     modalActionSelected: {},
     modal: false,
@@ -86,6 +87,13 @@ function getModalActionSelected(state, data) {
   }
 }
 
+function toggleAddNode(state) {
+  return {
+    ...state, 
+    addNodeForm: !state.addNodeForm
+  }
+}
+
 // function deleteAlertToAlertList(state, data) {
 //   return {
 //     ...state, 
@@ -117,6 +125,8 @@ export default function webUtilities(state = initialState, action) {
       return toggleModalWindowStatus(state, action.payload);
     case ActionTypes.MODAL_ACTION_SELECTED:  
       return getModalActionSelected(state, action.payload);
+    case ActionTypes.TOGGLE_ADD_NODE:  
+      return toggleAddNode(state);
     default:
       return state;
   }

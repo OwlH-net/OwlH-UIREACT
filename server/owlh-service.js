@@ -40,14 +40,11 @@ function setConfiguration(data) {
 }
 
 function getLogin(data) {
-  console.log("USR DATA")
-  console.log(data)
   const auth = {
     username: data.user,
     password: data.password
   }
 
-  console.log("GET LOGIN")
   // return axios.put(`${url}/master/login`,{},
   return axios.put(`${url}/master/auth`,{},
                     {
@@ -56,11 +53,9 @@ function getLogin(data) {
                     }
                   )
     .then(resp => {
-      console.log(resp.data)
       return resp.data
     })
     .catch(resp => {
-      console.log(resp)
       return resp.data
     })
 }
@@ -183,12 +178,49 @@ function deleteNode(req) {
 }
 
 function regNode(req) {
-  console.log(req.headers)
-  console.log(req.headers.token)
-  console.log(req.headers.user)
-  const connectUrl = `${url}/node/registerNode/${req.params.uuid}`
-  console.log(connectUrl)
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': req.headers.token,
+    'user': req.headers.user
+  }
 
+  // return axios.put(`${url}/node/registerNode/${req.params.uuid}`,
+  return axios.put(`${url}/node/registerNode/${req.params.uuid}`,req.body, 
+                  {
+                    httpsAgent: httsAgent,
+                    headers: newHeader
+                  }
+                )
+  .then(resp => {
+    return resp.data
+  })
+  .catch(resp => {
+    return resp.data
+  })
+}
+
+function addNode(req) {
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': req.headers.token,
+    'user': req.headers.user
+  }
+
+  return axios.post(`${url}/node`,req.body, 
+                  {
+                    httpsAgent: httsAgent,
+                    headers: newHeader
+                  }
+                )
+  .then(resp => {
+    return resp.data
+  })
+  .catch(resp => {
+    return resp.data
+  })
+}
+
+function getGroups(req) {
   let token = req.headers.token
   let username = req.headers.user
 
@@ -198,23 +230,23 @@ function regNode(req) {
     'user': username
   }
 
-  // return axios.put(`${url}/node/registerNode/${req.params.uuid}`,
-  return axios.put(connectUrl,req.body, 
-                  {
-                    httpsAgent: httsAgent,
-                    headers: newHeader
-                  }
-                )
-  .then(resp => {
-    console.log(resp.data)
-    return resp.data
-  })
-  .catch(resp => {
-    return resp.data
-  })
+  return axios.get(`${url}/group`,
+                    {
+                      httpsAgent: httsAgent,
+                      headers: newHeader
+                    }
+                  )
+    .then(resp => {
+      return resp.data
+    })
+    .catch(resp => {
+      return resp.data
+    })
 }
 
+
 module.exports = {
+  addNode,
   getLogin,
   getAbout,
   getConfiguration,
@@ -223,5 +255,6 @@ module.exports = {
   getNodes,
   pingNode,
   deleteNode,
-  regNode
+  regNode,
+  getGroups
 }

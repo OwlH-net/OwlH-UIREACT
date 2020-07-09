@@ -1,4 +1,5 @@
 export const TOGGLE_MODAL = 'TOGGLE_MODAL'
+export const TOGGLE_ADD_NODE = 'TOGGLE_ADD_NODE'
 export const TOGGLE_PROGRESS = 'TOGGLE_PROGRESS'
 export const SHOW_SPINNER = 'SHOW_SPINNER'
 export const HIDE_SPINNER = 'HIDE_SPINNER'

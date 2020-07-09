@@ -6,12 +6,15 @@ const NodeStatus = (props) => {
     let pendingRegistration
     if(props.registrationStatus == "wait"){
         pendingRegistration = <div>                
-                <span className="badge bg-warning align-text-bottom text-white">PENDING REGISTRATION</span> <br/>
-                {/* <span class="badge bg-primary align-text-bottom text-white float-" style="cursor: pointer;" onclick="registerNode(\''+uuid+'\')">Try registration now</span> */}
+            <span className="badge bg-warning align-text-bottom text-white">PENDING REGISTRATION</span> <br/>
+            {/* <span class="badge bg-primary align-text-bottom text-white float-" style="cursor: pointer;" onclick="registerNode(\''+uuid+'\')">Try registration now</span> */}
+            {
+                props.status == "online" ?
                 <span className="badge bg-primary align-text-bottom text-white pointer" onClick={() => {props.registerNode(props.nodeUUID)}}>Try registration now</span>
-            </div>
-
-        console.log(pendingRegistration)
+                :null
+            }
+            <hr/>
+        </div>
 
     }
     let nodeStatus;
@@ -25,9 +28,8 @@ const NodeStatus = (props) => {
 
     return (
         <div>
-            {nodeStatus}
-            <hr/>
             {pendingRegistration}
+            {nodeStatus}
         </div>
     )
 }

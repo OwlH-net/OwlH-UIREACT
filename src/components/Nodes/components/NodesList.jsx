@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { FaBoxOpen, FaCogs, FaTrashAlt } from "react-icons/fa";
 import NodeStatus from './NodeStatus'
 import ModalWindow from '../../Shared/ModalWindow'
-import { PingNode, SetLoading, getAllNodes,DeleteNode } from '../../../store/node/actions'
+import { SetLoading, getAllNodes,DeleteNode } from '../../../store/node/actions'
 import { ToggleModalWindow, ModalButtonClicked, ToggleProgressBar } from '../../../store/webUtilities/actions'
 import { connect } from 'react-redux';
 
@@ -17,12 +17,6 @@ const NodesList = (props) => {
     const nodeStatusReload = () => {
         props.toggleProgressBar(true)
         props.getNodes()
-        console.log(props.allNodesList.length)
-        // Object.entries(props.allNodesList || {}).map(([id , val]) =>    
-        //     {
-        //         props.getPingNode(id)
-        //     }
-        // )
     }
     
     useEffect(() => {
