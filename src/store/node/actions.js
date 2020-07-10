@@ -134,8 +134,7 @@ export function RegisterNode(nodeUUID) {
   }
 }
 
-export function AddNode(data) {
-  console.log(data)
+export function Enroll(data) {
   const token = GetToken()
   const username = GetUserName()
 
@@ -148,7 +147,7 @@ export function AddNode(data) {
   let newConfig = {headers: newHeaders}
 
   return (dispatch)  => {
-    axios.post('/api/addNode', JSON.stringify(data) ,newConfig)
+    axios.post('/api/enrollNode', JSON.stringify(data) ,newConfig)
       .then(resp => {
         dispatch(getAllNodes())
     })

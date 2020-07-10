@@ -183,8 +183,6 @@ function regNode(req) {
     'token': req.headers.token,
     'user': req.headers.user
   }
-
-  // return axios.put(`${url}/node/registerNode/${req.params.uuid}`,
   return axios.put(`${url}/node/registerNode/${req.params.uuid}`,req.body, 
                   {
                     httpsAgent: httsAgent,
@@ -199,14 +197,14 @@ function regNode(req) {
   })
 }
 
-function addNode(req) {
+function enrollNode(req) {
   let newHeader = {
     'Content-Type': 'application/json',
     'token': req.headers.token,
     'user': req.headers.user
   }
 
-  return axios.post(`${url}/node`,req.body, 
+  return axios.post(`${url}/node/enrollNewNode`,req.body, 
                   {
                     httpsAgent: httsAgent,
                     headers: newHeader
@@ -246,7 +244,7 @@ function getGroups(req) {
 
 
 module.exports = {
-  addNode,
+  enrollNode,
   getLogin,
   getAbout,
   getConfiguration,

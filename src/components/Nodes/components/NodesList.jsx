@@ -11,7 +11,7 @@ const NodesList = (props) => {
     const [nodeSelected, setNodeSelected] = useState('')
 
     useEffect(() => {
-        const NodeStatusReload = setTimeout(function(){ nodeStatusReload() }, 10000)
+        const NodeStatusReload = setTimeout(function(){ nodeStatusReload() }, 30000)
     }, [props.allNodesList]);
 
     const nodeStatusReload = () => {

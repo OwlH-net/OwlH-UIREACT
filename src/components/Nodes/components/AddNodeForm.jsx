@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import { AddNode } from '../../../store/node/actions'
+import { Enroll } from '../../../store/node/actions'
 import { ToggleAddNodeForm } from '../../../store/webUtilities/actions'
 
 const AddNodeForm = (props) =>  {
+    const [groupsSelected, setGroupsSelected] = useState([])
     const [formData, setFormData] = useState({
         name: "",
         ip: "",
@@ -11,25 +12,34 @@ const AddNodeForm = (props) =>  {
         nodeuser: "",
         nodepass: ""
     });
-    
-    useEffect(() => {
-        console.log(props.allGroupList)
-    }, []);
 
     const groupItems = (props.allGroupList || []).map(group => {
-        console.log(group["guuid"])
         return <ul className="checkbox-grid" key={group["guuid"]}>
-            <input type="checkbox" value={group["gname"]}/>
+            <input type="checkbox" value={group["guuid"]} name={group["gname"]} onChange={handleCheck}/>
             <label htmlFor={group["gname"]}>&nbsp;{group["gname"]}</label>
         </ul>
     })
 
-    const getData = () => {
-        props.addNode(formData)
+    const getData = () => {     
+        const enrollData = {
+            Node:formData,
+            Group:groupsSelected,
+            Suricata:{}
+        }   
+
+        props.enroll(enrollData)
         props.toggleAddNodeForm()
     }
 
-    const handleChange = (e) => {      
+    function handleCheck(e){
+        if(!groupsSelected.includes(event.target.value)){
+            setGroupsSelected([...groupsSelected, event.target.value])
+        }else{
+            setGroupsSelected(groupsSelected.filter((e) => ( e !== event.target.value )))
+        }
+    }
+    
+    const handleChange = (e) => {
         setFormData({
             ...formData,
             [event.target.name]: event.target.value
@@ -109,7 +119,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    addNode: (data) => dispatch(AddNode(data)),
+    enroll: (data) => dispatch(Enroll(data)),
     toggleAddNodeForm: () => dispatch(ToggleAddNodeForm()),
 })
 
