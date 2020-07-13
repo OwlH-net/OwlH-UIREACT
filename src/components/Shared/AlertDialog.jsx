@@ -21,13 +21,13 @@ const AlertDialog = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        passwordChange: state.webUtilities.passwordChange,
+        // passwordChange: state.webUtilities.passwordChange,
         errorAlertShow: state.webUtilities.errorAlertShow 
     }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    handleToggleStatus: (status) => dispatch(toggleAlert(status)),
+    // handleToggleStatus: (status) => dispatch(toggleAlert(status)),
     clearAxiosData: () => dispatch(ResetAxiosChangePass()),
     deleteAlert: (alertId) => dispatch(DeleteAlertToAlertList(alertId))
 })

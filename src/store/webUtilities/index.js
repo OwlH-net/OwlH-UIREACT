@@ -5,9 +5,11 @@ const initialState = {
     addNodeForm: false,
     progressBar: false,
     modalActionSelected: {},
+    nodeToEdit: {},
     modal: false,
     defaults: false,
     errorAlertShow: false,
+    isMasterActive: true,
     alertList: [],
     passwordChange: {}
 }
@@ -27,9 +29,18 @@ function toggleAlertStatus(state, data) {
 }
 
 function defaultCredentials(state, data) {
-  return {
-    ...state, 
-    defaults: data
+  if(data.defaults == "true"){
+    return {
+      ...state, 
+      defaults: data,
+      isMasterActive: true
+    }
+  }else if(data.code == "ECONNREFUSED" || data.error == "ECONNREFUSED"){
+    return {
+      ...state, 
+      defaults: false,
+      isMasterActive: false
+    }
   }
 }
 
@@ -87,19 +98,28 @@ function getModalActionSelected(state, data) {
   }
 }
 
-function toggleAddNode(state) {
+function saveNodeToEdit(state, data) {
   return {
     ...state, 
-    addNodeForm: !state.addNodeForm
+    nodeToEdit: data,
+    addNodeForm: true
   }
 }
 
-// function deleteAlertToAlertList(state, data) {
-//   return {
-//     ...state, 
-//     alertList: state.alertList.filter(alert => alert.id != data)
-//   }
-// }
+function toggleAddNode(state) {
+  return {
+    ...state, 
+    addNodeForm: !state.addNodeForm,
+    nodeToEdit: {}
+  }
+}
+
+function deleteAlertToAlertList(state, data) {
+  return {
+    ...state, 
+    alertList: state.alertList.filter(alert => alert.id != data)
+  }
+}
 
 export default function webUtilities(state = initialState, action) {
   switch(action.type) {
@@ -127,6 +147,10 @@ export default function webUtilities(state = initialState, action) {
       return getModalActionSelected(state, action.payload);
     case ActionTypes.TOGGLE_ADD_NODE:  
       return toggleAddNode(state);
+    case ActionTypes.TOGGLE_EDIT_NODE:  
+      return toggleEditNodeForm(state);
+    case ActionTypes.NODE_TO_EDIT:  
+      return saveNodeToEdit(state, action.payload);
     default:
       return state;
   }

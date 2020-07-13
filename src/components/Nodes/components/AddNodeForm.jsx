@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { Enroll } from '../../../store/node/actions'
-import { ToggleAddNodeForm } from '../../../store/webUtilities/actions'
+import { ToggleAddNodeForm, EditNode } from '../../../store/webUtilities/actions'
 
 const AddNodeForm = (props) =>  {
     const [groupsSelected, setGroupsSelected] = useState([])
@@ -13,6 +13,16 @@ const AddNodeForm = (props) =>  {
         nodepass: ""
     });
 
+    useEffect(() => {
+        setFormData({
+            name: props.nodeToEdit.name,
+            ip: props.nodeToEdit.ip,
+            port: props.nodeToEdit.port,
+            nodeuser: props.nodeToEdit.nodeuser,
+            nodepass: props.nodeToEdit.nodepass
+        })
+    },[])
+
     const groupItems = (props.allGroupList || []).map(group => {
         return <ul className="checkbox-grid" key={group["guuid"]}>
             <input type="checkbox" value={group["guuid"]} name={group["gname"]} onChange={handleCheck}/>
@@ -20,7 +30,7 @@ const AddNodeForm = (props) =>  {
         </ul>
     })
 
-    const getData = () => {     
+    const getData = () => {             
         const enrollData = {
             Node:formData,
             Group:groupsSelected,
@@ -29,6 +39,12 @@ const AddNodeForm = (props) =>  {
 
         props.enroll(enrollData)
         props.toggleAddNodeForm()
+    }
+
+    const editNodeData = () => {
+        formData.id = props.nodeToEdit.id    
+        props.editNode(formData)
+        // props.toggleAddNodeForm()
     }
 
     function handleCheck(e){
@@ -49,13 +65,14 @@ const AddNodeForm = (props) =>  {
     return (
         <div>
             <div>
-                <form>          
-                    <h4>Available groups</h4>      
-                    <div className="form-row">
-                        {groupItems}
-                    </div>
-                    <br/>
-                    <h4>Add node form</h4>      
+                <form> 
+                    {
+                        props.nodeToEdit.id == undefined || props.nodeToEdit.id == null || props.nodeToEdit.id == ""
+                        ?                 
+                        <h4>Add node form</h4>      
+                        :
+                        <h4>Edit node form</h4>      
+                    }
                     <div className="form-row">
                         <div className="form-group col-md-6">
                             <div className="input-group mb-2 mr-sm-2 mb-sm-0">
@@ -103,10 +120,26 @@ const AddNodeForm = (props) =>  {
                         </div>
                     </div>
 
-                    <div className="text-right">
-                        <a className="btn btn-primary float-right text-decoration-none text-white right" onClick={() => {getData()}}>Add</a>
-                    </div>
-                    <br/><br/><br/>
+                    {
+                        props.nodeToEdit.id == undefined || props.nodeToEdit.id == null || props.nodeToEdit.id == ""
+                        ?
+                        <div>
+                            <br/>
+                            <h4>Available groups</h4>      
+                            <div className="form-row">
+                                {groupItems}
+                            </div>
+                            <br/><br/><br/>
+                            <div className="text-right">
+                                <a className="btn btn-primary float-right text-decoration-none text-white right" onClick={() => {getData()}}>Add</a>
+                            </div>
+                        </div>
+                        :
+                        <div className="text-right">
+                            <a className="btn btn-primary float-right text-decoration-none text-white right" onClick={() => {editNodeData()}}>Edit</a>
+                        </div>   
+                                            
+                    }                    
                 </form>
             </div>
         </div>
@@ -115,11 +148,13 @@ const AddNodeForm = (props) =>  {
 const mapStateToProps = (state) => {
     return {
         allGroupList: state.groups.allGroupList,
+        nodeToEdit: state.webUtilities.nodeToEdit,
     }
 }
 
 const mapDispatchToProps = (dispatch) => ({
     enroll: (data) => dispatch(Enroll(data)),
+    editNode: (data) => dispatch(EditNode(data)),
     toggleAddNodeForm: () => dispatch(ToggleAddNodeForm()),
 })
 

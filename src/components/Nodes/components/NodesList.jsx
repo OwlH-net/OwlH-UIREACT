@@ -3,7 +3,7 @@ import { FaBoxOpen, FaCogs, FaTrashAlt } from "react-icons/fa";
 import NodeStatus from './NodeStatus'
 import ModalWindow from '../../Shared/ModalWindow'
 import { SetLoading, getAllNodes,DeleteNode } from '../../../store/node/actions'
-import { ToggleModalWindow, ModalButtonClicked, ToggleProgressBar } from '../../../store/webUtilities/actions'
+import { ToggleModalWindow, ModalButtonClicked, ToggleProgressBar, ToggleEditNodeForm, NodeToEdit } from '../../../store/webUtilities/actions'
 import { connect } from 'react-redux';
 
 const NodesList = (props) => {
@@ -35,6 +35,12 @@ const NodesList = (props) => {
         setNodeSelected(id)
         props.toggleModal(true)  
     }
+    //Set current node uuid
+    const modifyCurrentNode = (uuid, val) => {
+        val.id = uuid;
+
+        props.nodeToEdit(val)   
+    }
 
     
     const nodesData = () => {
@@ -55,7 +61,7 @@ const NodesList = (props) => {
                         <span>
                             <FaBoxOpen size={21} className="iconBlue"/> Manage node <br/>
                             <hr style={{ color: "dodgerblue", backgroundColor: "dodgerblue", height: 1}}/>
-                            <FaCogs size={21} className="iconBlue" /> Modify node<br/>
+                            <FaCogs size={21} className="iconBlue" onClick={() => {modifyCurrentNode(id, val)}}/> Modify node<br/>
                             <FaTrashAlt size={21} className="iconRed" onClick={() => {deleteCurrentNode(id)}}/> Delete node <br/>
                         </span>
                     </td>
@@ -106,7 +112,9 @@ const mapDispatchToProps = (dispatch) => ({
     toggleModal: (status) => dispatch(ToggleModalWindow(status)),
     modalButtonClicked: (option) => dispatch(ModalButtonClicked(option)),
     getNodes: () => dispatch(getAllNodes()),
-    toggleProgressBar: (status) => dispatch(ToggleProgressBar(status))
+    toggleEditNodeForm: () => dispatch(ToggleEditNodeForm()),
+    toggleProgressBar: (status) => dispatch(ToggleProgressBar(status)),
+    nodeToEdit: (status) => dispatch(NodeToEdit(status))
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);

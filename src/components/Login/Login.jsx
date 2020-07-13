@@ -1,11 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import { userLogin, currentConfiguration } from '../../store/owlh/actions';
-import { showSpinner, defaultCredentials } from '../../store/webUtilities/actions';
+import { showSpinner, defaultCredentials,AddAlertToAlertList, toggleAlert } from '../../store/webUtilities/actions';
 import { Route, Link, BrowserRouter, NavLink } from 'react-router-dom';
 import Avatar from './Avatar';
 import { BsGearFill } from "react-icons/bs";
 import { connect } from 'react-redux';
 import Spinner from '../../components/Shared/Spinner'
+import AlertDialog from '../../components/Shared/AlertDialog'
 
 class Login extends Component {
     constructor(props) {
@@ -43,13 +44,19 @@ class Login extends Component {
         this.props.loadConfig()
         
         //load message when admin credentials are default
-        this.props.checkDefaultCredentials()
+        this.props.checkDefaultCredentials()      
     }
-
 
     render() {
         return (
             <div className="backgroundLogin text-center p-5">
+            {/* <AlertDialog key={alert.id} id={alert.id} title={alert.title} subtitle={alert.subtitle} variant={alert.variant}/> */}
+                {
+                    !this.props.isMasterActive 
+                    ? <span id="master-offline-banner" className="badge bg-danger align-text-bottom text-white m-3 p-3"><b>Master connection error! </b>The master selected is currently unavailable</span>
+                    : null
+                }
+
                 <form onSubmit={this.handleSubmit}>
                     <div className="d-inline-block w-75 my-5 p-5 bg-white rounded shadow-sm">
                         <div className="mb-3">
@@ -68,7 +75,7 @@ class Login extends Component {
                                 <input type="password" id="password" name="password" className="form-control" value={this.state.password} onChange={this.handleChange}/>
                             </div>
                         </div>
-                        {                            
+                        {
                             this.props.defaults ? 
                             <div id="default-user-credentials" >
                                 <p>WARNING If this is your first login, remember default credentials are admin/admin</p>
@@ -89,24 +96,28 @@ class Login extends Component {
 
 const mapStateToProps = (state) => {
     return {
+        alertList: state.webUtilities.alertList,
+        isMasterActive: state.webUtilities.isMasterActive,
         spinner: state.webUtilities.spinner,
         defaults: state.webUtilities.defaults
     }
 }
 
 const mapDispatchToProps = dispatch => {
-    console.log("dispatch to props")
     const loadConfig1 = () => {return currentConfiguration()}
     const getLogin = (data) => {return userLogin(data)}
     const getSpinner = () => {return showSpinner()}
     const getDefaultCredentials = () => {return defaultCredentials()}
-
-  return {
-    loadConfig: () => dispatch(loadConfig1()),
-    userLoginToken: (data) => dispatch(getLogin(data)),
-    displaySpinner: () => dispatch(getSpinner()),
-    checkDefaultCredentials: () => dispatch(getDefaultCredentials()),
-  }
+    const addAlert = (alert) => {return AddAlertToAlertList(alert)}
+    const changeCurrentStatus = (data) => {return toggleAlert(data)}
+    return {
+        loadConfig: () => dispatch(loadConfig1()),
+        userLoginToken: (data) => dispatch(getLogin(data)),
+        displaySpinner: () => dispatch(getSpinner()),
+        checkDefaultCredentials: () => dispatch(getDefaultCredentials()),
+        addAlertToState: (alert) => dispatch(addAlert(alert)),
+        ChangeCurrentAlertStatus: (data) => dispatch(changeCurrentStatus(data)),
+    }
 }
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);

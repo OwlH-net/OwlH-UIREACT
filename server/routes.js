@@ -56,4 +56,14 @@ router.get('/groups', async (req, res, next) => {
   res.status(200).json(reg)
 })
 
+router.get('/groups', async (req, res, next) => {
+  const reg = await OwlHService.getGroups(req)
+  res.status(200).json(reg)
+})
+
+router.put('/editNode', async (req, res, next) => {
+  const reg = await OwlHService.editNode(req)
+  res.status(200).json(reg)
+})
+
 module.exports = router

@@ -22,7 +22,6 @@ export function getAllNodes() {
     return (dispatch) => {
       axios.get('/api/nodes', newConfig)
       .then(resp => {
-        console.log(resp)
         //check token for pending reg
         dispatch(accGetAllNodes(resp.data))
       })

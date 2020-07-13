@@ -97,9 +97,6 @@ const NewMaster = (props) => {
 }
 
 const mapStateToProps = (state) => {
-    console.log("state on edit master form")
-    console.log(state.login.currentMaster)
-    console.log( Object.entries(state.login.currentMaster).length === 0 ? "nulo": state.login.currentMaster[0].name)
     return {
         editMaster: state.login.currentMaster
     }

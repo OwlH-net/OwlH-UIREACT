@@ -87,7 +87,6 @@ function setPassword(req) {
 }
 
 function getAbout(data) {
-  // return axios.put(`${url}/master/login`,{},
   return axios.get(`${url}/home`,
                     {
                       httpsAgent: httsAgent
@@ -97,9 +96,9 @@ function getAbout(data) {
       console.log(resp.data)
       return resp.data
     })
-    .catch(resp => {
-      console.log(resp)
-      return resp.data
+    .catch(error => {
+      console.log(error) 
+      return {ack: "false", error: error.errno, code: error.code}
     })
 }
 
@@ -242,6 +241,25 @@ function getGroups(req) {
     })
 }
 
+function editNode(req) {
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': req.headers.token,
+    'user': req.headers.user
+  }
+  return axios.put(`${url}/node`,req.body, 
+                  {
+                    httpsAgent: httsAgent,
+                    headers: newHeader
+                  }
+                )
+  .then(resp => {
+    return resp.data
+  })
+  .catch(resp => {
+    return resp.data
+  })
+}
 
 module.exports = {
   enrollNode,
@@ -254,5 +272,6 @@ module.exports = {
   pingNode,
   deleteNode,
   regNode,
-  getGroups
+  getGroups,
+  editNode
 }
