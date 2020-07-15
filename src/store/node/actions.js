@@ -152,3 +152,29 @@ export function Enroll(data) {
     })
   }
 }
+
+export function ShowNodes(filter) {
+  return {
+    type: ActionTypes.FILTER_BY_STATUS,
+    payload: filter
+  }
+}
+
+export function SortTableIP() {
+  return {
+    type: ActionTypes.SORT_BY_IP
+  }
+}
+
+export function SortTableName() {
+  return {
+    type: ActionTypes.SORT_BY_NAME
+  }
+}
+
+export function SetSearchBar(values) {
+  return {
+    type: ActionTypes.SEARCH_BAR_VALUES,
+    payload: values
+  }
+}

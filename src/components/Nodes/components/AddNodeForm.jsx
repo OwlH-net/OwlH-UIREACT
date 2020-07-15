@@ -14,14 +14,24 @@ const AddNodeForm = (props) =>  {
     });
 
     useEffect(() => {
-        setFormData({
-            name: props.nodeToEdit.name,
-            ip: props.nodeToEdit.ip,
-            port: props.nodeToEdit.port,
-            nodeuser: props.nodeToEdit.nodeuser,
-            nodepass: props.nodeToEdit.nodepass
-        })
-    },[])
+        if(props.isEditNode){
+            setFormData({
+                name: props.nodeToEdit.name,
+                ip: props.nodeToEdit.ip,
+                port: props.nodeToEdit.port,
+                nodeuser: props.nodeToEdit.nodeuser,
+                nodepass: props.nodeToEdit.nodepass
+            })
+        }else{
+            setFormData({
+                name: '',
+                ip: '',
+                port: '',
+                nodeuser: '',
+                nodepass: '',
+            })
+        }
+    },[props.isEditNode])
 
     const groupItems = (props.allGroupList || []).map(group => {
         return <ul className="checkbox-grid" key={group["guuid"]}>
@@ -149,6 +159,7 @@ const mapStateToProps = (state) => {
     return {
         allGroupList: state.groups.allGroupList,
         nodeToEdit: state.webUtilities.nodeToEdit,
+        isEditNode: state.webUtilities.isEditNode,
     }
 }
 

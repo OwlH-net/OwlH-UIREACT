@@ -9,13 +9,24 @@ import { connect } from 'react-redux';
 const NodesList = (props) => {
 
     const [nodeSelected, setNodeSelected] = useState('')
+    const [nodesFiltered, setNodesFiltered] = useState([])
 
     useEffect(() => {
+        console.log(props.allNodesList)
         const NodeStatusReload = setTimeout(function(){ nodeStatusReload() }, 30000)
+        setNodesFiltered(props.allNodesList)
     }, [props.allNodesList]);
 
+    useEffect(() => {
+        setNodesFiltered(props.allNodesList)
+    }, [props.filterByStatus]);
+
+    useEffect(() => {
+        props.getNodes()
+    }, [props.sortName]);
+
     const nodeStatusReload = () => {
-        props.toggleProgressBar(true)
+        // props.toggleProgressBar(true)
         props.getNodes()
     }
     
@@ -38,31 +49,49 @@ const NodesList = (props) => {
     //Set current node uuid
     const modifyCurrentNode = (uuid, val) => {
         val.id = uuid;
-
         props.nodeToEdit(val)   
     }
 
     
-    const nodesData = () => {
-        const totalList = Object.entries(props.allNodesList || {}).map(([id , val]) =>
+    const nodesData = () => {   
+        let nodesAfterFilter;
+        let nodesAfterFilterAndSearch;
+        //filter nodes by button
+        if(props.filterByStatus != 'all'){
+            nodesAfterFilter = (nodesFiltered || []).filter(function (key) {
+                return key.status == props.filterByStatus;
+            });
+        }else{
+            nodesAfterFilter = nodesFiltered
+        }
+        //filter filtered nodes by search bar
+        if(props.search != '' ){
+            nodesAfterFilterAndSearch = (nodesAfterFilter || []).filter(function (key) {
+                return (key.name.includes(props.search) || key.ip.includes(props.search));
+            });
+        }else{
+            nodesAfterFilterAndSearch = nodesAfterFilter
+        }
+
+        const totalList = Object.entries(nodesAfterFilterAndSearch || {}).map(([id , val]) =>
         {
             return (
-                <tr key={id}>
-                    <td key={id+'-name'}>
+                <tr key={id} uuid={val.uuid}>
+                    <td key={val.uuid+'-name'}>
                         <span>
-                            {props.allNodesList[id]["name"]}<br/>
-                            <p className="text-muted">{props.allNodesList[id]["ip"]}</p>
+                            {val.name}<br/>
+                            <p className="text-muted">{val.ip}</p>
                         </span>
                     </td>
-                    <td key={id+'-status'}>
-                        <NodeStatus key={id+'-node'} registrationStatus={props.allNodesList[id]["token"]} status={props.allNodesList[id]["status"]} nodeUUID={id}/>        
+                    <td key={val.uuid+'-status'}>
+                        <NodeStatus key={val.uuid+'-node'} registrationStatus={val.token} status={val.status} nodeUUID={val.uuid}/>        
                     </td>
-                    <td key={id+'-actions'}>
+                    <td key={val.uuid+'-actions'}>
                         <span>
                             <FaBoxOpen size={21} className="iconBlue"/> Manage node <br/>
                             <hr style={{ color: "dodgerblue", backgroundColor: "dodgerblue", height: 1}}/>
-                            <FaCogs size={21} className="iconBlue" onClick={() => {modifyCurrentNode(id, val)}}/> Modify node<br/>
-                            <FaTrashAlt size={21} className="iconRed" onClick={() => {deleteCurrentNode(id)}}/> Delete node <br/>
+                            <FaCogs size={21} className="iconBlue" onClick={() => {modifyCurrentNode(val.uuid, val)}}/> Modify node<br/>
+                            <FaTrashAlt size={21} className="iconRed" onClick={() => {deleteCurrentNode(val.uuid)}}/> Delete node <br/>
                         </span>
                     </td>
                 </tr>
@@ -100,6 +129,10 @@ const NodesList = (props) => {
 
 const mapStateToProps = (state) => {
     return {
+        search: state.node.search,
+        sortName: state.node.sortName,
+        sortIP: state.node.sortIP,
+        filterByStatus: state.node.filterByStatus,
         allNodesList: state.node.allNodesList,
         modal: state.webUtilities.modal,
         modalActionSelected: state.webUtilities.modalActionSelected,

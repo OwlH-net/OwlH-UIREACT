@@ -77,11 +77,9 @@ function setPassword(req) {
                     }
                   )
     .then(resp => {
-      console.log(resp.data)
       return resp.data
     })
     .catch(resp => {
-      console.log(resp)
       return resp.data
     })
 }
@@ -93,11 +91,9 @@ function getAbout(data) {
                     }
                   )
     .then(resp => {
-      console.log(resp.data)
       return resp.data
     })
     .catch(error => {
-      console.log(error) 
       return {ack: "false", error: error.errno, code: error.code}
     })
 }
@@ -119,7 +115,8 @@ function getNodes(req) {
                     }
                   )
     .then(resp => {
-      return resp.data
+      console.log(resp.data.Nodes)
+      return resp.data.Nodes
     })
     .catch(resp => {
       return resp.data

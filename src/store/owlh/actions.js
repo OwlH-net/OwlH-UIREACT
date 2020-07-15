@@ -26,9 +26,6 @@ export function userLogin(credentials) {
 }
 
 function getLoginToken(data) {
-  console.log("run Action LOGIN_TOKEN")
-  console.log(data)
-
   return {
     type: ActionTypes.LOGIN_TOKEN,
     payload: data
@@ -36,11 +33,9 @@ function getLoginToken(data) {
 }
 
 export function currentConfiguration(){
-  console.log("GET current config")
   return (dispatch)  => {
     axios.get('/api/config')
     .then(resp => {
-      console.log("------>"+resp)
       const config = resp.data 
       dispatch(getLoadConfiguration(config))
     })
@@ -48,8 +43,6 @@ export function currentConfiguration(){
 }
 
 function getLoadConfiguration(data) {
-  console.log(data)
-  console.log("run Action LOAD_CONF")
   return {
     type: ActionTypes.LOAD_CONF,
     payload: data
@@ -57,30 +50,21 @@ function getLoadConfiguration(data) {
 }
 
 export function saveCurrentMasters(data){
-  console.log("PUT current Master List")
-  console.log(data)
     axios.put('/api/config', JSON.stringify(data), config)
     .then(resp => {
-      console.log("master save action done")
-      console.log(resp)
     })
 }
 
 export function saveCurrentConfiguration(data){
-  console.log("PUT current config")
-  console.log(data)
   return (dispatch)  => {
     axios.put('/api/config', JSON.stringify(data), config)
     .then(resp => {
-      console.log(resp)
       dispatch(accSaveConfiguration(data))
     })
   }
 }
 
 function accSaveConfiguration(data) {
-  console.log(data)
-  console.log("run Action SAVE_CONF")
   return {
     type: ActionTypes.SAVE_CONF,
     payload: data
@@ -99,7 +83,6 @@ function accSaveConfiguration(data) {
 
 //loadCurrentMasters
 export function loadCurrentMasters(){
-  console.log("GET current masters")
   return (dispatch) => {
     // axios.get('/api/config')
     // .then(resp => {
@@ -111,8 +94,6 @@ export function loadCurrentMasters(){
   }
 }
 function getLoadCurrentMasters(data) {
-  console.log(data)
-  console.log("run Action LOAD_MASTERS")
   return {
     type: ActionTypes.LOAD_MASTERS,
     payload: data
@@ -121,8 +102,6 @@ function getLoadCurrentMasters(data) {
 
 
 export function newMaster(data){
-  console.log("newMaster -- action")
-  console.log(data)
   return (dispatch) => {
     dispatch(accAddMaster(data))
   }
@@ -130,8 +109,6 @@ export function newMaster(data){
 
 //addMaster
 function accAddMaster(data) {
-  console.log(data)
-  console.log("run Action ADD_MASTER")
   return {
     type: ActionTypes.ADD_MASTER,
     payload: data
@@ -140,15 +117,11 @@ function accAddMaster(data) {
 
 //delete master
 export function deleteMaster(data){
-  console.log("deleteMaster -- action")
-  console.log(data)
   return (dispatch) => {
     dispatch(accDeleteMaster(data))
   }
 }
 function accDeleteMaster(data) {
-  console.log(data)
-  console.log("run Action DELETE_MASTER")
   return {
     type: ActionTypes.DELETE_MASTER,
     payload: data

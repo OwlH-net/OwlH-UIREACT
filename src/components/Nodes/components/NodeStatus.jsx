@@ -7,7 +7,6 @@ const NodeStatus = (props) => {
     if(props.registrationStatus == "wait"){
         pendingRegistration = <div>                
             <span className="badge bg-warning align-text-bottom text-white">PENDING REGISTRATION</span> <br/>
-            {/* <span class="badge bg-primary align-text-bottom text-white float-" style="cursor: pointer;" onclick="registerNode(\''+uuid+'\')">Try registration now</span> */}
             {
                 props.status == "online" ?
                 <span className="badge bg-primary align-text-bottom text-white pointer" onClick={() => {props.registerNode(props.nodeUUID)}}>Try registration now</span>

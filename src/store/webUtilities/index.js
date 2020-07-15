@@ -11,7 +11,8 @@ const initialState = {
     errorAlertShow: false,
     isMasterActive: true,
     alertList: [],
-    passwordChange: {}
+    passwordChange: {},
+    isEditNode: false
 }
 
 function toggleModalWindowStatus(state, data) {
@@ -102,7 +103,8 @@ function saveNodeToEdit(state, data) {
   return {
     ...state, 
     nodeToEdit: data,
-    addNodeForm: true
+    addNodeForm: true,
+    isEditNode: true
   }
 }
 
@@ -110,7 +112,8 @@ function toggleAddNode(state) {
   return {
     ...state, 
     addNodeForm: !state.addNodeForm,
-    nodeToEdit: {}
+    nodeToEdit: {},
+    isEditNode: false
   }
 }
 
