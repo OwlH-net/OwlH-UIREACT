@@ -1,1 +1,3 @@
+export const ADD_GROUP = 'ADD_GROUP'
 export const GET_ALL_GROUPS = 'GET_ALL_GROUPS'
+export const TOGGLE_ADD_GROUP = 'TOGGLE_ADD_GROUP'
