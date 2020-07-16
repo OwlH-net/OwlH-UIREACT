@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Menu from '../../Shared/Components/Menu/Menu'
 import Banner from '../../Shared/Components/Banner/Banner'
 import { getAllNodes, ShowNodes, SortTableIP, SortTableName, SetSearchBar } from '../../../store/node/actions'
-import { ToggleAddNodeForm } from '../../../store/webUtilities/actions'
+import { ToggleAddNodeForm, ToggleProgressBar } from '../../../store/webUtilities/actions'
 import { GetAllGroups } from '../../../store/groups/actions'
 import NodesList from './NodesList'
 import AddNodeForm from './AddNodeForm'
@@ -13,6 +13,7 @@ import {ProgressBar} from 'react-bootstrap'
 const index = (props) => {
     //getAllNodes
     useEffect(() => {
+        props.toggleProgressBar(true);
         props.getNodes()
         props.getAllGroups();
     }, [])
@@ -26,7 +27,7 @@ const index = (props) => {
             <Menu />
 
             <Banner title="Nodes" subtitle="All nodes list" />
-            {/* {props.progressBar ? <ProgressBar animated now={100} /> : null} */}
+            {props.progressBar ? <ProgressBar animated now={100} /> : null}
             <div className="p-3">
                 <span onClick={() => {props.showNodes('online')}} className="badge bg-success align-text-bottom text-white float-right pointer" title="Show only online nodes">ON LINE</span>
                 <span onClick={() => {props.showNodes('offline')}} className="badge bg-danger align-text-bottom text-white float-right mr-1 pointer" title="Show only offline nodes">OFF LINE</span>
@@ -72,6 +73,7 @@ const mapDispatchToProps = (dispatch) => ({
     sortTableName: () => dispatch(SortTableName()),
     getNodes: () => dispatch(getAllNodes()),
     toggleAddNodeForm: () => dispatch(ToggleAddNodeForm()),
+    toggleProgressBar: (status) => dispatch(ToggleProgressBar(status)),
     getAllGroups: () => dispatch(GetAllGroups()),
     showNodes: (status) => dispatch(ShowNodes(status)),
     setSearchBar: (values) => dispatch(SetSearchBar(values)),

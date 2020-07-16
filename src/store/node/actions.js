@@ -1,5 +1,6 @@
 import * as ActionTypes from './node-action-types';
 import {GetUserName, GetToken} from '../../components/Shared/CheckToken'
+import {ToggleProgressBar} from '../webUtilities/actions'
 import axios from 'axios'
 
 const config = {
@@ -23,6 +24,7 @@ export function getAllNodes() {
       axios.get('/api/nodes', newConfig)
       .then(resp => {
         //check token for pending reg
+        dispatch(ToggleProgressBar(false))
         dispatch(accGetAllNodes(resp.data))
       })
     }
@@ -34,35 +36,35 @@ function accGetAllNodes(data) {
     }
 }
 
-export function PingNode(nodeUUID) {
-    const token = GetToken()
-    const username = GetUserName()
+// export function PingNode(nodeUUID) {
+//     const token = GetToken()
+//     const username = GetUserName()
 
-    let newHeaders = {
-      ...config.headers, 
-      'user': username,
-      'token': token,
-    }
-    let newConfig = {headers: newHeaders}
+//     let newHeaders = {
+//       ...config.headers, 
+//       'user': username,
+//       'token': token,
+//     }
+//     let newConfig = {headers: newHeaders}
       
-    return (dispatch) => {
-      axios.get('/api/pingNode/'+nodeUUID, newConfig)
-      .then(resp => {
-        //manage node status request
-        if("ack" in resp.data){
-          dispatch(accPingNode("offline", nodeUUID))
-        }else{
-          dispatch(accPingNode("online", nodeUUID))
-        }
-      })
-    }
-  }
-function accPingNode(data, nodeUUID) {
-    return {
-      type: ActionTypes.PING_NODE,
-      payload: {id:nodeUUID, status:data}
-    }
-}
+//     return (dispatch) => {
+//       axios.get('/api/pingNode/'+nodeUUID, newConfig)
+//       .then(resp => {
+//         //manage node status request
+//         if("ack" in resp.data){
+//           dispatch(accPingNode("offline", nodeUUID))
+//         }else{
+//           dispatch(accPingNode("online", nodeUUID))
+//         }
+//       })
+//     }
+//   }
+// function accPingNode(data, nodeUUID) {
+//     return {
+//       type: ActionTypes.PING_NODE,
+//       payload: {id:nodeUUID, status:data}
+//     }
+// }
 
 export function SetLoading(id) {
     console.log("JAL - Set Loading action")
@@ -108,6 +110,7 @@ export function DeleteNode(nodeUUID) {
   return (dispatch) => {
     axios.delete('/api/deleteNode/'+nodeUUID, newConfig)
     .then(resp => {
+      dispatch(ToggleProgressBar(false))
       dispatch(getAllNodes())
     })
   }
@@ -128,6 +131,7 @@ export function RegisterNode(nodeUUID) {
   return (dispatch)  => {
     axios.put('/api/registerNode/'+nodeUUID, {} ,newConfig)
       .then(resp => {
+        dispatch(ToggleProgressBar(false))
         dispatch(getAllNodes())
     })
   }
@@ -148,6 +152,7 @@ export function Enroll(data) {
   return (dispatch)  => {
     axios.post('/api/enrollNode', JSON.stringify(data) ,newConfig)
       .then(resp => {
+        dispatch(ToggleProgressBar(false))
         dispatch(getAllNodes())
     })
   }

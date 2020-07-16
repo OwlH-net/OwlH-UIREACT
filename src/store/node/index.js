@@ -1,5 +1,6 @@
 import * as ActionTypes from './node-action-types';
 
+
 const initialState = {
   allNodesList: [],
   sortIP: 'asc',
@@ -16,24 +17,13 @@ function ShowNodes(state, data) {
 }
 
 function getAllNodes(state, data) {
-  var sortedBaz;
-  {state.sortName == 'asc' ? sortedBaz = data.sort(compareAsc) : sortedBaz = data.sort(compareDesc)}
   return {
     ...state,
-    allNodesList: sortedBaz
+    allNodesList: data
   }
 }
 
-function compareAsc(a, b) {
-  if (a.name > b.name) return 1;
-  if (b.name > a.name) return -1;
-  return 0;
-}
-function compareDesc(a, b) {
-  if (a.name < b.name) return 1;
-  if (b.name < a.name) return -1;
-  return 0;
-}
+
 
 // function pingNode(state, data) {
 
@@ -108,7 +98,6 @@ function sortTableIP(state) {
 function sortTableName(state) {
   var toogleSort;
   {state.sortName == 'asc' ? toogleSort = 'desc' : toogleSort = 'asc'}
-  console.log(toogleSort)
   return {
     ...state,
     sortName: toogleSort

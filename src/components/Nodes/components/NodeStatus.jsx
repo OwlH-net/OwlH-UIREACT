@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { RegisterNode } from '../../../store/node/actions'
+import { ToggleProgressBar } from '../../../store/webUtilities/actions'
 import { connect } from 'react-redux';
 
 const NodeStatus = (props) => {    
@@ -9,7 +10,7 @@ const NodeStatus = (props) => {
             <span className="badge bg-warning align-text-bottom text-white">PENDING REGISTRATION</span> <br/>
             {
                 props.status == "online" ?
-                <span className="badge bg-primary align-text-bottom text-white pointer" onClick={() => {props.registerNode(props.nodeUUID)}}>Try registration now</span>
+                <span className="badge bg-primary align-text-bottom text-white pointer" onClick={() => {props.toggleProgressBar(true); props.registerNode(props.nodeUUID)}}>Try registration now</span>
                 :null
             }
             <hr/>
@@ -35,6 +36,7 @@ const NodeStatus = (props) => {
 
 const mapDispatchToProps = (dispatch) => ({
     registerNode: (node) => dispatch(RegisterNode(node)),
+    toggleProgressBar: (status) => dispatch(ToggleProgressBar(status)),
 })
 
 const withProps = connect(null, mapDispatchToProps);

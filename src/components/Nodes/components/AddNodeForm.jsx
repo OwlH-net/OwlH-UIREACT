@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { Enroll } from '../../../store/node/actions'
-import { ToggleAddNodeForm, EditNode } from '../../../store/webUtilities/actions'
+import { ToggleAddNodeForm, EditNode, ToggleProgressBar } from '../../../store/webUtilities/actions'
 
 const AddNodeForm = (props) =>  {
     const [groupsSelected, setGroupsSelected] = useState([])
@@ -13,6 +13,7 @@ const AddNodeForm = (props) =>  {
         nodepass: ""
     });
 
+    //load current node data if button 'edit node' is pressed
     useEffect(() => {
         if(props.isEditNode){
             setFormData({
@@ -47,14 +48,15 @@ const AddNodeForm = (props) =>  {
             Suricata:{}
         }   
 
+        props.toggleProgressBar(true)
         props.enroll(enrollData)
         props.toggleAddNodeForm()
     }
 
     const editNodeData = () => {
+        props.toggleProgressBar(true)
         formData.id = props.nodeToEdit.id    
         props.editNode(formData)
-        // props.toggleAddNodeForm()
     }
 
     function handleCheck(e){
@@ -167,6 +169,7 @@ const mapDispatchToProps = (dispatch) => ({
     enroll: (data) => dispatch(Enroll(data)),
     editNode: (data) => dispatch(EditNode(data)),
     toggleAddNodeForm: () => dispatch(ToggleAddNodeForm()),
+    toggleProgressBar: (status) => dispatch(ToggleProgressBar(status)),
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);
