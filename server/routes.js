@@ -41,8 +41,18 @@ router.delete('/deleteNode/:uuid', async (req, res, next) => {
   res.status(200).json(del)
 })
 
+router.delete('/deleteGroup/:uuid', async (req, res, next) => {
+  const del = await OwlHService.deleteGroup(req)
+  res.status(200).json(del)
+})
+
 router.put('/registerNode/:uuid', async (req, res, next) => {
   const reg = await OwlHService.regNode(req)
+  res.status(200).json(reg)
+})
+
+router.put('/editGroup', async (req, res, next) => {
+  const reg = await OwlHService.editGroup(req)
   res.status(200).json(reg)
 })
 

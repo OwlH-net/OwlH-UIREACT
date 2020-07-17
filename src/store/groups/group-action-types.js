@@ -1,3 +1,5 @@
 export const ADD_GROUP = 'ADD_GROUP'
+export const DELETE_GROUP = 'DELETE_GROUP'
 export const GET_ALL_GROUPS = 'GET_ALL_GROUPS'
-export const TOGGLE_ADD_GROUP = 'TOGGLE_ADD_GROUP'
+export const TOGGLE_FORM_GROUP = 'TOGGLE_FORM_GROUP'
+export const TOGGLE_EDIT_FORM = 'TOGGLE_EDIT_FORM'

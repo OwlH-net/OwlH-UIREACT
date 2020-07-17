@@ -1,8 +1,10 @@
 import * as ActionTypes from './group-action-types';
 
 const initialState = {
-    allGroupList: [],
-    addGroupForm: false
+  allGroupList: [],
+  groupToEdit: {},
+  addGroupForm: false,
+  isEdit: false,
 }
 
 function getAllGroups(state, data) {
@@ -12,11 +14,19 @@ function getAllGroups(state, data) {
     }
 }
 
-function ToggleAddGroupForm(state) {
-  console.log(state)
+function ToggleGroupForm(state) {
     return {
       ...state,
+      isEdit: false,
       addGroupForm: !state.addGroupForm
+    }
+}
+
+function SaveGroupSelected(state, data) {
+  return {
+      ...state,
+      isEdit: true,
+      groupToEdit: data
     }
 }
 
@@ -24,8 +34,10 @@ export default function webUtilities(state = initialState, action) {
     switch(action.type) {
       case ActionTypes.GET_ALL_GROUPS:  
         return getAllGroups(state, action.payload);
-      case ActionTypes.TOGGLE_ADD_GROUP:  
-        return ToggleAddGroupForm(state);
+      case ActionTypes.TOGGLE_FORM_GROUP:  
+        return ToggleGroupForm(state);
+      case ActionTypes.TOGGLE_EDIT_FORM:  
+        return SaveGroupSelected(state, action.payload);
       default:
         return state;
     }

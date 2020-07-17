@@ -49,15 +49,62 @@ export function AddGroup(data) {
       axios.post('/api/group', JSON.stringify(data), newConfig)
       .then(resp => {
         dispatch(ToggleProgressBar(false))
-        dispatch(ToggleAddGroupForm())
+        dispatch(ToggleGroupForm())
         dispatch(GetAllGroups())
       })
     }
-  }
+}
 
-
-export function ToggleAddGroupForm() {
-    return {
-      type: ActionTypes.TOGGLE_ADD_GROUP
+export function EditGroupSelected(data) {
+    const token = GetToken()
+    const username = GetUserName()
+  
+    let newHeaders = {
+      ...config.headers, 
+      'user': username,
+      'token': token
     }
+    let newConfig = {headers: newHeaders}
+
+    return (dispatch) => {
+      axios.put('/api/editGroup', JSON.stringify(data), newConfig)
+      .then(resp => {
+        dispatch(ToggleProgressBar(false))
+        dispatch(ToggleGroupForm())
+        dispatch(GetAllGroups())
+      })
+    }
+}
+
+export function ToggleGroupForm() {
+    return {
+      type: ActionTypes.TOGGLE_FORM_GROUP
+    }
+}
+
+export function SaveGroupSelected(data) {
+    return {
+      type: ActionTypes.TOGGLE_EDIT_FORM,
+      payload: data
+    }
+}
+
+export function DeleteGroup(nodeUUID) {
+  const token = GetToken()
+  const username = GetUserName()
+
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
+  }
+  let newConfig = {headers: newHeaders}
+
+  return (dispatch) => {
+    axios.delete('/api/deleteGroup/'+nodeUUID, newConfig)
+    .then(resp => {
+      dispatch(ToggleProgressBar(false))
+      dispatch(GetAllGroups())
+    })
+  }
 }

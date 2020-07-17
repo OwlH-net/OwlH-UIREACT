@@ -258,6 +258,26 @@ function editNode(req) {
   })
 }
 
+function editGroup(req) {
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': req.headers.token,
+    'user': req.headers.user
+  }
+  return axios.put(`${url}/group/editGroup`,req.body, 
+                  {
+                    httpsAgent: httsAgent,
+                    headers: newHeader
+                  }
+                )
+  .then(resp => {
+    return resp.data
+  })
+  .catch(resp => {
+    return resp.data
+  })
+}
+
 function addGroup(req) {
   let newHeader = {
     'Content-Type': 'application/json',
@@ -266,6 +286,30 @@ function addGroup(req) {
   }
 
   return axios.post(`${url}/group`,req.body, 
+                  {
+                    httpsAgent: httsAgent,
+                    headers: newHeader
+                  }
+                )
+  .then(resp => {
+    return resp.data
+  })
+  .catch(resp => {
+    return resp.data
+  })
+}
+
+function deleteGroup(req) {
+  let token = req.headers.token
+  let username = req.headers.user
+
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': token,
+    'user': username
+  }
+
+  return axios.delete(`${url}/group/DeleteGroup/${req.params.uuid}`,
                   {
                     httpsAgent: httsAgent,
                     headers: newHeader
@@ -292,5 +336,7 @@ module.exports = {
   regNode,
   getGroups,
   editNode,
-  addGroup
+  addGroup,
+  deleteGroup,
+  editGroup
 }
