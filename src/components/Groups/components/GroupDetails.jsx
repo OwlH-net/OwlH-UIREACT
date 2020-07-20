@@ -7,25 +7,34 @@ import Tab from 'react-bootstrap/Tab'
 import {ProgressBar} from 'react-bootstrap'
 import { ToggleProgressBar, ToggleModalWindow, ModalButtonClicked } from '../../../store/webUtilities/actions'
 import { GetAllGroups } from '../../../store/groups/actions'
+import { FaTrashAlt } from "react-icons/fa";
+
 const GroupDetails = (props) => {
     
-    useEffect(() => {
+    useEffect(() => {        
         props.toggleProgressBar(true);
         props.getAllGroups();
     }, [])
     
     useEffect(() => {
-        nodesForThisGroup()
+        nodesForThisGroup(props.groupToDetails.guuid)
     }, [props.allGroupList])
 
-    const nodesForThisGroup = (guuid) => {
-        console.log(props.groupToDetails)
+    const nodesForThisGroup = (guuid) => {        
         const totalList = Object.entries(props.allGroupList || {}).map(([id , val]) =>{
-            // console.log(val.guuid)
             if(val.guuid == guuid){
-                console.log(val.guuid+"  --  "+val.gname)
+                return Object.entries(val.Nodes || {}).map(([nodesId , nodes]) =>{
+                    console.log(nodes)
+                    console.log(nodes.nname)
+                    return <tr>
+                        <td>{nodes.nname}</td>
+                        <td>{nodes.nip}</td>
+                        <td> <FaTrashAlt size={21} className="iconRed" onClick={() => {}}/></td>
+                    </tr>
+                })
             }
         });
+        return totalList
     }
 
     return (
@@ -38,11 +47,22 @@ const GroupDetails = (props) => {
                 <b>Nodes</b>
                 <a className="btn btn-primary float-right text-decoration-none text-white right m-1" onClick={() => {}}>Add node</a>
                 <a className="btn btn-success float-right text-decoration-none text-white right m-1" onClick={() => {}}>Sync all</a>
-                <a className="btn btn-secondary float-right text-decoration-none text-white right m-1" onClick={() => {}}>Back</a>
+                <a className="btn btn-secondary float-right text-decoration-none text-white right m-1" onClick={() => {window.history.back();}}>Back</a>
             </div>
             
             <div>
-                {nodesForThisGroup(props.groupToDetails.guuid)}
+                <table className="table table-hover table-layout-fixed">
+                    <thead>
+                        <tr>
+                            <th>Node name</th>
+                            <th>Node IP</th>
+                            <th width="15%">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {nodesForThisGroup(props.groupToDetails.guuid)}
+                    </tbody>
+                </table>
             </div>
 
         </div>
