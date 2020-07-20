@@ -24,6 +24,7 @@ export function GetAllGroups() {
       axios.get('/api/groups', newConfig)
       .then(resp => {
         dispatch(accGetAllGroups(resp.data))
+        dispatch(ToggleProgressBar(false))
       })
     }
   }
@@ -86,6 +87,25 @@ export function SaveGroupSelected(data) {
     return {
       type: ActionTypes.TOGGLE_EDIT_FORM,
       payload: data
+    }
+}
+
+export function GroupToDetails(data) {
+    return {
+      type: ActionTypes.GROUP_TO_DETAILS,
+      payload: data
+    }
+}
+
+export function ClearGroup() {
+    return {
+      type: ActionTypes.CLEAR_GROUP_DATA
+    }
+}
+
+export function ShowEditForm() {
+    return {
+      type: ActionTypes.SHOW_EDIT_FORM
     }
 }
 

@@ -28,15 +28,20 @@ const AddGroupForm = (props) => {
 
     useEffect(() => {
         setEditGroupValues({
-        name: props.groupToEdit.gname,
-        desc: props.groupToEdit.gdesc,
-        uuid: props.groupToEdit.guuid
-    })
+            name: props.groupToEdit.gname,
+            desc: props.groupToEdit.gdesc,
+            uuid: props.groupToEdit.guuid
+        })
     },[props.groupToEdit])
 
     const EditGroup = () => {   
         props.toggleProgressBar(true)
         props.editGroupSelected(editGroupValues)
+        // setEditGroupValues({
+        //     name: "",
+        //     desc: "",
+        //     uuid: "",
+        // })
     }
 
     const AddDataForm = () => {    

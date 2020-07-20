@@ -4,10 +4,9 @@ import Menu from '../../Shared/Components/Menu/Menu'
 import Banner from '../../Shared/Components/Banner/Banner'
 import GroupsList from './GroupsList'
 import AddGroupForm from './GroupForm'
-import { GetAllGroups, ToggleGroupForm } from '../../../store/groups/actions'
+import { GetAllGroups, ToggleGroupForm, ClearGroup } from '../../../store/groups/actions'
 import { ToggleProgressBar } from '../../../store/webUtilities/actions'
 import {ProgressBar} from 'react-bootstrap'
-import { addDevServerEntrypoints } from 'webpack-dev-server';
 
 const index = (props) => {
 
@@ -17,23 +16,31 @@ const index = (props) => {
         props.getAllGroups();
     }, [])
 
+    const groupButton = () => {
+        if(props.showGroupForm){
+            return <a className="btn btn-primary float-right text-decoration-none text-white right" onClick={() => {props.clearGroup(); props.toggleGroupForm()}}>Close form</a>                
+        }else{
+            return <a className="btn btn-primary float-right text-decoration-none text-white right" onClick={() => {props.toggleGroupForm()}}>Add new group</a>                
+        }
+    }
+
     return (
         <div>
             <Menu />   
             <Banner title="Groups" subtitle="all groups list" />  
             {props.progressBar ? <ProgressBar animated now={100} /> : null}
 
-            <div className="m-3 p-3">              
-                <a className="btn btn-primary float-right text-decoration-none text-white right" onClick={() => {props.toggleGroupForm()}}>Add new group</a>                
+            <div className="m-3 p-3">       
+                {groupButton()}
             </div>
             <div className="m-3 p-3">
                 <GroupsList />
             </div>
             <div className="m-3 p-3">
-                <a className="btn btn-primary float-right text-decoration-none text-white right" onClick={() => {props.toggleGroupForm()}}>Add new group</a>
+                {groupButton()}
             </div>
             <div className="m-3 p-3">
-                {props.addGroupForm ? <AddGroupForm /> : null}
+                {props.showGroupForm ? <AddGroupForm /> : null}
             </div>
         </div>
     )
@@ -42,7 +49,7 @@ const index = (props) => {
 const mapStateToProps = (state) => {
     return {
         isEdit: state.groups.isEdit,
-        addGroupForm: state.groups.addGroupForm,
+        showGroupForm: state.groups.showGroupForm,
         progressBar: state.webUtilities.progressBar,
     }
 }
@@ -50,6 +57,7 @@ const mapDispatchToProps = (dispatch) => ({
     toggleProgressBar: (status) => dispatch(ToggleProgressBar(status)),
     toggleGroupForm: () => dispatch(ToggleGroupForm()),
     getAllGroups: () => dispatch(GetAllGroups()),
+    clearGroup: () => dispatch(ClearGroup()),
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);

@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import ModalWindow from '../../Shared/ModalWindow'
 import { ToggleProgressBar, ToggleModalWindow, ModalButtonClicked } from '../../../store/webUtilities/actions'
-import { DeleteGroup, ToggleGroupForm, SaveGroupSelected } from '../../../store/groups/actions'
+import { DeleteGroup, ToggleGroupForm, SaveGroupSelected, ClearGroup, ShowEditForm, GroupToDetails } from '../../../store/groups/actions'
 import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
+import { Route, Link, BrowserRouter, NavLink } from 'react-router-dom';
 
 const GroupsList = (props) => {
     const [allGroups, setAllGroups] = useState([])
     const [groupSelected, setGroupSelected] = useState('')
-    const [groupEdited, setGroupEdited] = useState([])
 
     //getAllNodes
     useEffect(() => {
@@ -35,18 +35,12 @@ const GroupsList = (props) => {
 
     const showEditGroup = (val) => {
         props.toggleGroupForm()
+        props.showEditForm()
         props.saveGroupSelected(val)
     }
 
-    const editGroup = (guuid) => {
-        console.log(groupEdited)
-        // setGroupEdited([])
-        // let data = {
-        //     uuid:guuid,
-        //     name:gname,
-        //     desc:gdesc
-        // }
-        // props.editGroup(data)
+    const loadDetails = (val) => {
+        props.saveGroupSelected(val)        
     }
 
     const groupsData = () => {
@@ -61,11 +55,11 @@ const GroupsList = (props) => {
                         <p>{val.gdesc}</p>
                     </td>
                     <td key={id+'-actions'}>
-                        <span>
+                        <div>
                             <FaEdit size={21} className="iconBlue" onClick={() => {showEditGroup(val)}}/> &nbsp;
-                            <FaEye size={21} className="iconBlue"/> &nbsp;
-                            <FaTrashAlt size={21} className="iconRed" onClick={() => {deleteGroup(val.guuid)}}/> &nbsp;
-                        </span>
+                            <NavLink to="GroupDetails"   onClick={() => {props.groupToDetails(val)}}><FaEye size={21} className="iconBlue" onClick={() => {loadDetails(val)}}/></NavLink>&nbsp;
+                            <FaTrashAlt size={21} className="iconRed" onClick={() => {props.clearGroup(); deleteGroup(val.guuid)}}/>
+                        </div>
                     </td>
                 </tr>
             )
@@ -116,6 +110,9 @@ const mapDispatchToProps = (dispatch) => ({
     toggleGroupForm: () => dispatch(ToggleGroupForm()),
     saveGroupSelected: (group) => dispatch(SaveGroupSelected(group)),
     modalButtonClicked: (option) => dispatch(ModalButtonClicked(option)),
+    clearGroup: () => dispatch(ClearGroup()),
+    showEditForm: () => dispatch(ShowEditForm()),
+    groupToDetails: (group) => dispatch(GroupToDetails(group)),
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);
