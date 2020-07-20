@@ -9,6 +9,7 @@ import Nodes from '../components/Nodes/components/index';
 import Groups from '../components/Groups/components/index';
 import OpenRules from '../components/OpenRules/components/index';
 import ChangePassword from '../components/Shared/Components/ChangePassword';
+import GroupDetails from './Groups/components/GroupDetails';
 
 class App extends React.Component {
     constructor (props) {
@@ -32,6 +33,7 @@ class App extends React.Component {
             <Route path="/Nodes" exact component={ Nodes }/>
             <Route path="/OpenRules" exact component={ OpenRules }/>
             <Route path="/ChangePassword" exact component={ ChangePassword }/>
+            <Route path="/GroupDetails" exact component={ GroupDetails }/>
           </Switch>
       </BrowserRouter>
       </div>

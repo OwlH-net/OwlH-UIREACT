@@ -91,16 +91,12 @@ const NewMaster = (props) => {
                 <button type="button" className="m-3 p-2 w-25 btn btn-danger" onClick={resetFormData}><h5>Cancel</h5></button>
                 <button type="button" className="m-3 p-2 w-25 btn btn-primary" onClick={getFormData}><h5>Add</h5></button>
             </div>
-
         </div>
     </div>
   )
 }
 
 const mapStateToProps = (state) => {
-    console.log("state on edit master form")
-    console.log(state.login.currentMaster)
-    console.log( Object.entries(state.login.currentMaster).length === 0 ? "nulo": state.login.currentMaster[0].name)
     return {
         editMaster: state.login.currentMaster
     }

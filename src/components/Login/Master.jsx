@@ -24,14 +24,7 @@ const Master = (props) => {
   const masterList = store.getState().owlhReducer.masterList
 
   const editMaster = (mList, masterID) => {
-    console.log("edit master")
-    console.log(masterID)
-    console.log(mList)
-
-
     const master = mList.filter(master => master.name == masterID);
-    console.log("Edit Master")
-    console.log(master)
     props.locGetMasterDataToEdit(master)
   }
 
@@ -54,7 +47,6 @@ const Master = (props) => {
 
 // export default NewMaster;
 const mapDispatchToProps = dispatch => {
-  console.log("dispatch to props")
   const rmMaster = (masterID) => {return deleteMaster(masterID)}
   const activeMaster = (masterID) => {return toggleMaster(masterID)}
   const setActiveMaster = (master) => {return loginSetActiveMaster(master)}

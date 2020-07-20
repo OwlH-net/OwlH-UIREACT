@@ -30,6 +30,15 @@
   cursor: pointer;
 }
 
+.pointer {
+  cursor: pointer;
+}
+
+.PasswordValidation {
+  background: GhostWhite;
+  width: 75%;
+}
+
 .backgroundLogin {
   background: GhostWhite;
   width: 100%;
@@ -40,9 +49,21 @@
   display: none;
 }
 
+.right {
+  float: right;
+}
+
+#master-offline-banner {
+  font-size: 18px;
+}
+
 a.active {
   text-decoration: none;
   color: orange;
+}
+
+.table-layout-fixed{
+  table-layout: fixed;
 }
 
 .AlignRight{
@@ -50,6 +71,13 @@ a.active {
   justify-content: flex-end;
 }
 
+.line{
+  color:dodgerblue; 
+  background-color: "dodgerblue";
+  height: 1;
+}
+
+.bg-dodgerblue { background-color:dodgerblue; }
 .bg-purple { background-color: #6f42c1; }
 .bg-red { background-color: #F44336; }
 .bg-light-green { background-color: #8BC34A; }
