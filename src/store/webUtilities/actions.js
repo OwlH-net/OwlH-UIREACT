@@ -116,48 +116,4 @@ export function ToggleProgressBar(status) {
   }
 }
   
-export function ToggleAddNodeForm() {
-  return {
-    type: ActionTypes.TOGGLE_ADD_NODE
-  }
-}
-  
-export function ToggleEditNodeForm() {
-  return {
-    type: ActionTypes.TOGGLE_EDIT_NODE
-  }
-}
-  
-export function NodeToEdit(node) {
-  return {
-    type: ActionTypes.NODE_TO_EDIT,
-    payload: node
-  }
-}
-  
-export function EditNode(node) {
-  const token = GetToken()
-  const username = GetUserName()
 
-  let newHeaders = {
-    ...config.headers, 
-    'user': username,
-    'token': token
-  }
-  let newConfig = {headers: newHeaders}
-
-  return (dispatch) => {    
-    //check default credentials
-    axios.put('/api/editNode', JSON.stringify(node), newConfig)
-    .then(resp => {
-      dispatch(accEditNode())
-      dispatch(ToggleAddNodeForm())
-      dispatch(getAllNodes())
-    })
-  }
-}
-export function accEditNode() {
-  return {
-    type: ActionTypes.EDIT_NODE
-  }
-}

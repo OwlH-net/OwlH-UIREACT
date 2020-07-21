@@ -4,8 +4,10 @@ const initialState = {
   allGroupList: [],
   groupToEdit: {},
   groupToDetails: {},
+  groupNodes: {},
   groupDetails: {},
   showGroupForm: false,
+  isAddNodesToGroup: false,
   isEdit: false,
 }
 
@@ -54,6 +56,22 @@ function GroupToDetails(state, data) {
     }
 }
 
+function getAllNodesGroup(state, data) {
+  return {
+      ...state,
+      groupNodes: data,
+      isAddNodesToGroup: true,
+    }
+}
+
+function hideAllNodesGroup(state) {
+  return {
+      ...state,
+      groupNodes: {},
+      isAddNodesToGroup: false,
+    }
+}
+
 export default function webUtilities(state = initialState, action) {
     switch(action.type) {
       case ActionTypes.GET_ALL_GROUPS:  
@@ -68,6 +86,10 @@ export default function webUtilities(state = initialState, action) {
         return showEditForm(state);
       case ActionTypes.GROUP_TO_DETAILS:  
         return GroupToDetails(state, action.payload);
+      case ActionTypes.GET_NODES_GROUP:  
+        return getAllNodesGroup(state, action.payload);
+      case ActionTypes.HIDE_EDIT_FORM:  
+        return hideAllNodesGroup(state);
       default:
         return state;
     }

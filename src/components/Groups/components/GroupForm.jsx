@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import { ToggleAddNodeForm, ToggleProgressBar } from '../../../store/webUtilities/actions'
+import { ToggleProgressBar } from '../../../store/webUtilities/actions'
 import { AddGroup, EditGroupSelected } from '../../../store/groups/actions'
 
 const AddGroupForm = (props) => {
@@ -37,16 +37,10 @@ const AddGroupForm = (props) => {
     const EditGroup = () => {   
         props.toggleProgressBar(true)
         props.editGroupSelected(editGroupValues)
-        // setEditGroupValues({
-        //     name: "",
-        //     desc: "",
-        //     uuid: "",
-        // })
     }
 
     const AddDataForm = () => {    
         props.toggleProgressBar(true)
-        props.toggleAddNodeForm()
         props.addGroup(formData)
     }
 
@@ -113,14 +107,13 @@ const mapStateToProps = (state) => {
         isEdit: state.groups.isEdit,
         groupToEdit: state.groups.groupToEdit,
         allGroupList: state.groups.allGroupList,
-        nodeToEdit: state.webUtilities.nodeToEdit,
-        isEditNode: state.webUtilities.isEditNode,
+        nodeToEdit: state.node.nodeToEdit,
+        isEditNode: state.node.isEditNode,
     }
 }
 
 const mapDispatchToProps = (dispatch) => ({
     addGroup: (data) => dispatch(AddGroup(data)),
-    toggleAddNodeForm: () => dispatch(ToggleAddNodeForm()),
     toggleProgressBar: (status) => dispatch(ToggleProgressBar(status)),
     editGroupSelected: (group) => dispatch(EditGroupSelected(group)),
 })

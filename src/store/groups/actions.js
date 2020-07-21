@@ -128,3 +128,76 @@ export function DeleteGroup(nodeUUID) {
     })
   }
 }
+
+export function ShowNodesGroupForm(guuid) {
+  const token = GetToken()
+  const username = GetUserName()
+
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
+  }
+  let newConfig = {headers: newHeaders}
+
+  return (dispatch) => {
+    axios.get('/api/getAllNodesGroup/'+guuid, newConfig)
+    .then(resp => {
+      dispatch(accShowNodesGroupForm(resp.data))
+      dispatch(ToggleProgressBar(false))
+    })
+  }
+}
+function accShowNodesGroupForm(data) {
+  return {
+    type: ActionTypes.GET_NODES_GROUP,
+    payload: data
+  }
+}
+
+export function HideAllNodesGroup() {
+  return {
+    type: ActionTypes.HIDE_EDIT_FORM
+  }
+}
+
+export function AddNodesToGroup(data) {
+  const token = GetToken()
+  const username = GetUserName()
+
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
+  }
+  let newConfig = {headers: newHeaders}
+
+  return (dispatch) => {
+    axios.put('/api/addGroupNodes', JSON.stringify(data), newConfig)
+    .then(resp => {
+      dispatch(ToggleProgressBar(false))
+      dispatch(HideAllNodesGroup())
+      dispatch(GetAllGroups())
+    })
+  }
+}
+
+export function DeleteGroupNode(nodeUUID) {
+  const token = GetToken()
+  const username = GetUserName()
+
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
+  }
+  let newConfig = {headers: newHeaders}
+
+  return (dispatch) => {
+    axios.delete('/api/deleteNodeGroup/'+nodeUUID, newConfig)
+    .then(resp => {
+      dispatch(ToggleProgressBar(false))
+      dispatch(GetAllGroups())
+    })
+  }
+}

@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import Menu from '../../Shared/Components/Menu/Menu'
 import Banner from '../../Shared/Components/Banner/Banner'
-import { getAllNodes, ShowNodes, SortTableIP, SortTableName, SetSearchBar } from '../../../store/node/actions'
-import { ToggleAddNodeForm, ToggleProgressBar } from '../../../store/webUtilities/actions'
+import Footer from '../../Shared/Footer'
+import { ToggleAddNodeForm, getAllNodes, ShowNodes, SortTableIP, SortTableName, SetSearchBar } from '../../../store/node/actions'
+import { ToggleProgressBar } from '../../../store/webUtilities/actions'
 import { GetAllGroups } from '../../../store/groups/actions'
 import NodesList from './NodesList'
 import AddNodeForm from './AddNodeForm'
@@ -56,6 +57,7 @@ const index = (props) => {
             <div className="m-3 p-3">
                 {props.addNodeForm ? <AddNodeForm /> : null}
             </div>
+            <Footer />
         </div>
     )
 }
@@ -64,7 +66,7 @@ const mapStateToProps = (state) => {
     return {
         allNodesList: state.node.allNodesList,
         progressBar: state.webUtilities.progressBar,
-        addNodeForm: state.webUtilities.addNodeForm,
+        addNodeForm: state.node.addNodeForm,
         allGroupList: state.groups.allGroupList,
     }
 }

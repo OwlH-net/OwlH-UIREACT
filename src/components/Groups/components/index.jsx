@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
+import Footer from '../../Shared/Footer'
 import Menu from '../../Shared/Components/Menu/Menu'
 import Banner from '../../Shared/Components/Banner/Banner'
 import GroupsList from './GroupsList'
@@ -42,6 +43,7 @@ const index = (props) => {
             <div className="m-3 p-3">
                 {props.showGroupForm ? <AddGroupForm /> : null}
             </div>
+            <Footer />
         </div>
     )
 }

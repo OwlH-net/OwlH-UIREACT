@@ -123,7 +123,33 @@ function getNodes(req) {
     })
 }
 
-function pingNode(req) {
+// function pingNode(req) {
+//   let token = req.headers.token
+//   let username = req.headers.user
+
+//   let newHeader = {
+//     'Content-Type': 'application/json',
+//     'token': token,
+//     'user': username
+//   }
+
+//   return axios.get(`${url}/node/ping/${req.params.uuid}`,
+//                     {
+//                       httpsAgent: httsAgent,
+//                       headers: newHeader
+//                     }
+//                   )
+//     .then(resp => {
+//       return resp.data
+//     })
+//     .catch(resp => {
+//       return resp.data
+//     })
+// }
+
+function DeleteNodeGroup(req) {
+  console.log(req.headers)
+  console.log(`${url}/node/${req.params.uuid}`)
   let token = req.headers.token
   let username = req.headers.user
 
@@ -133,18 +159,18 @@ function pingNode(req) {
     'user': username
   }
 
-  return axios.get(`${url}/node/ping/${req.params.uuid}`,
-                    {
-                      httpsAgent: httsAgent,
-                      headers: newHeader
-                    }
-                  )
-    .then(resp => {
-      return resp.data
-    })
-    .catch(resp => {
-      return resp.data
-    })
+  return axios.delete(`${url}/group/deleteNodeGroup/${req.params.uuid}`,
+                  {
+                    httpsAgent: httsAgent,
+                    headers: newHeader
+                  }
+                )
+  .then(resp => {
+    return resp.data
+  })
+  .catch(resp => {
+    return resp.data
+  })
 }
 
 function deleteNode(req) {
@@ -278,6 +304,26 @@ function editGroup(req) {
   })
 }
 
+function AddGroupNodes(req) {
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': req.headers.token,
+    'user': req.headers.user
+  }
+  return axios.put(`${url}/group/addGroupNodes`,req.body, 
+                  {
+                    httpsAgent: httsAgent,
+                    headers: newHeader
+                  }
+                )
+  .then(resp => {
+    return resp.data
+  })
+  .catch(resp => {
+    return resp.data
+  })
+}
+
 function addGroup(req) {
   let newHeader = {
     'Content-Type': 'application/json',
@@ -323,20 +369,47 @@ function deleteGroup(req) {
   })
 }
 
+function AllNodesGroup(req) {
+  let token = req.headers.token
+  let username = req.headers.user
+
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': token,
+    'user': username
+  }
+
+  return axios.get(`${url}/group/getAllNodesGroup/${req.params.uuid}`,
+                    {
+                      httpsAgent: httsAgent,
+                      headers: newHeader
+                    }
+                  )
+    .then(resp => {
+      return resp.data
+    })
+    .catch(resp => {
+      return resp.data
+    })
+}
+
 module.exports = {
   enrollNode,
+  AllNodesGroup,
   getLogin,
   getAbout,
   getConfiguration,
   setConfiguration,
   setPassword,
   getNodes,
-  pingNode,
+  // pingNode,
   deleteNode,
   regNode,
   getGroups,
   editNode,
   addGroup,
   deleteGroup,
-  editGroup
+  editGroup,
+  AddGroupNodes,
+  DeleteNodeGroup
 }

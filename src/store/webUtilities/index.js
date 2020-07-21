@@ -2,17 +2,15 @@ import * as ActionTypes from './utils-action-types';
 
 const initialState = {
     spinner: false,
-    addNodeForm: false,
     progressBar: false,
     modalActionSelected: {},
-    nodeToEdit: {},
     modal: false,
     defaults: false,
     errorAlertShow: false,
     isMasterActive: true,
     alertList: [],
     passwordChange: {},
-    isEditNode: false
+
 }
 
 function toggleModalWindowStatus(state, data) {
@@ -99,24 +97,6 @@ function getModalActionSelected(state, data) {
   }
 }
 
-function saveNodeToEdit(state, data) {
-  return {
-    ...state, 
-    nodeToEdit: data,
-    addNodeForm: true,
-    isEditNode: true
-  }
-}
-
-function toggleAddNode(state) {
-  return {
-    ...state, 
-    addNodeForm: !state.addNodeForm,
-    nodeToEdit: {},
-    isEditNode: false
-  }
-}
-
 function deleteAlertToAlertList(state, data) {
   return {
     ...state, 
@@ -148,12 +128,8 @@ export default function webUtilities(state = initialState, action) {
       return toggleModalWindowStatus(state, action.payload);
     case ActionTypes.MODAL_ACTION_SELECTED:  
       return getModalActionSelected(state, action.payload);
-    case ActionTypes.TOGGLE_ADD_NODE:  
-      return toggleAddNode(state);
     case ActionTypes.TOGGLE_EDIT_NODE:  
       return toggleEditNodeForm(state);
-    case ActionTypes.NODE_TO_EDIT:  
-      return saveNodeToEdit(state, action.payload);
     default:
       return state;
   }
