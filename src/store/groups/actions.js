@@ -50,7 +50,6 @@ export function AddGroup(data) {
       axios.post('/api/group', JSON.stringify(data), newConfig)
       .then(resp => {
         dispatch(ToggleProgressBar(false))
-        dispatch(ToggleGroupForm())
         dispatch(GetAllGroups())
       })
     }
@@ -71,21 +70,20 @@ export function EditGroupSelected(data) {
       axios.put('/api/editGroup', JSON.stringify(data), newConfig)
       .then(resp => {
         dispatch(ToggleProgressBar(false))
-        dispatch(ToggleGroupForm())
         dispatch(GetAllGroups())
       })
     }
 }
 
-export function ToggleGroupForm() {
+export function ShowGroupForm() {
     return {
-      type: ActionTypes.TOGGLE_FORM_GROUP
+      type: ActionTypes.DISPLAY_FORM_GROUP
     }
 }
 
 export function SaveGroupSelected(data) {
     return {
-      type: ActionTypes.TOGGLE_EDIT_FORM,
+      type: ActionTypes.SAVE_EDIT_FORM,
       payload: data
     }
 }
@@ -97,9 +95,9 @@ export function GroupToDetails(data) {
     }
 }
 
-export function ClearGroup() {
+export function CloseGroupForm() {
     return {
-      type: ActionTypes.CLEAR_GROUP_DATA
+      type: ActionTypes.CLEAR_EDIT_FORM
     }
 }
 
@@ -177,6 +175,44 @@ export function AddNodesToGroup(data) {
     .then(resp => {
       dispatch(ToggleProgressBar(false))
       dispatch(HideAllNodesGroup())
+      dispatch(GetAllGroups())
+    })
+  }
+}
+
+export function AnalyzerStatus(data) {
+  const token = GetToken()
+  const username = GetUserName()
+
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
+  }
+  let newConfig = {headers: newHeaders}
+
+  return (dispatch) => {
+    axios.put('/api/analyzer', JSON.stringify(data), newConfig)
+    .then(resp => {
+      dispatch(GetAllGroups())
+    })
+  }
+}
+
+export function SyncAnalyzer(data) {
+  const token = GetToken()
+  const username = GetUserName()
+
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
+  }
+  let newConfig = {headers: newHeaders}
+
+  return (dispatch) => {
+    axios.put('/api/syncAnalyzerData', JSON.stringify(data), newConfig)
+    .then(resp => {
       dispatch(GetAllGroups())
     })
   }

@@ -115,7 +115,6 @@ function getNodes(req) {
                     }
                   )
     .then(resp => {
-      console.log(resp.data.Nodes)
       return resp.data.Nodes
     })
     .catch(resp => {
@@ -123,33 +122,7 @@ function getNodes(req) {
     })
 }
 
-// function pingNode(req) {
-//   let token = req.headers.token
-//   let username = req.headers.user
-
-//   let newHeader = {
-//     'Content-Type': 'application/json',
-//     'token': token,
-//     'user': username
-//   }
-
-//   return axios.get(`${url}/node/ping/${req.params.uuid}`,
-//                     {
-//                       httpsAgent: httsAgent,
-//                       headers: newHeader
-//                     }
-//                   )
-//     .then(resp => {
-//       return resp.data
-//     })
-//     .catch(resp => {
-//       return resp.data
-//     })
-// }
-
 function DeleteNodeGroup(req) {
-  console.log(req.headers)
-  console.log(`${url}/node/${req.params.uuid}`)
   let token = req.headers.token
   let username = req.headers.user
 
@@ -174,8 +147,6 @@ function DeleteNodeGroup(req) {
 }
 
 function deleteNode(req) {
-  console.log(req.headers)
-  console.log(`${url}/node/${req.params.uuid}`)
   let token = req.headers.token
   let username = req.headers.user
 
@@ -324,6 +295,47 @@ function AddGroupNodes(req) {
   })
 }
 
+function AnalyzerStatus(req) {
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': req.headers.token,
+    'user': req.headers.user
+  }
+  return axios.put(`${url}/node/analyzer`,req.body, 
+                  {
+                    httpsAgent: httsAgent,
+                    headers: newHeader
+                  }
+                )
+  .then(resp => {
+    return resp.data
+  })
+  .catch(resp => {
+    return resp.data
+  })
+}
+
+function SyncAnalyzer(req) {
+  console.log(req.body)
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': req.headers.token,
+    'user': req.headers.user
+  }
+  return axios.put(`${url}/node/analyzer/sync`,req.body, 
+                  {
+                    httpsAgent: httsAgent,
+                    headers: newHeader
+                  }
+                )
+  .then(resp => {
+    return resp.data
+  })
+  .catch(resp => {
+    return resp.data
+  })
+}
+
 function addGroup(req) {
   let newHeader = {
     'Content-Type': 'application/json',
@@ -402,7 +414,6 @@ module.exports = {
   setConfiguration,
   setPassword,
   getNodes,
-  // pingNode,
   deleteNode,
   regNode,
   getGroups,
@@ -411,5 +422,7 @@ module.exports = {
   deleteGroup,
   editGroup,
   AddGroupNodes,
-  DeleteNodeGroup
+  DeleteNodeGroup,
+  AnalyzerStatus,
+  SyncAnalyzer
 }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import { HideAllNodesGroup, AddNodesToGroup } from '../../../store/groups/actions'
-import { ToggleProgressBar } from '../../../store/webUtilities/actions'
+import { HideAllNodesGroup, AddNodesToGroup } from '../../../../store/groups/actions'
+import { ToggleProgressBar } from '../../../../store/webUtilities/actions'
 
 const AddNodeToGroup = (props) => {
 
@@ -40,8 +40,6 @@ const AddNodeToGroup = (props) => {
             setNodesSelected(nodesSelected.filter((e) => ( e !== event.target.value )))
         }
     }
-
-    console.log(props.groupNodes)
 
     return (
         <div>

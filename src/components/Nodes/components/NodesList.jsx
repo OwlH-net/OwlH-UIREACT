@@ -96,7 +96,7 @@ const NodesList = (props) => {
     //Set current node uuid
     const deleteCurrentNode = (id) => {
         setNodeSelected(id)
-        props.toggleModal(true)  
+        props.toggleModal(true)
     }
     //Set current node uuid
     const modifyCurrentNode = (uuid, val) => {

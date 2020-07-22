@@ -6,7 +6,7 @@ const initialState = {
   groupToDetails: {},
   groupNodes: {},
   groupDetails: {},
-  showGroupForm: false,
+  isShowGroupForm: false,
   isAddNodesToGroup: false,
   isEdit: false,
 }
@@ -18,26 +18,25 @@ function getAllGroups(state, data) {
     }
 }
 
-function ToggleGroupForm(state) {
+function DisplayGroupForm(state) {
     return {
       ...state,
-      // isEdit: !state.isEdit,
-      showGroupForm: !state.showGroupForm,
+      isShowGroupForm: true
     }
 }
 
 function SaveGroupSelected(state, data) {
   return {
       ...state,
-      isEdit: true,
       groupToEdit: data
     }
 }
 
-function clearGroupData(state) {
+function clearGroupFormData(state) {
   return {
       ...state,
       isEdit: false,
+      isShowGroupForm: false,
       groupToEdit: {}
     }
 }
@@ -76,12 +75,12 @@ export default function webUtilities(state = initialState, action) {
     switch(action.type) {
       case ActionTypes.GET_ALL_GROUPS:  
         return getAllGroups(state, action.payload);
-      case ActionTypes.TOGGLE_FORM_GROUP:  
-        return ToggleGroupForm(state);
-      case ActionTypes.TOGGLE_EDIT_FORM:  
+      case ActionTypes.DISPLAY_FORM_GROUP:  
+        return DisplayGroupForm(state);
+      case ActionTypes.SAVE_EDIT_FORM:  
         return SaveGroupSelected(state, action.payload);
-      case ActionTypes.CLEAR_GROUP_DATA:  
-        return clearGroupData(state);
+      case ActionTypes.CLEAR_EDIT_FORM:  
+        return clearGroupFormData(state);
       case ActionTypes.SHOW_EDIT_FORM:  
         return showEditForm(state);
       case ActionTypes.GROUP_TO_DETAILS:  

@@ -15,8 +15,9 @@ const ModalWindow = (props) => {
                     <Modal.Body>{props.subtitle}</Modal.Body>
                     <Modal.Footer>
                         <Button variant='secondary' onClick={ ()=> {props.toggleModal(false)}} >Close</Button>
-                        {'btn' in props && props.id=='deleteNode' ? <Button variant={props.variantColor} onClick={() => { props.toggleProgressBar(true); props.toggleModal(false); props.modalButtonClicked({status:true, id:props.id}) }}>{props.btn}</Button> : null}
-                        {'btn' in props && props.id=='deleteGroup' ? <Button variant={props.variantColor} onClick={() => { props.toggleProgressBar(true); props.toggleModal(false); props.modalButtonClicked({status:true, id:props.id}) }}>{props.btn}</Button> : null}
+                        {'btn' in props && props.btn=='Delete' ? <Button variant={props.variantColor} onClick={() => { props.toggleProgressBar(true); props.toggleModal(false); props.modalButtonClicked({status:true, id:props.id}) }}>{props.btn}</Button> : null}
+                        {/* {'btn' in props && props.id=='deleteNode' ? <Button variant={props.variantColor} onClick={() => { props.toggleProgressBar(true); props.toggleModal(false); props.modalButtonClicked({status:true, id:props.id}) }}>{props.btn}</Button> : null}
+                        {'btn' in props && props.id=='deleteGroup' ? <Button variant={props.variantColor} onClick={() => { props.toggleProgressBar(true); props.toggleModal(false); props.modalButtonClicked({status:true, id:props.id}) }}>{props.btn}</Button> : null} */}
                     </Modal.Footer>
                 </Modal>
                 : null

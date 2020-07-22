@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import Menu from '../../Shared/Components/Menu/Menu'
-import GroupDetailsNodes from './GroupDetailsNodes'
+import GroupDetailsNodes from './Nodes/GroupDetailsNodes'
+import GroupDetailsAnalyzer from './Analyzer/GroupDetailsAnalyzer'
 import Banner from '../../Shared/Components/Banner/Banner'
 import {ProgressBar} from 'react-bootstrap'
 import { ToggleProgressBar, ToggleModalWindow, ModalButtonClicked } from '../../../store/webUtilities/actions'
@@ -14,14 +15,12 @@ const GroupDetails = (props) => {
     
     useEffect(() => {        
         //check for empty group object for go back
-        // {Object.keys(props.groupToDetails).length === 0 ? browserHistory.push('/Groups') : null }
+        {Object.keys(props.groupToDetails).length === 0 ? document.location.href= 'http://'+location.host+'/Groups' : null }
 
         props.toggleProgressBar(true);
         props.getAllGroups();
     }, [])
     
-
-
     return (
         <div>
             <Menu />
@@ -37,7 +36,7 @@ const GroupDetails = (props) => {
             
                 <TabPanel> <GroupDetailsNodes /> </TabPanel>
                 <TabPanel> <GroupDetailsNodes /> </TabPanel>
-                <TabPanel> <GroupDetailsNodes /> </TabPanel>
+                <TabPanel> <GroupDetailsAnalyzer /> </TabPanel>
             </Tabs>
 
         </div>
