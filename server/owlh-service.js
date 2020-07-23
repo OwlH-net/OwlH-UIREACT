@@ -316,13 +316,32 @@ function AnalyzerStatus(req) {
 }
 
 function SyncAnalyzer(req) {
-  console.log(req.body)
   let newHeader = {
     'Content-Type': 'application/json',
     'token': req.headers.token,
     'user': req.headers.user
   }
   return axios.put(`${url}/node/analyzer/sync`,req.body, 
+                  {
+                    httpsAgent: httsAgent,
+                    headers: newHeader
+                  }
+                )
+  .then(resp => {
+    return resp.data
+  })
+  .catch(resp => {
+    return resp.data
+  })
+}
+
+function ChangeSuricataStatus(req) {
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': req.headers.token,
+    'user': req.headers.user
+  }
+  return axios.put(`${url}/node/ChangeServiceStatus`,req.body, 
                   {
                     httpsAgent: httsAgent,
                     headers: newHeader
@@ -405,8 +424,33 @@ function AllNodesGroup(req) {
     })
 }
 
+function GetGroupSuricataList(req) {
+  let token = req.headers.token
+  let username = req.headers.user
+
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': token,
+    'user': username
+  }
+
+  return axios.get(`${url}/group/suricata/status/${req.params.uuid}`,
+                    {
+                      httpsAgent: httsAgent,
+                      headers: newHeader
+                    }
+                  )
+    .then(resp => {
+      return resp.data
+    })
+    .catch(resp => {
+      return resp.data
+    })
+}
+
 module.exports = {
   enrollNode,
+  GetGroupSuricataList,
   AllNodesGroup,
   getLogin,
   getAbout,
@@ -424,5 +468,6 @@ module.exports = {
   AddGroupNodes,
   DeleteNodeGroup,
   AnalyzerStatus,
+  ChangeSuricataStatus,
   SyncAnalyzer
 }

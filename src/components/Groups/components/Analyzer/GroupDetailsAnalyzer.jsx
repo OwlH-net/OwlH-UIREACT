@@ -66,6 +66,12 @@ const GroupDetailsAnalyzer = (props) => {
         })
     }
 
+    const EditAnalyzerJson = (gname) => {   
+        // props.syncAnalyzer({
+        //     uuid: guuid
+        // })
+    }
+
     return (
         <div className="my-3">            
             <table className="table table-hover table-layout-fixed">
@@ -75,7 +81,7 @@ const GroupDetailsAnalyzer = (props) => {
                             <span className="badge bg-success align-text-bottom text-white float-left mr-2 pointer" onClick={()=>{ChangeAnalyzerStatus("Disabled")}}>Disable all</span>
                             <span className="badge bg-primary align-text-bottom text-white float-left mr-2 pointer" onClick={()=>{ChangeAnalyzerStatus("Enabled")}}>Enable all</span>
                         </td>
-                        <td>Edit Analyzer <FaEdit size={21} className="iconBlue"/></td>
+                        <td>Edit Analyzer <FaEdit size={21} className="iconBlue" onClick={() => {EditAnalyzerJson(props.groupToDetails.gname)}}/></td>
                         <td>Synchronize Analyzer <FaSyncAlt size={21} className="iconBlue" onClick={() => {SyncAnalyzerData(props.groupToDetails.guuid)}}/></td>
                     </tr>
                 </tbody>

@@ -6,6 +6,7 @@ const initialState = {
   groupToDetails: {},
   groupNodes: {},
   groupDetails: {},
+  SuricataGroupList: {},
   isShowGroupForm: false,
   isAddNodesToGroup: false,
   isEdit: false,
@@ -71,6 +72,13 @@ function hideAllNodesGroup(state) {
     }
 }
 
+function GetGroupSuricataList(state, data) {
+  return {
+      ...state,
+      SuricataGroupList: data,
+    }
+}
+
 export default function webUtilities(state = initialState, action) {
     switch(action.type) {
       case ActionTypes.GET_ALL_GROUPS:  
@@ -89,6 +97,8 @@ export default function webUtilities(state = initialState, action) {
         return getAllNodesGroup(state, action.payload);
       case ActionTypes.HIDE_EDIT_FORM:  
         return hideAllNodesGroup(state);
+      case ActionTypes.GET_ALL_SURICATA_GROUP:  
+        return GetGroupSuricataList(state, action.payload);
       default:
         return state;
     }

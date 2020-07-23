@@ -1,6 +1,6 @@
 import React from 'react';
 import Login from './Login/Login';
-import {Switch, BrowserRouter, Route} from 'react-router-dom';
+import {Switch, BrowserRouter, Route, browserHistory } from 'react-router-dom';
 import ConfigurationForm from './Login/ConfigurationForm';
 import Welcome from './Welcome/Welcome';
 import Master from '../components/Master/components/index';

@@ -9,6 +9,32 @@ const config = {
   }
 }
 
+export function GetGroupSuricataList(groupID) {
+  const token = GetToken()
+  const username = GetUserName()
+
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
+  }
+  let newConfig = {headers: newHeaders}
+
+  return (dispatch) => {
+    axios.get('/api/getGroupSuricataList/'+groupID, newConfig)
+    .then(resp => {
+      dispatch(ToggleProgressBar(false))
+      dispatch(accGetGroupSuricataList(resp.data))
+    })
+  }
+}
+function accGetGroupSuricataList(data) {
+  return {
+    type: ActionTypes.GET_ALL_SURICATA_GROUP,
+    payload: data
+  }
+}
+
 export function GetAllGroups() {
     const token = GetToken()
     const username = GetUserName()
@@ -27,7 +53,7 @@ export function GetAllGroups() {
         dispatch(ToggleProgressBar(false))
       })
     }
-  }
+}
 function accGetAllGroups(data) {
     return {
       type: ActionTypes.GET_ALL_GROUPS,
@@ -193,6 +219,25 @@ export function AnalyzerStatus(data) {
 
   return (dispatch) => {
     axios.put('/api/analyzer', JSON.stringify(data), newConfig)
+    .then(resp => {
+      dispatch(GetAllGroups())
+    })
+  }
+}
+
+export function ChangeSuricataStatus(data) {
+  const token = GetToken()
+  const username = GetUserName()
+
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
+  }
+  let newConfig = {headers: newHeaders}
+
+  return (dispatch) => {
+    axios.put('/api/changeSuricataStatus', JSON.stringify(data), newConfig)
     .then(resp => {
       dispatch(GetAllGroups())
     })

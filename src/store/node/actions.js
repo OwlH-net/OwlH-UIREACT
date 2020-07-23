@@ -190,12 +190,6 @@ export function ToggleAddNodeForm() {
   }
 }
   
-export function ToggleEditNodeForm() {
-  return {
-    type: ActionTypes.TOGGLE_EDIT_NODE
-  }
-}
-  
 export function NodeToEdit(node) {
   return {
     type: ActionTypes.NODE_TO_EDIT,
@@ -218,14 +212,8 @@ export function EditNode(node) {
     //check default credentials
     axios.put('/api/editNode', JSON.stringify(node), newConfig)
     .then(resp => {
-      dispatch(accEditNode())
       dispatch(ToggleAddNodeForm())
       dispatch(getAllNodes())
     })
-  }
-}
-export function accEditNode() {
-  return {
-    type: ActionTypes.EDIT_NODE
   }
 }

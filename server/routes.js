@@ -96,6 +96,11 @@ router.get('/getAllNodesGroup/:uuid', async (req, res, next) => {
   res.status(200).json(ping)
 })
 
+router.get('/getGroupSuricataList/:uuid', async (req, res, next) => {
+  const ping = await OwlHService.GetGroupSuricataList(req)
+  res.status(200).json(ping)
+})
+
 router.put('/analyzer', async (req, res, next) => {
   const reg = await OwlHService.AnalyzerStatus(req)
   res.status(200).json(reg)
@@ -103,6 +108,11 @@ router.put('/analyzer', async (req, res, next) => {
 
 router.put('/syncAnalyzerData', async (req, res, next) => {
   const reg = await OwlHService.SyncAnalyzer(req)
+  res.status(200).json(reg)
+})
+
+router.put('/changeSuricataStatus', async (req, res, next) => {
+  const reg = await OwlHService.ChangeSuricataStatus(req)
   res.status(200).json(reg)
 })
 

@@ -3,26 +3,34 @@ import { connect } from 'react-redux';
 import Menu from '../../Shared/Components/Menu/Menu'
 import GroupDetailsNodes from './Nodes/GroupDetailsNodes'
 import GroupDetailsAnalyzer from './Analyzer/GroupDetailsAnalyzer'
+import GroupDetailsSuricata from './Suricata/GroupDetailsSuricata'
 import Banner from '../../Shared/Components/Banner/Banner'
 import {ProgressBar} from 'react-bootstrap'
 import { ToggleProgressBar, ToggleModalWindow, ModalButtonClicked } from '../../../store/webUtilities/actions'
 import { GetAllGroups } from '../../../store/groups/actions'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import { browserHistory } from 'react-router'
+import  { useHistory } from 'react-router-dom'
 
 const GroupDetails = (props) => {
     
     useEffect(() => {        
-        //check for empty group object for go back
-        {Object.keys(props.groupToDetails).length === 0 ? document.location.href= 'http://'+location.host+'/Groups' : null }
-
+        //check empty group object for go back    
         props.toggleProgressBar(true);
         props.getAllGroups();
     }, [])
     
-    return (
+    return (        
         <div>
+            {
+                //Redirect to groups when the webpage is reloaded!
+                Object.keys(props.groupToDetails).length === 0
+                ?
+                useHistory().push("/Groups")
+                :
+                null
+            }
+
             <Menu />
              <Banner title={"Group "+props.groupToDetails.gname} subtitle="Group details" />
             {props.progressBar ? <ProgressBar animated now={100} /> : null}
@@ -35,7 +43,7 @@ const GroupDetails = (props) => {
                 </TabList>
             
                 <TabPanel> <GroupDetailsNodes /> </TabPanel>
-                <TabPanel> <GroupDetailsNodes /> </TabPanel>
+                <TabPanel> <GroupDetailsSuricata /> </TabPanel>
                 <TabPanel> <GroupDetailsAnalyzer /> </TabPanel>
             </Tabs>
 

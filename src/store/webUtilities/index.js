@@ -128,8 +128,6 @@ export default function webUtilities(state = initialState, action) {
       return toggleModalWindowStatus(state, action.payload);
     case ActionTypes.MODAL_ACTION_SELECTED:  
       return getModalActionSelected(state, action.payload);
-    case ActionTypes.TOGGLE_EDIT_NODE:  
-      return toggleEditNodeForm(state);
     default:
       return state;
   }
