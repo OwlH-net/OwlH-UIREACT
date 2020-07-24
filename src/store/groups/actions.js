@@ -81,6 +81,52 @@ export function AddGroup(data) {
     }
 }
 
+export function CheckMD5(data) {
+    const token = GetToken()
+    const username = GetUserName()
+  
+    let newHeaders = {
+      ...config.headers, 
+      'user': username,
+      'token': token
+    }
+    let newConfig = {headers: newHeaders}
+
+    return (dispatch) => {
+      axios.put('/api/getMD5files', JSON.stringify(data), newConfig)
+      .then(resp => {
+        dispatch(accCheckMD5(resp.data))
+      })
+    }
+}
+export function accCheckMD5(data) {
+  return {
+    type: ActionTypes.GET_MD5_FILES,
+    payload: data
+  }
+}
+
+export function ChangeSuricataConfigGroupPaths(data) {
+    const token = GetToken()
+    const username = GetUserName()
+  
+    let newHeaders = {
+      ...config.headers, 
+      'user': username,
+      'token': token
+    }
+    let newConfig = {headers: newHeaders}
+
+    return (dispatch) => {
+      axios.put('/api/changePaths', JSON.stringify(data), newConfig)
+      .then(resp => {
+        dispatch(ToggleProgressBar(false))
+        dispatch(HidePathInput())
+        dispatch(GetAllGroups())
+      })
+    }
+}
+
 export function EditGroupSelected(data) {
     const token = GetToken()
     const username = GetUserName()
@@ -98,6 +144,18 @@ export function EditGroupSelected(data) {
         dispatch(ToggleProgressBar(false))
         dispatch(GetAllGroups())
       })
+    }
+}
+
+export function ShowPathInput() {
+    return {
+      type: ActionTypes.SHOW_PATH_INPUT
+    }
+}
+
+export function HidePathInput() {
+    return {
+      type: ActionTypes.HIDE_PATH_INPUT
     }
 }
 

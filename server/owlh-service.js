@@ -355,6 +355,46 @@ function ChangeSuricataStatus(req) {
   })
 }
 
+function GetMD5files(req) {
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': req.headers.token,
+    'user': req.headers.user
+  }
+  return axios.put(`${url}/group/getMD5files`,req.body, 
+                  {
+                    httpsAgent: httsAgent,
+                    headers: newHeader
+                  }
+                )
+  .then(resp => {
+    return resp.data
+  })
+  .catch(resp => {
+    return resp.data
+  })
+}
+
+function ChangePaths(req) {
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': req.headers.token,
+    'user': req.headers.user
+  }
+  return axios.put(`${url}/group/changePaths`,req.body, 
+                  {
+                    httpsAgent: httsAgent,
+                    headers: newHeader
+                  }
+                )
+  .then(resp => {
+    return resp.data
+  })
+  .catch(resp => {
+    return resp.data
+  })
+}
+
 function addGroup(req) {
   let newHeader = {
     'Content-Type': 'application/json',
@@ -469,5 +509,7 @@ module.exports = {
   DeleteNodeGroup,
   AnalyzerStatus,
   ChangeSuricataStatus,
-  SyncAnalyzer
+  SyncAnalyzer,
+  ChangePaths,
+  GetMD5files
 }

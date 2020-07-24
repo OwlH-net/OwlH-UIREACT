@@ -116,4 +116,14 @@ router.put('/changeSuricataStatus', async (req, res, next) => {
   res.status(200).json(reg)
 })
 
+router.put('/changePaths', async (req, res, next) => {
+  const reg = await OwlHService.ChangePaths(req)
+  res.status(200).json(reg)
+})
+
+router.put('/getMD5files', async (req, res, next) => {
+  const reg = await OwlHService.GetMD5files(req)
+  res.status(200).json(reg)
+})
+
 module.exports = router
