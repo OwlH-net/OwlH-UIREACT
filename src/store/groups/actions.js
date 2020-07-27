@@ -243,6 +243,40 @@ export function HideAllNodesGroup() {
   }
 }
 
+export function displayRulesetList(data) {
+  return {
+    type: ActionTypes.DISPLAY_RULESET_LIST,
+    payload: data
+  }
+}
+
+export function GetRulesetList(guuid) {
+  const token = GetToken()
+  const username = GetUserName()
+
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
+  }
+  let newConfig = {headers: newHeaders}
+
+  return (dispatch) => {
+    axios.get('/api/getGroupSelectedRulesets/'+guuid, newConfig)
+    .then(resp => {
+      dispatch(ToggleProgressBar(false))
+      dispatch(displayRulesetList(true))
+      dispatch(accGetRulesetList(resp.data))
+    })
+  }
+}
+export function accGetRulesetList(data) {
+  return {
+    type: ActionTypes.GET_RULESET_LIST,
+    payload: data
+  }
+}
+
 export function AddNodesToGroup(data) {
   const token = GetToken()
   const username = GetUserName()

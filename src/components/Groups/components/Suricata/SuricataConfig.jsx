@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { FaPlus, FaSyncAlt, FaEdit, FaFolderOpen, FaFile } from "react-icons/fa";
 import { ChangeSuricataStatus, CheckMD5, ShowPathInput, HidePathInput, ChangeSuricataConfigGroupPaths } from '../../../../store/groups/actions'
+import { GetRulesetList } from '../../../../store/groups/actions'
 import { ToggleProgressBar } from '../../../../store/webUtilities/actions'
 
 const SuricataConfig = (props) => {
@@ -17,8 +18,8 @@ const SuricataConfig = (props) => {
     useEffect(() => {           
         //get MD5 data
         props.checkMD5(suriConfigPath)
-
-        // MD5Content();
+        //get group rulesets
+        props.getRulesetList(props.groupToDetails.guuid)
     }, [])
 
     useEffect(() => {
@@ -31,61 +32,7 @@ const SuricataConfig = (props) => {
             mastersuricata: props.allGroupList[0].mastersuricata,
             nodesuricata: props.allGroupList[0].nodesuricata,
         })
-    }, [props.allGroupList])
-    
-    useEffect(() => {
-        GetMasterMD5()
-    }, [props.MD5files])
-
-    const GetMasterMD5 = () => {
-        Object.entries(props.MD5files || {}).map(([uuid , val]) =>{
-            Object.entries(val || {}).map(([nodeID , node]) =>{
-                SetMasterMD5(node.masterMD5)
-            })
-        })
-    }
-
-    const MD5Content = () => {
-        const totalList = Object.entries(props.allGroupList || {}).map(([groupID , group]) =>{
-            return Object.entries(group.Nodes || {}).map(([nodesID , node]) =>{
-                return Object.entries(props.MD5files || {}).map(([MD5nodesID , MD5node]) =>{
-                    if(node.nuuid == MD5nodesID){
-                        return Object.entries(MD5node || {}).map(([id , md5Values]) =>{
-                            return <tr key={MD5nodesID}>
-                                <td>{node.nname}</td>
-                                <td>{node.nip}</td>
-                                <td>
-                                    <FaFolderOpen size={21} className="iconBlue"/> &nbsp;
-                                    {    
-                                        md5Values.equals == "true"
-                                        ?
-                                        <span className="badge badge-pill bg-success align-text-bottom text-white">&nbsp;</span>
-                                        :
-                                        <span className="badge badge-pill bg-danger align-text-bottom text-white">&nbsp;</span>                                        
-                                    }
-                                </td>
-                            </tr>
-                        })  
-                    }
-                })
-            })
-        //     if(id != "installed" && id != "zeek"){
-        //         return <tr key={id}>
-        //             <td>{val.nodeName}</td>
-        //             {
-        //                 val.status == "enabled" 
-        //                 ? 
-        //                 <td><span className="badge bg-success align-text-bottom text-white">{val.status}</span></td> 
-        //                 : 
-        //                 <td><span className="badge bg-danger align-text-bottom text-white">{val.status}</span></td> 
-        //             }
-        //             <td>{val.interface}</td>
-        //             <td><FaInfoCircle size={21} className="iconBlue" /></td>
-        //         </tr>
-        //     }
-        })
-        return totalList
-    }
+    }, [props.allGroupList])   
 
     const changePaths = () => {
         props.toggleProgressBar(true)
@@ -99,15 +46,26 @@ const SuricataConfig = (props) => {
         })
     }
 
+    useEffect(() => {
+        GetMasterMD5()
+    }, [props.MD5files])
+
+    const GetMasterMD5 = () => {
+        Object.entries(props.MD5files || {}).map(([uuid , val]) =>{
+            Object.entries(val || {}).map(([nodeID , node]) =>{
+                SetMasterMD5(node.masterMD5)
+            })
+        })
+    }
+
     return (
         <div>
             <a className="btn btn-primary float-right text-decoration-none text-white right" onClick={() => {}}>Sync</a>
-            <table className="table table-hover table-layout-fixed">
+            
+            {/* <SuricataRulesets /> */}
+
+            <table className="table table-hover table-layout-fixed my-3">
                 <tbody>
-                    <tr>
-                        <td width="20%">Ruleset <FaPlus size={21} className="iconBlue"/> <FaSyncAlt size={21} className="iconBlue"/> </td>
-                        <td colSpan={2}> <b>Here goes the ruleset selected!!</b> </td>
-                    </tr>
                     <tr>
                         <td rowSpan={3} width="20%">Configuration &nbsp; 
                             <FaEdit size={21} className="iconBlue" onClick={() => {props.showPathInput()}}/> &nbsp;
@@ -137,8 +95,8 @@ const SuricataConfig = (props) => {
             </table>    
             {
                 props.showSuricataConfigPath 
-                ?
-                <table className="table table-hover table-layout-fixed">
+                ?                
+                <table className="table table-hover table-layout-fixed my-3">
                     <tbody>
                         <tr>
                             <td>                              
@@ -172,19 +130,7 @@ const SuricataConfig = (props) => {
                 </table>
                 :
                 null
-            }                    
-            <table className="table table-hover table-layout-fixed">
-                <thead>
-                    <tr>
-                        <th>Node name</th>
-                        <th>Node IP</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {MD5Content()}
-                </tbody>
-            </table>
+            }                                
         </div>
     )
 }
@@ -195,6 +141,7 @@ const mapStateToProps = (state) => {
         groupToDetails: state.groups.groupToDetails,
         allGroupList: state.groups.allGroupList,
         showSuricataConfigPath: state.groups.showSuricataConfigPath,
+        rulesetList: state.groups.rulesetList,
     }
 }
 const mapDispatchToProps = (dispatch) => ({
@@ -205,6 +152,7 @@ const mapDispatchToProps = (dispatch) => ({
     showPathInput: () => dispatch(ShowPathInput()),    
     hidePathInput: () => dispatch(HidePathInput()),    
     changeSuricataConfigGroupPaths: (data) => dispatch(ChangeSuricataConfigGroupPaths(data)),    
+    getRulesetList: (group) => dispatch(GetRulesetList(group)),    
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);

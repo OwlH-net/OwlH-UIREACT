@@ -488,6 +488,30 @@ function GetGroupSuricataList(req) {
     })
 }
 
+function GetGroupSelectedRulesets(req) {
+  let token = req.headers.token
+  let username = req.headers.user
+
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': token,
+    'user': username
+  }
+
+  return axios.get(`${url}/group/getGroupSelectedRulesets/${req.params.uuid}`,
+                    {
+                      httpsAgent: httsAgent,
+                      headers: newHeader
+                    }
+                  )
+    .then(resp => {
+      return resp.data
+    })
+    .catch(resp => {
+      return resp.data
+    })
+}
+
 module.exports = {
   enrollNode,
   GetGroupSuricataList,
@@ -511,5 +535,6 @@ module.exports = {
   ChangeSuricataStatus,
   SyncAnalyzer,
   ChangePaths,
-  GetMD5files
+  GetMD5files,
+  GetGroupSelectedRulesets
 }

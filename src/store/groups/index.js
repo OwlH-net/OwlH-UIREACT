@@ -8,6 +8,8 @@ const initialState = {
   groupDetails: {},
   SuricataGroupList: {},
   MD5files: {},
+  rulesetList: {},
+  showRulesetList: false,
   isShowGroupForm: false,
   isAddNodesToGroup: false,
   showSuricataConfigPath: false,
@@ -102,6 +104,20 @@ function getMD5Files(state, data) {
     }
 }
 
+function getRulesetList(state, data) {
+  return {
+    ...state,
+    rulesetList: data,
+    }
+}
+
+function displayRulesetList(state, data) {
+  return {
+      ...state,
+      showRulesetList: data,
+    }
+}
+
 export default function webUtilities(state = initialState, action) {
     switch(action.type) {
       case ActionTypes.GET_ALL_GROUPS:  
@@ -128,6 +144,10 @@ export default function webUtilities(state = initialState, action) {
         return hideInputPathSuricata(state);
       case ActionTypes.GET_MD5_FILES:  
         return getMD5Files(state, action.payload);
+      case ActionTypes.DISPLAY_RULESET_LIST:  
+        return displayRulesetList(state, action.payload);
+      case ActionTypes.GET_RULESET_LIST:  
+        return getRulesetList(state, action.payload);
       default:
         return state;
     }

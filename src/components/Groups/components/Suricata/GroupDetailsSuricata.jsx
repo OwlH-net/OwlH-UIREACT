@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import  SuricataList from './SuricataList'
-import  SuricataConfig from './SuricataConfig'
 import { ChangeSuricataStatus } from '../../../../store/groups/actions'
+import SuricataRulesets from './SuricataRulesets'
+import SuricataConfig from './SuricataConfig'
+import SuricataNodes from './SuricataNodes'
 
 const GroupDetailsSuricata = (props) => {
 
@@ -88,7 +90,11 @@ const GroupDetailsSuricata = (props) => {
                             <SuricataList />
                         </div>
                     :
-                    <SuricataConfig />
+                        <>
+                            <SuricataRulesets />
+                            <SuricataConfig />
+                            <SuricataNodes />
+                        </>
                 }
             </div>
             <div className="my-3">

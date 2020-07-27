@@ -126,4 +126,9 @@ router.put('/getMD5files', async (req, res, next) => {
   res.status(200).json(reg)
 })
 
+router.get('/getGroupSelectedRulesets/:uuid', async (req, res, next) => {
+  const ping = await OwlHService.GetGroupSelectedRulesets(req)
+  res.status(200).json(ping)
+})
+
 module.exports = router
