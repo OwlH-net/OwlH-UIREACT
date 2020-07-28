@@ -7,7 +7,7 @@ import { ToggleProgressBar } from '../../../../store/webUtilities/actions'
 
 const SuricataConfig = (props) => {
 
-    const [masterMD5, SetMasterMD5] = useState('')
+    // const [masterMD5, SetMasterMD5] = useState('')
     const [suriConfigPath, SetSuriConfigPath] = useState({
         type: 'suricata',
         uuid: props.groupToDetails.guuid,
@@ -15,7 +15,7 @@ const SuricataConfig = (props) => {
         nodesuricata: props.allGroupList[0].nodesuricata
     })
 
-    useEffect(() => {           
+    useEffect(() => {
         //get MD5 data
         props.checkMD5(suriConfigPath)
         //get group rulesets
@@ -46,24 +46,20 @@ const SuricataConfig = (props) => {
         })
     }
 
-    useEffect(() => {
-        GetMasterMD5()
-    }, [props.MD5files])
+    // useEffect(() => {
+    //     GetMasterMD5()
+    // }, [props.MD5files])
 
-    const GetMasterMD5 = () => {
-        Object.entries(props.MD5files || {}).map(([uuid , val]) =>{
-            Object.entries(val || {}).map(([nodeID , node]) =>{
-                SetMasterMD5(node.masterMD5)
-            })
-        })
-    }
+    // const GetMasterMD5 = () => {
+    //     Object.entries(props.MD5files || {}).map(([uuid , val]) =>{
+    //         Object.entries(val || {}).map(([nodeID , node]) =>{
+    //             SetMasterMD5(node.masterMD5)
+    //         })
+    //     })
+    // }
 
     return (
         <div>
-            <a className="btn btn-primary float-right text-decoration-none text-white right" onClick={() => {}}>Sync</a>
-            
-            {/* <SuricataRulesets /> */}
-
             <table className="table table-hover table-layout-fixed my-3">
                 <tbody>
                     <tr>
@@ -79,10 +75,10 @@ const SuricataConfig = (props) => {
                         }
                         </td>
                     </tr>                   
-                    <tr>
+                    {/* <tr>
                         <td><FaFile size={21} className="iconBlue"/> <b>Path: </b> </td>
                         <td><b>MD5: </b>{masterMD5}</td>
-                    </tr>
+                    </tr> */}
                     <tr>
                         <td>Node path</td>
                         <td>

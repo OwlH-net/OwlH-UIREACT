@@ -243,7 +243,7 @@ export function HideAllNodesGroup() {
   }
 }
 
-export function displayRulesetList(data) {
+export function DisplayAddRulesetForm(data) {
   return {
     type: ActionTypes.DISPLAY_RULESET_LIST,
     payload: data
@@ -265,7 +265,6 @@ export function GetRulesetList(guuid) {
     axios.get('/api/getGroupSelectedRulesets/'+guuid, newConfig)
     .then(resp => {
       dispatch(ToggleProgressBar(false))
-      dispatch(displayRulesetList(true))
       dispatch(accGetRulesetList(resp.data))
     })
   }
@@ -371,6 +370,50 @@ export function DeleteGroupNode(nodeUUID) {
     .then(resp => {
       dispatch(ToggleProgressBar(false))
       dispatch(GetAllGroups())
+    })
+  }
+}
+
+export function DeleteRulesetSelected(values) {
+  const token = GetToken()
+  const username = GetUserName()
+
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
+  }
+  let newConfig = {headers: newHeaders}
+  let deleteData = {data: JSON.stringify(values)}
+
+  console.log(deleteData)
+  return (dispatch) => {
+    axios.delete('/api/deleteExpertGroupRuleset', {deleteData, newConfig})
+    .then(resp => {
+      console.log(resp.data)
+      dispatch(ToggleProgressBar(false))
+      dispatch(GetRulesetList(values.uuid))
+    })
+  }
+}
+
+export function AddRulesetsToGroup(data) {
+  const token = GetToken()
+  const username = GetUserName()
+
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
+  }
+  let newConfig = {headers: newHeaders}
+
+  return (dispatch) => {
+    axios.put('/api/addRulesetsToGroup', JSON.stringify(data), newConfig)
+    .then(resp => {
+      dispatch(ToggleProgressBar(false))
+      dispatch(DisplayAddRulesetForm(false))
+      dispatch(GetRulesetList(data.uuid))
     })
   }
 }

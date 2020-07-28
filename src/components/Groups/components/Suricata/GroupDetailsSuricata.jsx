@@ -5,6 +5,7 @@ import { ChangeSuricataStatus } from '../../../../store/groups/actions'
 import SuricataRulesets from './SuricataRulesets'
 import SuricataConfig from './SuricataConfig'
 import SuricataNodes from './SuricataNodes'
+import SuricataMasterFilesList from './SuricataMasterFilesList'
 
 const GroupDetailsSuricata = (props) => {
 
@@ -91,8 +92,10 @@ const GroupDetailsSuricata = (props) => {
                         </div>
                     :
                         <>
+                            <a className="btn btn-primary float-right text-decoration-none text-white right" onClick={() => {}}>Sync</a>
                             <SuricataRulesets />
                             <SuricataConfig />
+                            <SuricataMasterFilesList />
                             <SuricataNodes />
                         </>
                 }

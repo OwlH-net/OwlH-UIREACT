@@ -170,6 +170,28 @@ function deleteNode(req) {
   })
 }
 
+function DeleteExpertGroupRuleset(req) {
+  console.log(req.body)
+  
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': req.headers.token,
+    'user': req.headers.user
+  }
+  return axios.delete(`${url}/group/deleteExpertGroupRuleset`,{data:req.body}, 
+                  {
+                    httpsAgent: httsAgent,
+                    headers: newHeader
+                  }
+                )
+  .then(resp => {
+    return resp.data
+  })
+  .catch(resp => {
+    return resp.data
+  })
+}
+
 function regNode(req) {
   let newHeader = {
     'Content-Type': 'application/json',
@@ -177,6 +199,26 @@ function regNode(req) {
     'user': req.headers.user
   }
   return axios.put(`${url}/node/registerNode/${req.params.uuid}`,req.body, 
+                  {
+                    httpsAgent: httsAgent,
+                    headers: newHeader
+                  }
+                )
+  .then(resp => {
+    return resp.data
+  })
+  .catch(resp => {
+    return resp.data
+  })
+}
+
+function AddRulesetsToGroup(req) {
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': req.headers.token,
+    'user': req.headers.user
+  }
+  return axios.put(`${url}/group/addRulesetsToGroup`,req.body, 
                   {
                     httpsAgent: httsAgent,
                     headers: newHeader
@@ -536,5 +578,7 @@ module.exports = {
   SyncAnalyzer,
   ChangePaths,
   GetMD5files,
-  GetGroupSelectedRulesets
+  GetGroupSelectedRulesets,
+  DeleteExpertGroupRuleset,
+  AddRulesetsToGroup
 }

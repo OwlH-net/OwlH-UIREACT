@@ -98,6 +98,7 @@ const NodesList = (props) => {
         setNodeSelected(id)
         props.toggleModal(true)
     }
+    
     //Set current node uuid
     const modifyCurrentNode = (uuid, val) => {
         val.id = uuid;

@@ -36,6 +36,12 @@ router.get('/nodes', async (req, res, next) => {
 //   res.status(200).json(ping)
 // })
 
+router.delete('/deleteExpertGroupRuleset', async (req, res, next) => {
+  console.log(req.body)
+  const del = await OwlHService.DeleteExpertGroupRuleset(req)
+  res.status(200).json(del)
+})
+
 router.delete('/deleteNode/:uuid', async (req, res, next) => {
   const del = await OwlHService.deleteNode(req)
   res.status(200).json(del)
@@ -123,6 +129,11 @@ router.put('/changePaths', async (req, res, next) => {
 
 router.put('/getMD5files', async (req, res, next) => {
   const reg = await OwlHService.GetMD5files(req)
+  res.status(200).json(reg)
+})
+
+router.put('/addRulesetsToGroup', async (req, res, next) => {
+  const reg = await OwlHService.AddRulesetsToGroup(req)
   res.status(200).json(reg)
 })
 
