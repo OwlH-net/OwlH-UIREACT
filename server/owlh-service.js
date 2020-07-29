@@ -115,7 +115,6 @@ function getNodes(req) {
                     }
                   )
     .then(resp => {
-      console.log(resp.data.Nodes)
       return resp.data.Nodes
     })
     .catch(resp => {
@@ -123,7 +122,7 @@ function getNodes(req) {
     })
 }
 
-function pingNode(req) {
+function DeleteNodeGroup(req) {
   let token = req.headers.token
   let username = req.headers.user
 
@@ -133,23 +132,21 @@ function pingNode(req) {
     'user': username
   }
 
-  return axios.get(`${url}/node/ping/${req.params.uuid}`,
-                    {
-                      httpsAgent: httsAgent,
-                      headers: newHeader
-                    }
-                  )
-    .then(resp => {
-      return resp.data
-    })
-    .catch(resp => {
-      return resp.data
-    })
+  return axios.delete(`${url}/group/deleteNodeGroup/${req.params.uuid}`,
+                  {
+                    httpsAgent: httsAgent,
+                    headers: newHeader
+                  }
+                )
+  .then(resp => {
+    return resp.data
+  })
+  .catch(resp => {
+    return resp.data
+  })
 }
 
 function deleteNode(req) {
-  console.log(req.headers)
-  console.log(`${url}/node/${req.params.uuid}`)
   let token = req.headers.token
   let username = req.headers.user
 
@@ -173,6 +170,28 @@ function deleteNode(req) {
   })
 }
 
+function DeleteExpertGroupRuleset(req) {
+  console.log(req.body)
+  
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': req.headers.token,
+    'user': req.headers.user
+  }
+  return axios.delete(`${url}/group/deleteExpertGroupRuleset`,{data:req.body}, 
+                  {
+                    httpsAgent: httsAgent,
+                    headers: newHeader
+                  }
+                )
+  .then(resp => {
+    return resp.data
+  })
+  .catch(resp => {
+    return resp.data
+  })
+}
+
 function regNode(req) {
   let newHeader = {
     'Content-Type': 'application/json',
@@ -180,6 +199,26 @@ function regNode(req) {
     'user': req.headers.user
   }
   return axios.put(`${url}/node/registerNode/${req.params.uuid}`,req.body, 
+                  {
+                    httpsAgent: httsAgent,
+                    headers: newHeader
+                  }
+                )
+  .then(resp => {
+    return resp.data
+  })
+  .catch(resp => {
+    return resp.data
+  })
+}
+
+function AddRulesetsToGroup(req) {
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': req.headers.token,
+    'user': req.headers.user
+  }
+  return axios.put(`${url}/group/addRulesetsToGroup`,req.body, 
                   {
                     httpsAgent: httsAgent,
                     headers: newHeader
@@ -278,6 +317,126 @@ function editGroup(req) {
   })
 }
 
+function AddGroupNodes(req) {
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': req.headers.token,
+    'user': req.headers.user
+  }
+  return axios.put(`${url}/group/addGroupNodes`,req.body, 
+                  {
+                    httpsAgent: httsAgent,
+                    headers: newHeader
+                  }
+                )
+  .then(resp => {
+    return resp.data
+  })
+  .catch(resp => {
+    return resp.data
+  })
+}
+
+function AnalyzerStatus(req) {
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': req.headers.token,
+    'user': req.headers.user
+  }
+  return axios.put(`${url}/node/analyzer`,req.body, 
+                  {
+                    httpsAgent: httsAgent,
+                    headers: newHeader
+                  }
+                )
+  .then(resp => {
+    return resp.data
+  })
+  .catch(resp => {
+    return resp.data
+  })
+}
+
+function SyncAnalyzer(req) {
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': req.headers.token,
+    'user': req.headers.user
+  }
+  return axios.put(`${url}/node/analyzer/sync`,req.body, 
+                  {
+                    httpsAgent: httsAgent,
+                    headers: newHeader
+                  }
+                )
+  .then(resp => {
+    return resp.data
+  })
+  .catch(resp => {
+    return resp.data
+  })
+}
+
+function ChangeSuricataStatus(req) {
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': req.headers.token,
+    'user': req.headers.user
+  }
+  return axios.put(`${url}/node/ChangeServiceStatus`,req.body, 
+                  {
+                    httpsAgent: httsAgent,
+                    headers: newHeader
+                  }
+                )
+  .then(resp => {
+    return resp.data
+  })
+  .catch(resp => {
+    return resp.data
+  })
+}
+
+function GetMD5files(req) {
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': req.headers.token,
+    'user': req.headers.user
+  }
+  return axios.put(`${url}/group/getMD5files`,req.body, 
+                  {
+                    httpsAgent: httsAgent,
+                    headers: newHeader
+                  }
+                )
+  .then(resp => {
+    return resp.data
+  })
+  .catch(resp => {
+    return resp.data
+  })
+}
+
+function ChangePaths(req) {
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': req.headers.token,
+    'user': req.headers.user
+  }
+  return axios.put(`${url}/group/changePaths`,req.body, 
+                  {
+                    httpsAgent: httsAgent,
+                    headers: newHeader
+                  }
+                )
+  .then(resp => {
+    return resp.data
+  })
+  .catch(resp => {
+    return resp.data
+  })
+}
+
 function addGroup(req) {
   let newHeader = {
     'Content-Type': 'application/json',
@@ -323,20 +482,103 @@ function deleteGroup(req) {
   })
 }
 
+function AllNodesGroup(req) {
+  let token = req.headers.token
+  let username = req.headers.user
+
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': token,
+    'user': username
+  }
+
+  return axios.get(`${url}/group/getAllNodesGroup/${req.params.uuid}`,
+                    {
+                      httpsAgent: httsAgent,
+                      headers: newHeader
+                    }
+                  )
+    .then(resp => {
+      return resp.data
+    })
+    .catch(resp => {
+      return resp.data
+    })
+}
+
+function GetGroupSuricataList(req) {
+  let token = req.headers.token
+  let username = req.headers.user
+
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': token,
+    'user': username
+  }
+
+  return axios.get(`${url}/group/suricata/status/${req.params.uuid}`,
+                    {
+                      httpsAgent: httsAgent,
+                      headers: newHeader
+                    }
+                  )
+    .then(resp => {
+      return resp.data
+    })
+    .catch(resp => {
+      return resp.data
+    })
+}
+
+function GetGroupSelectedRulesets(req) {
+  let token = req.headers.token
+  let username = req.headers.user
+
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': token,
+    'user': username
+  }
+
+  return axios.get(`${url}/group/getGroupSelectedRulesets/${req.params.uuid}`,
+                    {
+                      httpsAgent: httsAgent,
+                      headers: newHeader
+                    }
+                  )
+    .then(resp => {
+      return resp.data
+    })
+    .catch(resp => {
+      return resp.data
+    })
+}
+
 module.exports = {
   enrollNode,
+  GetGroupSuricataList,
+  AllNodesGroup,
   getLogin,
   getAbout,
   getConfiguration,
   setConfiguration,
   setPassword,
   getNodes,
-  pingNode,
   deleteNode,
   regNode,
   getGroups,
   editNode,
   addGroup,
   deleteGroup,
-  editGroup
+  editGroup,
+  AddGroupNodes,
+  DeleteNodeGroup,
+  AnalyzerStatus,
+  ChangeSuricataStatus,
+  SyncAnalyzer,
+  ChangePaths,
+  GetMD5files,
+  GetGroupSelectedRulesets,
+  DeleteExpertGroupRuleset,
+  AddRulesetsToGroup
 }

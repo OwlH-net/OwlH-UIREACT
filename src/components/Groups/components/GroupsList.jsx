@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import ModalWindow from '../../Shared/ModalWindow'
 import { ToggleProgressBar, ToggleModalWindow, ModalButtonClicked } from '../../../store/webUtilities/actions'
-import { DeleteGroup, ToggleGroupForm, SaveGroupSelected, ClearGroup, ShowEditForm, GroupToDetails } from '../../../store/groups/actions'
+import { DeleteGroup, ShowGroupForm, SaveGroupSelected, ShowEditForm, GroupToDetails, CloseGroupForm } from '../../../store/groups/actions'
 import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
 import { Route, Link, BrowserRouter, NavLink } from 'react-router-dom';
 
@@ -34,7 +34,7 @@ const GroupsList = (props) => {
     }, [props.modalActionSelected.status]);
 
     const showEditGroup = (val) => {
-        props.toggleGroupForm()
+        props.showGroupForm()
         props.showEditForm()
         props.saveGroupSelected(val)
     }
@@ -57,8 +57,8 @@ const GroupsList = (props) => {
                     <td key={id+'-actions'}>
                         <div>
                             <FaEdit size={21} className="iconBlue" onClick={() => {showEditGroup(val)}}/> &nbsp;
-                            <NavLink to="GroupDetails"   onClick={() => {props.groupToDetails(val)}}><FaEye size={21} className="iconBlue" onClick={() => {loadDetails(val)}}/></NavLink>&nbsp;
-                            <FaTrashAlt size={21} className="iconRed" onClick={() => {props.clearGroup(); deleteGroup(val.guuid)}}/>
+                            <NavLink to="GroupDetails"  onClick={() => {props.groupToDetails(val)}}><FaEye size={21} className="iconBlue" onClick={() => {loadDetails(val)}}/></NavLink>&nbsp;
+                            <FaTrashAlt size={21} className="iconRed" onClick={() => {props.closeGroupForm(); deleteGroup(val.guuid)}}/>
                         </div>
                     </td>
                 </tr>
@@ -107,12 +107,12 @@ const mapDispatchToProps = (dispatch) => ({
     toggleProgressBar: (status) => dispatch(ToggleProgressBar(status)),
     deleteGroup: (group) => dispatch(DeleteGroup(group)),
     toggleModal: (status) => dispatch(ToggleModalWindow(status)),
-    toggleGroupForm: () => dispatch(ToggleGroupForm()),
+    showGroupForm: () => dispatch(ShowGroupForm()),
     saveGroupSelected: (group) => dispatch(SaveGroupSelected(group)),
     modalButtonClicked: (option) => dispatch(ModalButtonClicked(option)),
-    clearGroup: () => dispatch(ClearGroup()),
     showEditForm: () => dispatch(ShowEditForm()),
     groupToDetails: (group) => dispatch(GroupToDetails(group)),
+    closeGroupForm: () => dispatch(CloseGroupForm()),
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);

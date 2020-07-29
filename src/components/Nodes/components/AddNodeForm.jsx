@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { Enroll } from '../../../store/node/actions'
-import { ToggleAddNodeForm, EditNode, ToggleProgressBar } from '../../../store/webUtilities/actions'
+import { ToggleProgressBar } from '../../../store/webUtilities/actions'
+import { EditNode, ToggleAddNodeForm } from '../../../store/node/actions'
 
 const AddNodeForm = (props) =>  {
     const [groupsSelected, setGroupsSelected] = useState([])
@@ -138,7 +139,7 @@ const AddNodeForm = (props) =>  {
                         <div>
                             <br/>
                             <h4>Available groups</h4>      
-                            <div className="form-row">
+                            <div >
                                 {groupItems}
                             </div>
                             <br/><br/><br/>
@@ -160,8 +161,8 @@ const AddNodeForm = (props) =>  {
 const mapStateToProps = (state) => {
     return {
         allGroupList: state.groups.allGroupList,
-        nodeToEdit: state.webUtilities.nodeToEdit,
-        isEditNode: state.webUtilities.isEditNode,
+        nodeToEdit: state.node.nodeToEdit,
+        isEditNode: state.node.isEditNode,
     }
 }
 

@@ -31,9 +31,15 @@ router.get('/nodes', async (req, res, next) => {
   res.status(200).json(nodes)
 })
 
-router.get('/pingNode/:uuid', async (req, res, next) => {
-  const ping = await OwlHService.pingNode(req)
-  res.status(200).json(ping)
+// router.get('/pingNode/:uuid', async (req, res, next) => {
+//   const ping = await OwlHService.pingNode(req)
+//   res.status(200).json(ping)
+// })
+
+router.delete('/deleteExpertGroupRuleset', async (req, res, next) => {
+  console.log(req.body)
+  const del = await OwlHService.DeleteExpertGroupRuleset(req)
+  res.status(200).json(del)
 })
 
 router.delete('/deleteNode/:uuid', async (req, res, next) => {
@@ -43,6 +49,11 @@ router.delete('/deleteNode/:uuid', async (req, res, next) => {
 
 router.delete('/deleteGroup/:uuid', async (req, res, next) => {
   const del = await OwlHService.deleteGroup(req)
+  res.status(200).json(del)
+})
+
+router.delete('/deleteNodeGroup/:uuid', async (req, res, next) => {
+  const del = await OwlHService.DeleteNodeGroup(req)
   res.status(200).json(del)
 })
 
@@ -79,6 +90,56 @@ router.get('/groups', async (req, res, next) => {
 router.put('/editNode', async (req, res, next) => {
   const reg = await OwlHService.editNode(req)
   res.status(200).json(reg)
+})
+
+router.put('/addGroupNodes', async (req, res, next) => {
+  const reg = await OwlHService.AddGroupNodes(req)
+  res.status(200).json(reg)
+})
+
+router.get('/getAllNodesGroup/:uuid', async (req, res, next) => {
+  const ping = await OwlHService.AllNodesGroup(req)
+  res.status(200).json(ping)
+})
+
+router.get('/getGroupSuricataList/:uuid', async (req, res, next) => {
+  const ping = await OwlHService.GetGroupSuricataList(req)
+  res.status(200).json(ping)
+})
+
+router.put('/analyzer', async (req, res, next) => {
+  const reg = await OwlHService.AnalyzerStatus(req)
+  res.status(200).json(reg)
+})
+
+router.put('/syncAnalyzerData', async (req, res, next) => {
+  const reg = await OwlHService.SyncAnalyzer(req)
+  res.status(200).json(reg)
+})
+
+router.put('/changeSuricataStatus', async (req, res, next) => {
+  const reg = await OwlHService.ChangeSuricataStatus(req)
+  res.status(200).json(reg)
+})
+
+router.put('/changePaths', async (req, res, next) => {
+  const reg = await OwlHService.ChangePaths(req)
+  res.status(200).json(reg)
+})
+
+router.put('/getMD5files', async (req, res, next) => {
+  const reg = await OwlHService.GetMD5files(req)
+  res.status(200).json(reg)
+})
+
+router.put('/addRulesetsToGroup', async (req, res, next) => {
+  const reg = await OwlHService.AddRulesetsToGroup(req)
+  res.status(200).json(reg)
+})
+
+router.get('/getGroupSelectedRulesets/:uuid', async (req, res, next) => {
+  const ping = await OwlHService.GetGroupSelectedRulesets(req)
+  res.status(200).json(ping)
 })
 
 module.exports = router

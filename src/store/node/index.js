@@ -6,7 +6,10 @@ const initialState = {
   sortIP: 'asc',
   search: '',
   sortName: 'asc',
-  filterByStatus: 'all'
+  filterByStatus: 'all',
+  addNodeForm: false,
+  nodeToEdit: {},
+  isEditNode: false
 }
 
 function ShowNodes(state, data) {
@@ -23,7 +26,23 @@ function getAllNodes(state, data) {
   }
 }
 
+function saveNodeToEdit(state, data) {
+  return {
+    ...state, 
+    nodeToEdit: data,
+    addNodeForm: true,
+    isEditNode: true
+  }
+}
 
+function toggleAddNode(state) {
+  return {
+    ...state, 
+    addNodeForm: !state.addNodeForm,
+    nodeToEdit: {},
+    isEditNode: false
+  }
+}
 
 // function pingNode(state, data) {
 
@@ -129,6 +148,10 @@ export default function webUtilities(state = initialState, action) {
         return sortTableName(state);
       case ActionTypes.SEARCH_BAR_VALUES:  
         return SetSearchBar(state, action.payload);
+      case ActionTypes.TOGGLE_ADD_NODE:  
+        return toggleAddNode(state);
+      case ActionTypes.NODE_TO_EDIT:  
+        return saveNodeToEdit(state, action.payload);
       default:
         return state;
     }

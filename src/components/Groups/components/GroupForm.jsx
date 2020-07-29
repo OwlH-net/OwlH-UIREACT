@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import { ToggleAddNodeForm, ToggleProgressBar } from '../../../store/webUtilities/actions'
-import { AddGroup, EditGroupSelected } from '../../../store/groups/actions'
+import { ToggleProgressBar } from '../../../store/webUtilities/actions'
+import { AddGroup, EditGroupSelected, CloseGroupForm } from '../../../store/groups/actions'
 
 const AddGroupForm = (props) => {
     const [editGroupValues, setEditGroupValues] = useState({
@@ -37,17 +37,13 @@ const AddGroupForm = (props) => {
     const EditGroup = () => {   
         props.toggleProgressBar(true)
         props.editGroupSelected(editGroupValues)
-        // setEditGroupValues({
-        //     name: "",
-        //     desc: "",
-        //     uuid: "",
-        // })
+        props.closeGroupForm()
     }
 
-    const AddDataForm = () => {    
+    const AddDataForm = () => {  
         props.toggleProgressBar(true)
-        props.toggleAddNodeForm()
         props.addGroup(formData)
+        props.closeGroupForm()
     }
 
     const handleChangeAdd = (e) => {
@@ -103,6 +99,7 @@ const AddGroupForm = (props) => {
                     :
                     <a className="btn btn-primary float-right text-decoration-none text-white right" onClick={() => {AddDataForm()}}>Add</a>
                 }
+                <a className="btn btn-secondary float-right text-decoration-none text-white right mx-3" onClick={() => {props.closeGroupForm()}}>Close</a>
             </div>  
         </div>
     )
@@ -113,16 +110,16 @@ const mapStateToProps = (state) => {
         isEdit: state.groups.isEdit,
         groupToEdit: state.groups.groupToEdit,
         allGroupList: state.groups.allGroupList,
-        nodeToEdit: state.webUtilities.nodeToEdit,
-        isEditNode: state.webUtilities.isEditNode,
+        nodeToEdit: state.node.nodeToEdit,
+        isEditNode: state.node.isEditNode,
     }
 }
 
 const mapDispatchToProps = (dispatch) => ({
     addGroup: (data) => dispatch(AddGroup(data)),
-    toggleAddNodeForm: () => dispatch(ToggleAddNodeForm()),
     toggleProgressBar: (status) => dispatch(ToggleProgressBar(status)),
     editGroupSelected: (group) => dispatch(EditGroupSelected(group)),
+    closeGroupForm: () => dispatch(CloseGroupForm()),
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);

@@ -9,6 +9,32 @@ const config = {
   }
 }
 
+export function GetGroupSuricataList(groupID) {
+  const token = GetToken()
+  const username = GetUserName()
+
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
+  }
+  let newConfig = {headers: newHeaders}
+
+  return (dispatch) => {
+    axios.get('/api/getGroupSuricataList/'+groupID, newConfig)
+    .then(resp => {
+      dispatch(ToggleProgressBar(false))
+      dispatch(accGetGroupSuricataList(resp.data))
+    })
+  }
+}
+function accGetGroupSuricataList(data) {
+  return {
+    type: ActionTypes.GET_ALL_SURICATA_GROUP,
+    payload: data
+  }
+}
+
 export function GetAllGroups() {
     const token = GetToken()
     const username = GetUserName()
@@ -27,7 +53,7 @@ export function GetAllGroups() {
         dispatch(ToggleProgressBar(false))
       })
     }
-  }
+}
 function accGetAllGroups(data) {
     return {
       type: ActionTypes.GET_ALL_GROUPS,
@@ -50,7 +76,52 @@ export function AddGroup(data) {
       axios.post('/api/group', JSON.stringify(data), newConfig)
       .then(resp => {
         dispatch(ToggleProgressBar(false))
-        dispatch(ToggleGroupForm())
+        dispatch(GetAllGroups())
+      })
+    }
+}
+
+export function CheckMD5(data) {
+    const token = GetToken()
+    const username = GetUserName()
+  
+    let newHeaders = {
+      ...config.headers, 
+      'user': username,
+      'token': token
+    }
+    let newConfig = {headers: newHeaders}
+
+    return (dispatch) => {
+      axios.put('/api/getMD5files', JSON.stringify(data), newConfig)
+      .then(resp => {
+        dispatch(accCheckMD5(resp.data))
+      })
+    }
+}
+export function accCheckMD5(data) {
+  return {
+    type: ActionTypes.GET_MD5_FILES,
+    payload: data
+  }
+}
+
+export function ChangeSuricataConfigGroupPaths(data) {
+    const token = GetToken()
+    const username = GetUserName()
+  
+    let newHeaders = {
+      ...config.headers, 
+      'user': username,
+      'token': token
+    }
+    let newConfig = {headers: newHeaders}
+
+    return (dispatch) => {
+      axios.put('/api/changePaths', JSON.stringify(data), newConfig)
+      .then(resp => {
+        dispatch(ToggleProgressBar(false))
+        dispatch(HidePathInput())
         dispatch(GetAllGroups())
       })
     }
@@ -71,21 +142,32 @@ export function EditGroupSelected(data) {
       axios.put('/api/editGroup', JSON.stringify(data), newConfig)
       .then(resp => {
         dispatch(ToggleProgressBar(false))
-        dispatch(ToggleGroupForm())
         dispatch(GetAllGroups())
       })
     }
 }
 
-export function ToggleGroupForm() {
+export function ShowPathInput() {
     return {
-      type: ActionTypes.TOGGLE_FORM_GROUP
+      type: ActionTypes.SHOW_PATH_INPUT
+    }
+}
+
+export function HidePathInput() {
+    return {
+      type: ActionTypes.HIDE_PATH_INPUT
+    }
+}
+
+export function ShowGroupForm() {
+    return {
+      type: ActionTypes.DISPLAY_FORM_GROUP
     }
 }
 
 export function SaveGroupSelected(data) {
     return {
-      type: ActionTypes.TOGGLE_EDIT_FORM,
+      type: ActionTypes.SAVE_EDIT_FORM,
       payload: data
     }
 }
@@ -97,9 +179,9 @@ export function GroupToDetails(data) {
     }
 }
 
-export function ClearGroup() {
+export function CloseGroupForm() {
     return {
-      type: ActionTypes.CLEAR_GROUP_DATA
+      type: ActionTypes.CLEAR_EDIT_FORM
     }
 }
 
@@ -125,6 +207,213 @@ export function DeleteGroup(nodeUUID) {
     .then(resp => {
       dispatch(ToggleProgressBar(false))
       dispatch(GetAllGroups())
+    })
+  }
+}
+
+export function ShowNodesGroupForm(guuid) {
+  const token = GetToken()
+  const username = GetUserName()
+
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
+  }
+  let newConfig = {headers: newHeaders}
+
+  return (dispatch) => {
+    axios.get('/api/getAllNodesGroup/'+guuid, newConfig)
+    .then(resp => {
+      dispatch(accShowNodesGroupForm(resp.data))
+      dispatch(ToggleProgressBar(false))
+    })
+  }
+}
+function accShowNodesGroupForm(data) {
+  return {
+    type: ActionTypes.GET_NODES_GROUP,
+    payload: data
+  }
+}
+
+export function HideAllNodesGroup() {
+  return {
+    type: ActionTypes.HIDE_EDIT_FORM
+  }
+}
+
+export function DisplayAddRulesetForm(data) {
+  return {
+    type: ActionTypes.DISPLAY_RULESET_LIST,
+    payload: data
+  }
+}
+
+export function GetRulesetList(guuid) {
+  const token = GetToken()
+  const username = GetUserName()
+
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
+  }
+  let newConfig = {headers: newHeaders}
+
+  return (dispatch) => {
+    axios.get('/api/getGroupSelectedRulesets/'+guuid, newConfig)
+    .then(resp => {
+      dispatch(ToggleProgressBar(false))
+      dispatch(accGetRulesetList(resp.data))
+    })
+  }
+}
+export function accGetRulesetList(data) {
+  return {
+    type: ActionTypes.GET_RULESET_LIST,
+    payload: data
+  }
+}
+
+export function AddNodesToGroup(data) {
+  const token = GetToken()
+  const username = GetUserName()
+
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
+  }
+  let newConfig = {headers: newHeaders}
+
+  return (dispatch) => {
+    axios.put('/api/addGroupNodes', JSON.stringify(data), newConfig)
+    .then(resp => {
+      dispatch(ToggleProgressBar(false))
+      dispatch(HideAllNodesGroup())
+      dispatch(GetAllGroups())
+    })
+  }
+}
+
+export function AnalyzerStatus(data) {
+  const token = GetToken()
+  const username = GetUserName()
+
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
+  }
+  let newConfig = {headers: newHeaders}
+
+  return (dispatch) => {
+    axios.put('/api/analyzer', JSON.stringify(data), newConfig)
+    .then(resp => {
+      dispatch(GetAllGroups())
+    })
+  }
+}
+
+export function ChangeSuricataStatus(data) {
+  const token = GetToken()
+  const username = GetUserName()
+
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
+  }
+  let newConfig = {headers: newHeaders}
+
+  return (dispatch) => {
+    axios.put('/api/changeSuricataStatus', JSON.stringify(data), newConfig)
+    .then(resp => {
+      dispatch(GetAllGroups())
+    })
+  }
+}
+
+export function SyncAnalyzer(data) {
+  const token = GetToken()
+  const username = GetUserName()
+
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
+  }
+  let newConfig = {headers: newHeaders}
+
+  return (dispatch) => {
+    axios.put('/api/syncAnalyzerData', JSON.stringify(data), newConfig)
+    .then(resp => {
+      dispatch(GetAllGroups())
+    })
+  }
+}
+
+export function DeleteGroupNode(nodeUUID) {
+  const token = GetToken()
+  const username = GetUserName()
+
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
+  }
+  let newConfig = {headers: newHeaders}
+
+  return (dispatch) => {
+    axios.delete('/api/deleteNodeGroup/'+nodeUUID, newConfig)
+    .then(resp => {
+      dispatch(ToggleProgressBar(false))
+      dispatch(GetAllGroups())
+    })
+  }
+}
+
+export function DeleteRulesetSelected(values) {
+  const token = GetToken()
+  const username = GetUserName()
+
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
+  }
+  let newConfig = {headers: newHeaders}
+  let deleteData = {data: JSON.stringify(values)}
+
+  console.log(deleteData)
+  return (dispatch) => {
+    axios.delete('/api/deleteExpertGroupRuleset', {deleteData, newConfig})
+    .then(resp => {
+      console.log(resp.data)
+      dispatch(ToggleProgressBar(false))
+      dispatch(GetRulesetList(values.uuid))
+    })
+  }
+}
+
+export function AddRulesetsToGroup(data) {
+  const token = GetToken()
+  const username = GetUserName()
+
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
+  }
+  let newConfig = {headers: newHeaders}
+
+  return (dispatch) => {
+    axios.put('/api/addRulesetsToGroup', JSON.stringify(data), newConfig)
+    .then(resp => {
+      dispatch(ToggleProgressBar(false))
+      dispatch(DisplayAddRulesetForm(false))
+      dispatch(GetRulesetList(data.uuid))
     })
   }
 }
