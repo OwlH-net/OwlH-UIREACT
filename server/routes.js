@@ -37,7 +37,6 @@ router.get('/nodes', async (req, res, next) => {
 // })
 
 router.delete('/deleteExpertGroupRuleset', async (req, res, next) => {
-  console.log(req.body)
   const del = await OwlHService.DeleteExpertGroupRuleset(req)
   res.status(200).json(del)
 })
@@ -74,11 +73,6 @@ router.post('/enrollNode', async (req, res, next) => {
 
 router.post('/group', async (req, res, next) => {
   const reg = await OwlHService.addGroup(req)
-  res.status(200).json(reg)
-})
-
-router.get('/groups', async (req, res, next) => {
-  const reg = await OwlHService.getGroups(req)
   res.status(200).json(reg)
 })
 

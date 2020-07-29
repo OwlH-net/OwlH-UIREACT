@@ -71,7 +71,7 @@ const GroupsList = (props) => {
         <div>
             {/* modal window */}
             <ModalWindow title='Delete group' subtitle='Are you sure you want to delete this group?'
-                variantColor='danger' btn='Delete' id='deleteGroup' />
+                variantColor='danger' btn='Delete' id='deleteGroup' />            
 
             {Object.keys(props.allGroupList || []).length <= 0
                 ?

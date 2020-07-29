@@ -1,6 +1,6 @@
 import * as ActionTypes from './group-action-types';
 import {GetUserName, GetToken} from '../../components/Shared/CheckToken'
-import {ToggleProgressBar} from '../webUtilities/actions'
+import { ToggleProgressBar, AddAlertToAlertList, toggleAlert } from '../webUtilities/actions'
 import axios from 'axios'
 
 const config = {
@@ -49,8 +49,20 @@ export function GetAllGroups() {
     return (dispatch) => {
       axios.get('/api/groups', newConfig)
       .then(resp => {
-        dispatch(accGetAllGroups(resp.data))
+        
         dispatch(ToggleProgressBar(false))
+
+        if(resp.data.ack != "true"){
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Error getting groups! ",
+            subtitle: "Error getting Groups - "+resp.data.error,
+            variant: "danger"
+          }))
+          dispatch(toggleAlert(true))
+        }else{
+          dispatch(accGetAllGroups(resp.data))
+        }
       })
     }
 }
@@ -384,15 +396,16 @@ export function DeleteRulesetSelected(values) {
     'token': token
   }
   let newConfig = {headers: newHeaders}
-  let deleteData = {data: JSON.stringify(values)}
 
-  console.log(deleteData)
   return (dispatch) => {
-    axios.delete('/api/deleteExpertGroupRuleset', {deleteData, newConfig})
+    axios.delete('/api/deleteExpertGroupRuleset', {data:JSON.stringify(values), headers: newHeaders})
     .then(resp => {
-      console.log(resp.data)
-      dispatch(ToggleProgressBar(false))
-      dispatch(GetRulesetList(values.uuid))
+      // if(resp.data.ack == "true"){
+        dispatch(ToggleProgressBar(false))
+        dispatch(GetRulesetList(values.uuid))
+      // }else{
+
+      // }
     })
   }
 }

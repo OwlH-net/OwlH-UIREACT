@@ -135,7 +135,7 @@ function DeleteNodeGroup(req) {
   return axios.delete(`${url}/group/deleteNodeGroup/${req.params.uuid}`,
                   {
                     httpsAgent: httsAgent,
-                    headers: newHeader
+                     headers: newHeader
                   }
                 )
   .then(resp => {
@@ -171,15 +171,14 @@ function deleteNode(req) {
 }
 
 function DeleteExpertGroupRuleset(req) {
-  console.log(req.body)
-  
   let newHeader = {
     'Content-Type': 'application/json',
     'token': req.headers.token,
     'user': req.headers.user
   }
-  return axios.delete(`${url}/group/deleteExpertGroupRuleset`,{data:req.body}, 
+  return axios.delete(`${url}/group/deleteExpertGroupRuleset`, 
                   {
+                    data:req.body,
                     httpsAgent: httsAgent,
                     headers: newHeader
                   }
@@ -225,9 +224,11 @@ function AddRulesetsToGroup(req) {
                   }
                 )
   .then(resp => {
+    console.log(resp.data)
     return resp.data
   })
   .catch(resp => {
+    console.log(resp.data)
     return resp.data
   })
 }

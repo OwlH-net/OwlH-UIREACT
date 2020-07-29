@@ -37,6 +37,9 @@ const SuricataRulesets = (props) => {
             </tr>
         })
         return  <>
+            <tr>
+                <td colSpan={3}><h5>Add ruleset to group</h5></td>
+            </tr>
             {totalList}
             <tr className="background-grey">
                 <td colSpan={3}>
@@ -115,7 +118,8 @@ const SuricataRulesets = (props) => {
             <table className="table table-hover table-layout-fixed">
                 <tbody>
                     <tr>
-                        <td width="20%">Ruleset <FaPlus size={21} className="iconBlue" onClick={() => {getGroupRuleset()}} /> <FaSyncAlt size={21} className="iconBlue"/> </td>
+                        <td width="20%">
+                         <FaPlus size={21} className="iconBlue" onClick={() => {getGroupRuleset()}} /> <FaSyncAlt size={21} className="iconBlue"/> </td>
                         <td colSpan={2}> 
                             {currentRulesetsSelected()}
                         </td>

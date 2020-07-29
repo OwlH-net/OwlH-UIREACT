@@ -63,7 +63,7 @@ const SuricataConfig = (props) => {
             <table className="table table-hover table-layout-fixed my-3">
                 <tbody>
                     <tr>
-                        <td rowSpan={3} width="20%">Configuration &nbsp; 
+                        <td rowSpan={3} width="20%"> 
                             <FaEdit size={21} className="iconBlue" onClick={() => {props.showPathInput()}}/> &nbsp;
                             <FaSyncAlt size={21} className="iconBlue"/> &nbsp;                             
                             <span className="badge bg-primary align-text-bottom text-white pointer">Reload</span>

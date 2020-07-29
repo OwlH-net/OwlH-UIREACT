@@ -93,9 +93,13 @@ const GroupDetailsSuricata = (props) => {
                     :
                         <>
                             <a className="btn btn-primary float-right text-decoration-none text-white right" onClick={() => {}}>Sync</a>
+                            <h5 className="mt-3">Rulesets</h5>
                             <SuricataRulesets />
+                            <h5 className="mt-3">Configuration</h5>
                             <SuricataConfig />
+                            <h5 className="mt-3">Master files</h5>
                             <SuricataMasterFilesList />
+                            <h5 className="mt-3">Node files</h5>
                             <SuricataNodes />
                         </>
                 }

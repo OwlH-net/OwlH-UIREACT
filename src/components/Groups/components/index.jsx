@@ -10,16 +10,29 @@ import { ToggleProgressBar } from '../../../store/webUtilities/actions'
 import {ProgressBar} from 'react-bootstrap'
 
 const index = (props) => {
+    var alertItems
 
     //getAllNodes
     useEffect(() => {
         props.toggleProgressBar(true);
         props.getAllGroups();
+        
+        //Call alert list for every map item
+        alertItems = (props.alertList || []).map(alert => {
+            return <AlertDialog key={alert.id} id={alert.id} title={alert.title} subtitle={alert.subtitle} variant={alert.variant}/>
+        })
     }, [])
+
+
+    console.log(props.alertList)
 
     return (
         <div>
             <Menu />   
+
+            {/* Alert dialog */}
+            {alertItems}
+
             <Banner title="Groups" subtitle="all groups list" />  
             {props.progressBar ? <ProgressBar animated now={100} /> : null}
 
