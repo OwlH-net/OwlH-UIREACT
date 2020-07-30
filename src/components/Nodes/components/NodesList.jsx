@@ -3,7 +3,7 @@ import { FaBoxOpen, FaEdit, FaTrashAlt } from "react-icons/fa";
 import NodeStatus from './NodeStatus'
 import ModalWindow from '../../Shared/ModalWindow'
 import { SetLoading, getAllNodes, DeleteNode, NodeToEdit } from '../../../store/node/actions'
-import { ToggleModalWindow, ModalButtonClicked, ToggleProgressBar } from '../../../store/webUtilities/actions'
+import { ToggleModalWindow, ModalButtonClicked } from '../../../store/webUtilities/actions'
 import { connect } from 'react-redux';
 
 const NodesList = (props) => {
@@ -198,7 +198,6 @@ const mapDispatchToProps = (dispatch) => ({
     toggleModal: (status) => dispatch(ToggleModalWindow(status)),
     modalButtonClicked: (option) => dispatch(ModalButtonClicked(option)),
     getNodes: () => dispatch(getAllNodes()),
-    toggleProgressBar: (status) => dispatch(ToggleProgressBar(status)),
     nodeToEdit: (status) => dispatch(NodeToEdit(status))
 })
 

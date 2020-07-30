@@ -1,6 +1,6 @@
 import * as ActionTypes from './node-action-types';
 import {GetUserName, GetToken} from '../../components/Shared/CheckToken'
-import {ToggleProgressBar, AddAlertToAlertList} from '../webUtilities/actions'
+import {ToggleProgressBar, AddAlertToAlertList, toggleAlert} from '../webUtilities/actions'
 import axios from 'axios'
 
 const config = {
@@ -23,8 +23,7 @@ export function getAllNodes() {
     return (dispatch) => {
       axios.get('/api/nodes', newConfig)
       .then(resp => {
-
-        // dispatch(ToggleProgressBar(false))
+        dispatch(ToggleProgressBar(false))
 
         if(resp.data.ack == "false"){
           dispatch(AddAlertToAlertList({
@@ -49,8 +48,6 @@ function accGetAllNodes(data) {
 }
 
 export function SetLoading(id) {
-    console.log("JAL - Set Loading action")
-    console.log(id)
     return (dispatch) => {
         dispatch(setLoadingNode(id))
     }
@@ -64,9 +61,6 @@ function setLoadingNode(id) {
 
 
 export function ResetLoading(id) {
-    console.log("JAL - Reset Loading action")
-    console.log(id)
-
     return (dispatch) => {
         dispatch(resetLoadingNode(id))
     }
@@ -92,7 +86,9 @@ export function DeleteNode(nodeUUID) {
   return (dispatch) => {
     axios.delete('/api/deleteNode/'+nodeUUID, newConfig)
     .then(resp => {
+      
       dispatch(ToggleProgressBar(false))
+
       if(resp.data.ack == "false"){
         dispatch(AddAlertToAlertList({
           id: new Date() / 1000+'-valid',
@@ -123,6 +119,7 @@ export function RegisterNode(nodeUUID) {
   return (dispatch)  => {
     axios.put('/api/registerNode/'+nodeUUID, {} ,newConfig)
       .then(resp => {        
+        
         dispatch(ToggleProgressBar(false))
         if(resp.data.ack == "false"){
           dispatch(AddAlertToAlertList({
@@ -227,7 +224,6 @@ export function EditNode(node) {
     .then(resp => {
 
       dispatch(ToggleProgressBar(false))
-      
       if(resp.data.ack == "false"){
         dispatch(AddAlertToAlertList({
           id: new Date() / 1000+'-valid',

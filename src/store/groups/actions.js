@@ -60,6 +60,7 @@ export function GetAllGroups() {
     return (dispatch) => {
       axios.get('/api/groups', newConfig)
       .then(resp => {        
+
         dispatch(ToggleProgressBar(false))
 
         if(resp.data.ack == "false"){

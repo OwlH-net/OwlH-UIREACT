@@ -4,7 +4,7 @@ import Menu from '../../Shared/Components/Menu/Menu'
 import Banner from '../../Shared/Components/Banner/Banner'
 import Footer from '../../Shared/Footer'
 import { ToggleAddNodeForm, getAllNodes, ShowNodes, SortTableIP, SortTableName, SetSearchBar } from '../../../store/node/actions'
-import { ToggleProgressBar } from '../../../store/webUtilities/actions'
+import { ToggleProgressBar, AddAlertToAlertList } from '../../../store/webUtilities/actions'
 import { GetAllGroups } from '../../../store/groups/actions'
 import NodesList from './NodesList'
 import AddNodeForm from './AddNodeForm'
@@ -24,6 +24,8 @@ const index = (props) => {
     const searchHandleChange = (e) => {
         props.setSearchBar(event.target.value)
     }
+
+console.log(props.alertList)
 
     //Call alert list for every map item
     const alertItems = (props.alertList || []).map(alert => {
