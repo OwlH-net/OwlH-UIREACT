@@ -21,8 +21,6 @@ function toggleModalWindowStatus(state, data) {
 }
 
 function toggleAlertStatus(state, data) {
-  console.log(data);
-  console.log(state.errorAlertShow);
   return {
     ...state,
     errorAlertShow: data
@@ -85,9 +83,7 @@ function toggleProgressBarStatus(state, data) {
   }
 }
 
-function addAlertToAlertList(state, data) {
-  console.log(data)
-  console.log(state.alertList)
+function addAlertToAlertList(state, data) {  
   return {
     ...state, 
     alertList: [...state.alertList, data]

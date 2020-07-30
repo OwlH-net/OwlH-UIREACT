@@ -1,6 +1,6 @@
 import * as ActionTypes from './node-action-types';
 import {GetUserName, GetToken} from '../../components/Shared/CheckToken'
-import {ToggleProgressBar} from '../webUtilities/actions'
+import {ToggleProgressBar, AddAlertToAlertList} from '../webUtilities/actions'
 import axios from 'axios'
 
 const config = {
@@ -23,9 +23,21 @@ export function getAllNodes() {
     return (dispatch) => {
       axios.get('/api/nodes', newConfig)
       .then(resp => {
-        //check token for pending reg
-        dispatch(ToggleProgressBar(false))
-        dispatch(accGetAllNodes(resp.data))
+
+        // dispatch(ToggleProgressBar(false))
+
+        if(resp.data.ack == "false"){
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Error getting nodes! ",
+            subtitle: resp.data.error,
+            variant: "danger"
+          }))
+          dispatch(toggleAlert(true))
+        }else{
+          dispatch(accGetAllNodes(resp.data))
+        }
+
       })
     }
   }
@@ -35,36 +47,6 @@ function accGetAllNodes(data) {
       payload: data
     }
 }
-
-// export function PingNode(nodeUUID) {
-//     const token = GetToken()
-//     const username = GetUserName()
-
-//     let newHeaders = {
-//       ...config.headers, 
-//       'user': username,
-//       'token': token,
-//     }
-//     let newConfig = {headers: newHeaders}
-      
-//     return (dispatch) => {
-//       axios.get('/api/pingNode/'+nodeUUID, newConfig)
-//       .then(resp => {
-//         //manage node status request
-//         if("ack" in resp.data){
-//           dispatch(accPingNode("offline", nodeUUID))
-//         }else{
-//           dispatch(accPingNode("online", nodeUUID))
-//         }
-//       })
-//     }
-//   }
-// function accPingNode(data, nodeUUID) {
-//     return {
-//       type: ActionTypes.PING_NODE,
-//       payload: {id:nodeUUID, status:data}
-//     }
-// }
 
 export function SetLoading(id) {
     console.log("JAL - Set Loading action")
@@ -111,7 +93,17 @@ export function DeleteNode(nodeUUID) {
     axios.delete('/api/deleteNode/'+nodeUUID, newConfig)
     .then(resp => {
       dispatch(ToggleProgressBar(false))
-      dispatch(getAllNodes())
+      if(resp.data.ack == "false"){
+        dispatch(AddAlertToAlertList({
+          id: new Date() / 1000+'-valid',
+          title: "Error deleting node ",
+          subtitle: resp.data.error,
+          variant: "danger"
+        }))
+        dispatch(toggleAlert(true))
+      }else{
+        dispatch(getAllNodes())
+      }
     })
   }
 }
@@ -130,9 +122,19 @@ export function RegisterNode(nodeUUID) {
 
   return (dispatch)  => {
     axios.put('/api/registerNode/'+nodeUUID, {} ,newConfig)
-      .then(resp => {
+      .then(resp => {        
         dispatch(ToggleProgressBar(false))
-        dispatch(getAllNodes())
+        if(resp.data.ack == "false"){
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Register node error ",
+            subtitle: resp.data.error,
+            variant: "danger"
+          }))
+          dispatch(toggleAlert(true))
+        }else{
+          dispatch(getAllNodes())
+        }
     })
   }
 }
@@ -151,9 +153,20 @@ export function Enroll(data) {
 
   return (dispatch)  => {
     axios.post('/api/enrollNode', JSON.stringify(data) ,newConfig)
-      .then(resp => {
+      .then(resp => {        
         dispatch(ToggleProgressBar(false))
-        dispatch(getAllNodes())
+
+        if(resp.data.ack == "false"){
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Enroll node error ",
+            subtitle: resp.data.error,
+            variant: "danger"
+          }))
+          dispatch(toggleAlert(true))
+        }else{
+          dispatch(getAllNodes())
+        }
     })
   }
 }
@@ -212,8 +225,30 @@ export function EditNode(node) {
     //check default credentials
     axios.put('/api/editNode', JSON.stringify(node), newConfig)
     .then(resp => {
-      dispatch(ToggleAddNodeForm())
-      dispatch(getAllNodes())
+
+      dispatch(ToggleProgressBar(false))
+      
+      if(resp.data.ack == "false"){
+        dispatch(AddAlertToAlertList({
+          id: new Date() / 1000+'-valid',
+          title: "Error editing node ",
+          subtitle: resp.data.error,
+          variant: "danger"
+        }))
+        dispatch(toggleAlert(true))
+      }else{
+        dispatch(AddAlertToAlertList({
+          id: new Date() / 1000+'-valid',
+          title: "Edit node ",
+          subtitle: "The node has been edited successfully!",
+          variant: "success"
+        }))
+        dispatch(toggleAlert(true))
+
+        dispatch(ToggleAddNodeForm())
+        dispatch(getAllNodes())
+      }
+      
     })
   }
 }

@@ -9,10 +9,12 @@ import { GetAllGroups } from '../../../store/groups/actions'
 import NodesList from './NodesList'
 import AddNodeForm from './AddNodeForm'
 import {ProgressBar} from 'react-bootstrap'
+import AlertDialog from '../../Shared/AlertDialog'
 
 
 const index = (props) => {
     //getAllNodes
+
     useEffect(() => {
         props.toggleProgressBar(true);
         props.getNodes()
@@ -23,9 +25,18 @@ const index = (props) => {
         props.setSearchBar(event.target.value)
     }
 
+    //Call alert list for every map item
+    const alertItems = (props.alertList || []).map(alert => {
+        console.log(alert)
+        return <AlertDialog key={alert.id} id={alert.id} title={alert.title} subtitle={alert.subtitle} variant={alert.variant}/>
+    })
+
     return (
         <div>
             <Menu />
+
+            {/* Alert dialog */}
+            {alertItems}
 
             <Banner title="Nodes" subtitle="All nodes list" />
             {props.progressBar ? <ProgressBar animated now={100} /> : null}
@@ -66,8 +77,10 @@ const mapStateToProps = (state) => {
     return {
         allNodesList: state.node.allNodesList,
         progressBar: state.webUtilities.progressBar,
+        alertList: state.webUtilities.alertList,
         addNodeForm: state.node.addNodeForm,
         allGroupList: state.groups.allGroupList,
+        
     }
 }
 const mapDispatchToProps = (dispatch) => ({    
