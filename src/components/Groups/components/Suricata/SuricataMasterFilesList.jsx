@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { FaFile } from "react-icons/fa";
-import { ChangeSuricataStatus, CheckMD5, ShowPathInput, HidePathInput, ChangeSuricataConfigGroupPaths } from '../../../../store/groups/actions'
+import { ChangeSuricataStatus, ShowPathInput, HidePathInput, ChangeSuricataConfigGroupPaths } from '../../../../store/groups/actions'
 import { GetRulesetList } from '../../../../store/groups/actions'
 import { ToggleProgressBar } from '../../../../store/webUtilities/actions'
 
@@ -51,7 +51,6 @@ const mapDispatchToProps = (dispatch) => ({
     toggleProgressBar: (status) => dispatch(ToggleProgressBar(status)),
     getGroupSuricataList: (groupID) => dispatch(GetGroupSuricataList(groupID)),
     changeSuricataStatus: () => dispatch(ChangeSuricataStatus()),    
-    checkMD5: (data) => dispatch(CheckMD5(data)),    
     showPathInput: () => dispatch(ShowPathInput()),    
     hidePathInput: () => dispatch(HidePathInput()),    
     changeSuricataConfigGroupPaths: (data) => dispatch(ChangeSuricataConfigGroupPaths(data)),    

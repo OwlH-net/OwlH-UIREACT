@@ -115,7 +115,7 @@ function getNodes(req) {
                     }
                   )
     .then(resp => {
-      return resp.data.Nodes
+      return resp.data
     })
     .catch(resp => {
       return resp.data
@@ -224,11 +224,9 @@ function AddRulesetsToGroup(req) {
                   }
                 )
   .then(resp => {
-    console.log(resp.data)
     return resp.data
   })
   .catch(resp => {
-    console.log(resp.data)
     return resp.data
   })
 }

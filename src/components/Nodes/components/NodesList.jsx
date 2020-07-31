@@ -35,9 +35,9 @@ const NodesList = (props) => {
         setNodesFiltered(sortedObj)
     }, [props.sortIP]);
 
-    useEffect(() => {
-        nodeStatusReload()
-    }, []);
+    // useEffect(() => {
+    //     nodeStatusReload()
+    // }, []);
 
     const nodeStatusReload = () => {
         props.getNodes()
@@ -160,9 +160,9 @@ const NodesList = (props) => {
             <ModalWindow title='Delete node' subtitle='Are you sure you want to delete this node?' 
                 variantColor='danger' btn='Delete' id='deleteNode' />
 
-            {Object.keys(props.allNodesList || []).length <= 0 
+                {Object.keys(props.allNodesList || []).length <= 0 
                 ?
-                    <div></div>
+                    <h3 className="text-center">No nodes created</h3>
                 :
                     <table className="table table-hover table-layout-fixed">
                         <thead>
@@ -176,7 +176,7 @@ const NodesList = (props) => {
                             {nodesData()}
                         </tbody>
                     </table>
-            }
+                }
         </div>
     )
 }

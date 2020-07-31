@@ -9,6 +9,20 @@ const config = {
   }
 }
 
+export function PermissionsAlert() {
+  return (dispatch) => {
+    console.log("PermissionsAlert")
+    var newAlert = {
+      id: new Date() / 1000+'-valid',
+      title: "Error! ",
+      subtitle: "You don't have enough permissions for this action.",
+      variant: "warning"
+    }
+    dispatch(AddAlertToAlertList(newAlert))
+    dispatch(toggleAlert(true))
+  }
+}
+
 export function defaultCredentials() {
   return (dispatch) => {
     //check default credentials
@@ -68,6 +82,8 @@ export function hideSpinner() {
   
   
 export function toggleAlert(data) {
+  console.log("ToggleAlert");
+  console.log(data);
   return {
     type: ActionTypes.TOGGLE_ALERT,
     payload: data
@@ -82,6 +98,8 @@ export function ResetAxiosChangePass() {
 }
   
 export function AddAlertToAlertList(alert) {
+  console.log("Alert Added:")
+  console.log(alert);
   return {
     type: ActionTypes.ADD_ALERT_TO_ALERT_LIST,
     payload: alert

@@ -1,6 +1,6 @@
 import * as ActionTypes from './node-action-types';
 import {GetUserName, GetToken} from '../../components/Shared/CheckToken'
-import {ToggleProgressBar, AddAlertToAlertList, toggleAlert} from '../webUtilities/actions'
+import {ToggleProgressBar, AddAlertToAlertList, toggleAlert, PermissionsAlert} from '../webUtilities/actions'
 import axios from 'axios'
 
 const config = {
@@ -23,9 +23,12 @@ export function getAllNodes() {
     return (dispatch) => {
       axios.get('/api/nodes', newConfig)
       .then(resp => {
+
         dispatch(ToggleProgressBar(false))
 
-        if(resp.data.ack == "false"){
+        if(resp.data.permissions == "none"){
+          dispatch(PermissionsAlert())
+        }else if(resp.data.ack == "false"){
           dispatch(AddAlertToAlertList({
             id: new Date() / 1000+'-valid',
             title: "Error getting nodes! ",
@@ -33,8 +36,8 @@ export function getAllNodes() {
             variant: "danger"
           }))
           dispatch(toggleAlert(true))
-        }else{
-          dispatch(accGetAllNodes(resp.data))
+        }else if(resp.data.Nodes != null){
+          dispatch(accGetAllNodes(resp.data.Nodes))
         }
 
       })
@@ -86,10 +89,12 @@ export function DeleteNode(nodeUUID) {
   return (dispatch) => {
     axios.delete('/api/deleteNode/'+nodeUUID, newConfig)
     .then(resp => {
-      
+      console.log(resp.data);
       dispatch(ToggleProgressBar(false))
 
-      if(resp.data.ack == "false"){
+      if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
         dispatch(AddAlertToAlertList({
           id: new Date() / 1000+'-valid',
           title: "Error deleting node ",
@@ -121,7 +126,9 @@ export function RegisterNode(nodeUUID) {
       .then(resp => {        
         
         dispatch(ToggleProgressBar(false))
-        if(resp.data.ack == "false"){
+        if(resp.data.permissions == "none"){
+          dispatch(PermissionsAlert())
+        }else if(resp.data.ack == "false"){
           dispatch(AddAlertToAlertList({
             id: new Date() / 1000+'-valid',
             title: "Register node error ",
@@ -153,7 +160,9 @@ export function Enroll(data) {
       .then(resp => {        
         dispatch(ToggleProgressBar(false))
 
-        if(resp.data.ack == "false"){
+        if(resp.data.permissions == "none"){
+          dispatch(PermissionsAlert())
+        }else if(resp.data.ack == "false"){
           dispatch(AddAlertToAlertList({
             id: new Date() / 1000+'-valid',
             title: "Enroll node error ",
@@ -224,7 +233,9 @@ export function EditNode(node) {
     .then(resp => {
 
       dispatch(ToggleProgressBar(false))
-      if(resp.data.ack == "false"){
+      if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
         dispatch(AddAlertToAlertList({
           id: new Date() / 1000+'-valid',
           title: "Error editing node ",

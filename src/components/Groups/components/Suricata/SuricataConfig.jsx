@@ -17,7 +17,7 @@ const SuricataConfig = (props) => {
 
     useEffect(() => {
         //get MD5 data
-        props.checkMD5(suriConfigPath)
+        // props.checkMD5(suriConfigPath)
         //get group rulesets
         props.getRulesetList(props.groupToDetails.guuid)
     }, [])

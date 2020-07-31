@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import ModalWindow from '../../Shared/ModalWindow'
 import { ToggleProgressBar, ToggleModalWindow, ModalButtonClicked } from '../../../store/webUtilities/actions'
-import { DeleteGroup, ShowGroupForm, SaveGroupSelected, ShowEditForm, GroupToDetails, CloseGroupForm } from '../../../store/groups/actions'
+import { GetAllGroups, DeleteGroup, ShowGroupForm, SaveGroupSelected, ShowEditForm, GroupToDetails, CloseGroupForm } from '../../../store/groups/actions'
 import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
 import { Route, Link, BrowserRouter, NavLink } from 'react-router-dom';
 
@@ -12,6 +12,7 @@ const GroupsList = (props) => {
 
     //getAllNodes
     useEffect(() => {
+        console.log("UPDATE")
         props.toggleProgressBar(false);
         setAllGroups(props.allGroupList)
     }, [props.allGroupList])
@@ -75,7 +76,7 @@ const GroupsList = (props) => {
 
             {Object.keys(props.allGroupList || []).length <= 0
                 ?
-                    <div></div>
+                    <h3 className="text-center">There are no groups created</h3>
                 :
                 <div>
                     <table className="table table-hover table-layout-fixed">
@@ -113,6 +114,7 @@ const mapDispatchToProps = (dispatch) => ({
     showEditForm: () => dispatch(ShowEditForm()),
     groupToDetails: (group) => dispatch(GroupToDetails(group)),
     closeGroupForm: () => dispatch(CloseGroupForm()),
+    getAllGroups: () => dispatch(GetAllGroups()),
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);

@@ -1,6 +1,6 @@
 import * as ActionTypes from './group-action-types';
 import {GetUserName, GetToken} from '../../components/Shared/CheckToken'
-import { ToggleProgressBar, AddAlertToAlertList, toggleAlert } from '../webUtilities/actions'
+import { ToggleProgressBar, AddAlertToAlertList, toggleAlert, PermissionsAlert } from '../webUtilities/actions'
 import axios from 'axios'
 
 const config = {
@@ -25,7 +25,11 @@ export function GetGroupSuricataList(groupID) {
     .then(resp => {
       dispatch(ToggleProgressBar(false))   
       
-      if(resp.data.ack == "false"){
+      if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
         dispatch(AddAlertToAlertList({
           id: new Date() / 1000+'-valid',
           title: "Error getting Suricata List! ",
@@ -63,7 +67,9 @@ export function GetAllGroups() {
 
         dispatch(ToggleProgressBar(false))
 
-        if(resp.data.ack == "false"){
+        if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
           dispatch(AddAlertToAlertList({
             id: new Date() / 1000+'-valid',
             title: "Error getting groups! ",
@@ -78,6 +84,7 @@ export function GetAllGroups() {
     }
 }
 function accGetAllGroups(data) {
+  console.log(data)
     return {
       type: ActionTypes.GET_ALL_GROUPS,
       payload: data
@@ -100,7 +107,9 @@ export function AddGroup(data) {
       .then(resp => {
       
         dispatch(ToggleProgressBar(false))
-        if(resp.data.ack == "false"){
+        if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
           dispatch(AddAlertToAlertList({
             id: new Date() / 1000+'-valid',
             title: "Error adding groups! ",
@@ -131,7 +140,9 @@ export function CheckMD5(data) {
       axios.put('/api/getMD5files', JSON.stringify(data), newConfig)
       .then(resp => {
 
-        if(resp.data.ack == "false"){
+        if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
           dispatch(AddAlertToAlertList({
             id: new Date() / 1000+'-valid',
             title: "Error getting MD5! ",
@@ -168,27 +179,29 @@ export function ChangeSuricataConfigGroupPaths(data) {
       .then(resp => {
 
         dispatch(ToggleProgressBar(false))
-        if(resp.data.ack == "false"){
-          dispatch(AddAlertToAlertList({
-            id: new Date() / 1000+'-valid',
-            title: "Error changing paths! ",
-            subtitle: resp.data.error,
-            variant: "danger"
-          }))
-          dispatch(toggleAlert(true))
-        }else{
-          dispatch(AddAlertToAlertList({
-            id: new Date() / 1000+'-valid',
-            title: "Changing paths",
-            subtitle: "Path changed successfully!",
-            variant: "danger"
-          }))
-          dispatch(toggleAlert(true))          
-          dispatch(HidePathInput())
-          dispatch(GetAllGroups())
-        }
-      })
-    }
+        if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
+        dispatch(AddAlertToAlertList({
+          id: new Date() / 1000+'-valid',
+          title: "Error changing paths! ",
+          subtitle: resp.data.error,
+          variant: "danger"
+        }))
+        dispatch(toggleAlert(true))
+      }else{
+        dispatch(AddAlertToAlertList({
+          id: new Date() / 1000+'-valid',
+          title: "Changing paths",
+          subtitle: "Path changed successfully!",
+          variant: "success"
+        }))
+        dispatch(toggleAlert(true))          
+        dispatch(HidePathInput())
+        dispatch(GetAllGroups())
+      }
+    })
+  }
 }
 
 export function EditGroupSelected(data) {
@@ -208,7 +221,9 @@ export function EditGroupSelected(data) {
 
         dispatch(ToggleProgressBar(false))
 
-        if(resp.data.ack == "false"){
+        if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
           dispatch(AddAlertToAlertList({
             id: new Date() / 1000+'-valid',
             title: "Error editing group! ",
@@ -291,8 +306,10 @@ export function DeleteGroup(nodeUUID) {
     axios.delete('/api/deleteGroup/'+nodeUUID, newConfig)
     .then(resp => {
       dispatch(ToggleProgressBar(false))
-
-      if(resp.data.ack == "false"){
+      
+      if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
         dispatch(AddAlertToAlertList({
           id: new Date() / 1000+'-valid',
           title: "Error deleting group! ",
@@ -303,7 +320,6 @@ export function DeleteGroup(nodeUUID) {
       }else{
         dispatch(GetAllGroups())
       }
-
     })
   }
 }
@@ -325,7 +341,9 @@ export function ShowNodesGroupForm(guuid) {
       
       dispatch(ToggleProgressBar(false))
       
-      if(resp.data.ack == "false"){
+      if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
         dispatch(AddAlertToAlertList({
           id: new Date() / 1000+'-valid',
           title: "Error getting group nodes! ",
@@ -376,7 +394,9 @@ export function GetRulesetList(guuid) {
     .then(resp => {
       dispatch(ToggleProgressBar(false))
 
-      if(resp.data.ack == "false"){
+      if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
         dispatch(AddAlertToAlertList({
           id: new Date() / 1000+'-valid',
           title: "Error getting ruleset list! ",
@@ -415,7 +435,9 @@ export function AddNodesToGroup(data) {
       
       dispatch(ToggleProgressBar(false))
 
-      if(resp.data.ack == "false"){
+      if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
         dispatch(AddAlertToAlertList({
           id: new Date() / 1000+'-valid',
           title: "Error adding groups! ",
@@ -449,7 +471,9 @@ export function AnalyzerStatus(data) {
 
       dispatch(ToggleProgressBar(false))
 
-      if(resp.data.ack == "false"){
+      if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
         dispatch(AddAlertToAlertList({
           id: new Date() / 1000+'-valid',
           title: "Error Changing analyzer status! ",
@@ -482,7 +506,9 @@ export function ChangeSuricataStatus(data) {
 
       dispatch(ToggleProgressBar(false))
 
-      if(resp.data.ack == "false"){
+      if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
         dispatch(AddAlertToAlertList({
           id: new Date() / 1000+'-valid',
           title: "Error changing Suricata status! ",
@@ -515,7 +541,9 @@ export function SyncAnalyzer(data) {
 
       dispatch(ToggleProgressBar(false))
       
-      if(resp.data.ack == "false"){
+      if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
         dispatch(AddAlertToAlertList({
           id: new Date() / 1000+'-valid',
           title: "Error Analyzer sync! ",
@@ -547,7 +575,9 @@ export function DeleteGroupNode(nodeUUID) {
 
       dispatch(ToggleProgressBar(false))
       
-      if(resp.data.ack == "false"){
+      if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
         dispatch(AddAlertToAlertList({
           id: new Date() / 1000+'-valid',
           title: "Error deleting group node! ",
@@ -579,7 +609,9 @@ export function DeleteRulesetSelected(values) {
 
       dispatch(ToggleProgressBar(false))
       
-      if(resp.data.ack == "false"){
+      if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
         dispatch(AddAlertToAlertList({
           id: new Date() / 1000+'-valid',
           title: "Error deleting ruleset! ",
@@ -612,7 +644,9 @@ export function AddRulesetsToGroup(data) {
 
       dispatch(ToggleProgressBar(false))
       
-      if(resp.data.ack == "false"){
+      if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
         dispatch(AddAlertToAlertList({
           id: new Date() / 1000+'-valid',
           title: "Error adding ruleset! ",

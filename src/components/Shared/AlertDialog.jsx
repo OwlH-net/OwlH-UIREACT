@@ -6,7 +6,6 @@ import { toggleAlert, ResetAxiosChangePass, DeleteAlertToAlertList } from '../..
 const AlertDialog = (props) => {
 
     useEffect (() => {
-        console.log(props);
         const alertTimeout = setTimeout(function(){ disableAlert(props.id) }, 4000)
     }, [])
 

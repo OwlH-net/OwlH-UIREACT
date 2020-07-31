@@ -12,12 +12,12 @@ import AlertDialog from '../../Shared/AlertDialog'
 
 const index = (props) => {
 
-    //getAllNodes
+    // getAllNodes
     useEffect(() => {
         props.toggleProgressBar(true);
         props.getAllGroups();  
     }, [])
-    
+        
     //Call alert list for every map item
     const alertItems = (props.alertList || []).map(alert => {
         return <AlertDialog key={alert.id} id={alert.id} title={alert.title} subtitle={alert.subtitle} variant={alert.variant}/>
@@ -52,6 +52,7 @@ const index = (props) => {
 
 const mapStateToProps = (state) => {
     return {
+        allGroupList: state.groups.allGroupList,
         isEdit: state.groups.isEdit,
         isShowGroupForm: state.groups.isShowGroupForm,
         progressBar: state.webUtilities.progressBar,

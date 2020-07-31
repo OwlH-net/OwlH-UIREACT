@@ -7,7 +7,7 @@ import { ToggleProgressBar } from '../../../../store/webUtilities/actions'
 
 const SuricataNodes = (props) => {
 
-    const [masterMD5, SetMasterMD5] = useState('')
+    // const [masterMD5, SetMasterMD5] = useState('')
     const [suriConfigPath, SetSuriConfigPath] = useState({
         type: 'suricata',
         uuid: props.groupToDetails.guuid,
@@ -16,8 +16,6 @@ const SuricataNodes = (props) => {
     })
 
     useEffect(() => {           
-        //get MD5 data
-        props.checkMD5(suriConfigPath)
         //get group rulesets
         props.getRulesetList(props.groupToDetails.guuid)
     }, [])
@@ -33,18 +31,6 @@ const SuricataNodes = (props) => {
             nodesuricata: props.allGroupList[0].nodesuricata,
         })
     }, [props.allGroupList])
-
-    useEffect(() => {
-        GetMasterMD5()
-    }, [props.MD5files])
-
-    const GetMasterMD5 = () => {
-        Object.entries(props.MD5files || {}).map(([uuid , val]) =>{
-            Object.entries(val || {}).map(([nodeID , node]) =>{
-                SetMasterMD5(node.masterMD5)
-            })
-        })
-    }
 
     const MD5Content = () => {
         const totalList = Object.entries(props.allGroupList || {}).map(([groupID , group]) =>{
