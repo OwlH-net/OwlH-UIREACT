@@ -67,9 +67,12 @@ export function GetAllGroups() {
 
         dispatch(ToggleProgressBar(false))
 
-        if(resp.data.permissions == "none"){
-        dispatch(PermissionsAlert())
-      }else if(resp.data.ack == "false"){
+        if(resp.data == null){
+          dispatch(accGetAllGroups({}))
+        }            
+        else if(resp.data.permissions == "none"){
+          dispatch(PermissionsAlert())
+        }else if(resp.data.ack == "false"){
           dispatch(AddAlertToAlertList({
             id: new Date() / 1000+'-valid',
             title: "Error getting groups! ",
@@ -84,10 +87,48 @@ export function GetAllGroups() {
     }
 }
 function accGetAllGroups(data) {
-  console.log(data)
     return {
       type: ActionTypes.GET_ALL_GROUPS,
       payload: data
+    }
+}
+
+export function SyncPathGroup(data) {
+    const token = GetToken()
+    const username = GetUserName()
+  
+    let newHeaders = {
+      ...config.headers, 
+      'user': username,
+      'token': token
+    }
+    let newConfig = {headers: newHeaders}
+
+    return (dispatch) => {
+      axios.post('/api/syncPathGroup', JSON.stringify(data), newConfig)
+      .then(resp => {
+      
+        dispatch(ToggleProgressBar(false))
+
+        if(resp.data.ack == "false"){
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Error sync paths ",
+            subtitle: resp.data.error,
+            variant: "danger"
+          }))
+          dispatch(toggleAlert(true))
+        }else{
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Success! ",
+            subtitle: "Paths synchronized successfully!",
+            variant: "success"
+          }))
+          dispatch(toggleAlert(true))
+        }
+      
+      })
     }
 }
 
@@ -121,6 +162,44 @@ export function AddGroup(data) {
           dispatch(GetAllGroups())
         }
 
+      })
+    }
+}
+
+export function SyncGroupRuleset(data) {
+    const token = GetToken()
+    const username = GetUserName()
+  
+    let newHeaders = {
+      ...config.headers, 
+      'user': username,
+      'token': token
+    }
+    let newConfig = {headers: newHeaders}
+
+    return (dispatch) => {
+      axios.put('/api/syncGroupRulesets', JSON.stringify(data), newConfig)
+      .then(resp => {
+
+        if(resp.data.permissions == "none"){
+          dispatch(PermissionsAlert())
+        }else if(resp.data.ack == "false"){
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Error getting MD5! ",
+            subtitle: resp.data.error,
+            variant: "danger"
+          }))
+          dispatch(toggleAlert(true))
+        }else{
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Success! ",
+            subtitle: "Ruleset synchronized successfully.",
+            variant: "success"
+          }))
+          dispatch(toggleAlert(true))
+        }
       })
     }
 }
@@ -306,7 +385,7 @@ export function DeleteGroup(nodeUUID) {
     axios.delete('/api/deleteGroup/'+nodeUUID, newConfig)
     .then(resp => {
       dispatch(ToggleProgressBar(false))
-      
+
       if(resp.data.permissions == "none"){
         dispatch(PermissionsAlert())
       }else if(resp.data.ack == "false"){

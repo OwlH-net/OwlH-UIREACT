@@ -4,20 +4,27 @@ import { FaFile } from "react-icons/fa";
 import { ChangeSuricataStatus, ShowPathInput, HidePathInput, ChangeSuricataConfigGroupPaths } from '../../../../store/groups/actions'
 import { GetRulesetList } from '../../../../store/groups/actions'
 import { ToggleProgressBar } from '../../../../store/webUtilities/actions'
+import { NODE_TO_EDIT } from '../../../../store/node/node-action-types';
 
 const SuricataMasterFilesList = (props) => {
-    const [masterMD5, SetMasterMD5] = useState('')
 
     useEffect(() => {
         GetMasterMD5()
     }, [props.MD5files])
 
     const GetMasterMD5 = () => {
-        Object.entries(props.MD5files || {}).map(([uuid , val]) =>{
-            Object.entries(val || {}).map(([nodeID , node]) =>{
-                SetMasterMD5(node.masterMD5)
+        var paths = []
+        return Object.entries(props.MD5files || {}).map(([uuid , val]) =>{
+            return Object.entries(val || {}).map(([nodeID , node]) =>{
+                if(!paths.includes(node.masterPath)){
+                    paths.push(node.masterPath)
+                    return <tr key={nodeID}>                    
+                        <td><FaFile size={21} className="iconBlue"/> {node.masterPath} </td>
+                        <td>{node.masterMD5}</td>
+                    </tr>
+                }
             })
-        })
+        });
     }
 
     return (
@@ -29,10 +36,7 @@ const SuricataMasterFilesList = (props) => {
                 </tr>
             </thead>
             <tbody>
-                <tr>                    
-                    <td><FaFile size={21} className="iconBlue"/> path here... </td>
-                    <td>{masterMD5}</td>
-                </tr>
+                {GetMasterMD5()}
             </tbody>
         </table>
     )

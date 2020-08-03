@@ -45,11 +45,34 @@ function getLogin(data) {
     password: data.password
   }
 
-  // return axios.put(`${url}/master/login`,{},
   return axios.put(`${url}/master/auth`,{},
                     {
                       httpsAgent: httsAgent,
                       auth: auth
+                    }
+                  )
+    .then(resp => {
+      return resp.data
+    })
+    .catch(resp => {
+      return resp.data
+    })
+}
+
+function SyncGroupRulesets(req) {
+  let token = req.headers.token
+  let username = req.headers.user
+
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': token,
+    'user': username
+  }
+
+  return axios.put(`${url}/node/ruleset/syncGroups`,req.body,
+                    {
+                      httpsAgent: httsAgent,
+                      headers: newHeader
                     }
                   )
     .then(resp => {
@@ -218,6 +241,28 @@ function AddRulesetsToGroup(req) {
     'user': req.headers.user
   }
   return axios.put(`${url}/group/addRulesetsToGroup`,req.body, 
+                  {
+                    httpsAgent: httsAgent,
+                    headers: newHeader
+                  }
+                )
+  .then(resp => {
+    return resp.data
+  })
+  .catch(resp => {
+    return resp.data
+  })
+}
+
+function SyncPathGroup(req) {
+  console.log(req.body);
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': req.headers.token,
+    'user': req.headers.user
+  }
+
+  return axios.post(`${url}/group/syncPathGroup`,req.body, 
                   {
                     httpsAgent: httsAgent,
                     headers: newHeader
@@ -579,5 +624,7 @@ module.exports = {
   GetMD5files,
   GetGroupSelectedRulesets,
   DeleteExpertGroupRuleset,
-  AddRulesetsToGroup
+  AddRulesetsToGroup,
+  SyncPathGroup,
+  SyncGroupRulesets
 }

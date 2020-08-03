@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { FaPlus, FaSyncAlt, FaEdit, FaFolderOpen, FaFile } from "react-icons/fa";
 import { ChangeSuricataStatus, CheckMD5, ShowPathInput, HidePathInput, ChangeSuricataConfigGroupPaths } from '../../../../store/groups/actions'
-import { GetRulesetList } from '../../../../store/groups/actions'
+import { GetRulesetList, SyncPathGroup } from '../../../../store/groups/actions'
 import { ToggleProgressBar } from '../../../../store/webUtilities/actions'
 
 const SuricataConfig = (props) => {
 
-    // const [masterMD5, SetMasterMD5] = useState('')
     const [suriConfigPath, SetSuriConfigPath] = useState({
         type: 'suricata',
         uuid: props.groupToDetails.guuid,
@@ -16,8 +15,6 @@ const SuricataConfig = (props) => {
     })
 
     useEffect(() => {
-        //get MD5 data
-        // props.checkMD5(suriConfigPath)
         //get group rulesets
         props.getRulesetList(props.groupToDetails.guuid)
     }, [])
@@ -45,18 +42,11 @@ const SuricataConfig = (props) => {
             [event.target.name]: event.target.value
         })
     }
-
-    // useEffect(() => {
-    //     GetMasterMD5()
-    // }, [props.MD5files])
-
-    // const GetMasterMD5 = () => {
-    //     Object.entries(props.MD5files || {}).map(([uuid , val]) =>{
-    //         Object.entries(val || {}).map(([nodeID , node]) =>{
-    //             SetMasterMD5(node.masterMD5)
-    //         })
-    //     })
-    // }
+    
+    const syncMasterPathGroup  = () => {
+        console.log("Synchronizing")
+        props.syncPathGroup(suriConfigPath)
+    }
 
     return (
         <div>
@@ -65,7 +55,7 @@ const SuricataConfig = (props) => {
                     <tr>
                         <td rowSpan={3} width="20%"> 
                             <FaEdit size={21} className="iconBlue" onClick={() => {props.showPathInput()}}/> &nbsp;
-                            <FaSyncAlt size={21} className="iconBlue"/> &nbsp;                             
+                            <FaSyncAlt size={21} className="iconBlue" onClick={() => {syncMasterPathGroup()}}/> &nbsp;                             
                             <span className="badge bg-primary align-text-bottom text-white pointer">Reload</span>
                         </td>                            
                         <td>Master path <FaFolderOpen size={21} className="iconBlue"/> </td>
@@ -83,7 +73,7 @@ const SuricataConfig = (props) => {
                         <td>Node path</td>
                         <td>
                         {
-                            props.allGroupList[0].nodesuricata == "" ? <b>No suricata master path selected</b> : props.allGroupList[0].nodesuricata
+                            props.allGroupList[0].nodesuricata == "" ? <b>No suricata node path selected</b> : props.allGroupList[0].nodesuricata
                         }
                         </td>
                     </tr>                    
@@ -149,6 +139,7 @@ const mapDispatchToProps = (dispatch) => ({
     hidePathInput: () => dispatch(HidePathInput()),    
     changeSuricataConfigGroupPaths: (data) => dispatch(ChangeSuricataConfigGroupPaths(data)),    
     getRulesetList: (group) => dispatch(GetRulesetList(group)),    
+    syncPathGroup: (sync) => dispatch(SyncPathGroup(sync)),    
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);

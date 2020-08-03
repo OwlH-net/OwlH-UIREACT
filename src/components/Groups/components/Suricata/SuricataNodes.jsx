@@ -38,20 +38,37 @@ const SuricataNodes = (props) => {
                 return Object.entries(props.MD5files || {}).map(([MD5nodesID , MD5node]) =>{
                     if(node.nuuid == MD5nodesID){
                         return Object.entries(MD5node || {}).map(([id , md5Values]) =>{
-                            return <tr key={MD5nodesID}>
-                                <td>{node.nname}</td>
-                                <td>{node.nip}</td>
-                                <td>
-                                    <FaFolderOpen size={21} className="iconBlue"/> &nbsp;
-                                    {    
-                                        md5Values.equals == "true"
-                                        ?
-                                        <span className="badge badge-pill bg-success align-text-bottom text-white">&nbsp;</span>
-                                        :
-                                        <span className="badge badge-pill bg-danger align-text-bottom text-white">&nbsp;</span>                                        
-                                    }
-                                </td>
-                            </tr>
+                            console.log(id)
+                            console.log(md5Values)
+
+                            return <>
+                                <tr key={MD5nodesID}>
+                                    <td>{node.nname}</td>
+                                    <td>{node.nip}</td>
+                                    <td>
+                                        <FaFolderOpen size={21} className="iconBlue"/> &nbsp;
+                                        {    
+                                            md5Values.equals == "true"
+                                            ?
+                                            <span className="badge badge-pill bg-success align-text-bottom text-white">&nbsp;</span>
+                                            :
+                                            (
+                                                md5Values.equals == "false"
+                                                ?
+                                                <span className="badge badge-pill bg-danger align-text-bottom text-white">&nbsp;</span>
+                                                :
+                                                <span className="badge badge-pill bg-dark align-text-bottom text-white">&nbsp;</span>
+                                            )
+                                        }
+                                    </td>
+                                </tr>
+                                <tr key={MD5nodesID+'-files'}>
+                                    <td>File</td>
+                                    <td>Master MD5</td>
+                                    <td>Node MD5</td>
+                                    <td>STATUS</td>
+                                </tr>
+                            </>
                         })  
                     }
                 })

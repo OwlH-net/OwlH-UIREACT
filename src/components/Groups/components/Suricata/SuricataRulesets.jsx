@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { FaPlus, FaSyncAlt, FaTrash } from "react-icons/fa";
-import { DisplayAddRulesetForm, GetRulesetList, DeleteRulesetSelected, AddRulesetsToGroup } from '../../../../store/groups/actions'
+import { DisplayAddRulesetForm, GetRulesetList, DeleteRulesetSelected, AddRulesetsToGroup, SyncGroupRuleset } from '../../../../store/groups/actions'
 import { ToggleProgressBar, ToggleModalWindow, ModalButtonClicked } from '../../../../store/webUtilities/actions'
 import ModalWindow from '../../../Shared/ModalWindow'
 
@@ -91,11 +91,18 @@ const SuricataRulesets = (props) => {
         props.getRulesetList(props.groupToDetails.guuid)
     }
 
+    const SynchronizeGroupRuleset = () => {
+        props.syncGroupRuleset({
+            uuid: props.groupToDetails.guuid
+        })
+    }
+
     //modal for delete
     const deleteRuleset = (id, name) => {
         setRulesetSelected({rsetID: id ,rsetName: name})
         props.toggleModal(true)
     }
+
     useEffect(() => {
         if(props.modalActionSelected.status){            
             //call delete node and get all nodes at axios
@@ -119,7 +126,9 @@ const SuricataRulesets = (props) => {
                 <tbody>
                     <tr>
                         <td width="20%">
-                         <FaPlus size={21} className="iconBlue" onClick={() => {getGroupRuleset()}} /> <FaSyncAlt size={21} className="iconBlue"/> </td>
+                            <FaPlus size={21} className="iconBlue" onClick={() => {getGroupRuleset()}} />
+                            <FaSyncAlt size={21} className="iconBlue" onClick={() => {SynchronizeGroupRuleset()}}/> 
+                        </td>
                         <td colSpan={2}> 
                             {currentRulesetsSelected()}
                         </td>
@@ -155,6 +164,7 @@ const mapDispatchToProps = (dispatch) => ({
     modalButtonClicked: (option) => dispatch(ModalButtonClicked(option)),
     deleteRulesetSelected: (data) => dispatch(DeleteRulesetSelected(data)),
     addRulesetsToGroup: (data) => dispatch(AddRulesetsToGroup(data)),
+    syncGroupRuleset: (data) => dispatch(SyncGroupRuleset(data)),
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);

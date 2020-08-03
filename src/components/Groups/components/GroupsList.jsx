@@ -12,7 +12,6 @@ const GroupsList = (props) => {
 
     //getAllNodes
     useEffect(() => {
-        console.log("UPDATE")
         props.toggleProgressBar(false);
         setAllGroups(props.allGroupList)
     }, [props.allGroupList])

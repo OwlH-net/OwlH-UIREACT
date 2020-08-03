@@ -76,6 +76,11 @@ router.post('/group', async (req, res, next) => {
   res.status(200).json(reg)
 })
 
+router.post('/syncPathGroup', async (req, res, next) => {
+  const reg = await OwlHService.SyncPathGroup(req)
+  res.status(200).json(reg)
+})
+
 router.get('/groups', async (req, res, next) => {
   const reg = await OwlHService.getGroups(req)
   res.status(200).json(reg)
@@ -128,6 +133,11 @@ router.put('/getMD5files', async (req, res, next) => {
 
 router.put('/addRulesetsToGroup', async (req, res, next) => {
   const reg = await OwlHService.AddRulesetsToGroup(req)
+  res.status(200).json(reg)
+})
+
+router.put('/syncGroupRulesets', async (req, res, next) => {
+  const reg = await OwlHService.SyncGroupRulesets(req)
   res.status(200).json(reg)
 })
 
