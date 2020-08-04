@@ -2,11 +2,15 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { FaFile } from "react-icons/fa";
 import { ChangeSuricataStatus, ShowPathInput, HidePathInput, ChangeSuricataConfigGroupPaths } from '../../../../store/groups/actions'
-import { GetRulesetList } from '../../../../store/groups/actions'
+import { GetRulesetList, ToggleMasterFiles } from '../../../../store/groups/actions'
 import { ToggleProgressBar } from '../../../../store/webUtilities/actions'
 import { NODE_TO_EDIT } from '../../../../store/node/node-action-types';
 
 const SuricataMasterFilesList = (props) => {
+
+    useEffect(() => {
+        {props.showMasterFiles ? props.toggleMasterFiles():null}
+    }, [])
 
     useEffect(() => {
         GetMasterMD5()
@@ -28,22 +32,34 @@ const SuricataMasterFilesList = (props) => {
     }
 
     return (
-        <table className="table table-hover table-layout-fixed my-3">
-            <thead>
-                <tr>
-                    <th>Master file path</th>
-                    <th>Master file MD5</th>
-                </tr>
-            </thead>
-            <tbody>
-                {GetMasterMD5()}
-            </tbody>
-        </table>
+        <div>
+            {
+                props.showMasterFiles
+                ?
+                <div>
+                    <h5 className="mt-3">Master files</h5>
+                    <table className="table table-hover table-layout-fixed my-3">
+                        <thead>
+                            <tr>
+                                <th>Master file path</th>
+                                <th>Master file MD5</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {GetMasterMD5()}
+                        </tbody>
+                    </table>
+                </div>
+                :
+                null    
+            }
+        </div>
     )
 }
 
 const mapStateToProps = (state) => {
     return {
+        showMasterFiles: state.groups.showMasterFiles,
         MD5files: state.groups.MD5files,
         groupToDetails: state.groups.groupToDetails,
         allGroupList: state.groups.allGroupList,
@@ -59,6 +75,7 @@ const mapDispatchToProps = (dispatch) => ({
     hidePathInput: () => dispatch(HidePathInput()),    
     changeSuricataConfigGroupPaths: (data) => dispatch(ChangeSuricataConfigGroupPaths(data)),    
     getRulesetList: (group) => dispatch(GetRulesetList(group)),    
+    toggleMasterFiles: (group) => dispatch(ToggleMasterFiles(group)),    
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);

@@ -326,6 +326,12 @@ export function EditGroupSelected(data) {
     }
 }
 
+export function ToggleNodeFiles() {
+    return {
+      type: ActionTypes.TOGGLE_SHOW_NODE_FILES
+    }
+}
+
 export function ShowPathInput() {
     return {
       type: ActionTypes.SHOW_PATH_INPUT
@@ -335,6 +341,12 @@ export function ShowPathInput() {
 export function HidePathInput() {
     return {
       type: ActionTypes.HIDE_PATH_INPUT
+    }
+}
+
+export function ToggleMasterFiles() {
+    return {
+      type: ActionTypes.DISPLAY_MASTER_FILES
     }
 }
 

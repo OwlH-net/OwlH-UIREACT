@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { FaPlus, FaSyncAlt, FaEdit, FaFolderOpen, FaFile } from "react-icons/fa";
 import { ChangeSuricataStatus, CheckMD5, ShowPathInput, HidePathInput, ChangeSuricataConfigGroupPaths } from '../../../../store/groups/actions'
-import { GetRulesetList, SyncPathGroup } from '../../../../store/groups/actions'
+import { GetRulesetList, SyncPathGroup, ToggleMasterFiles } from '../../../../store/groups/actions'
 import { ToggleProgressBar } from '../../../../store/webUtilities/actions'
 
 const SuricataConfig = (props) => {
@@ -50,15 +50,17 @@ const SuricataConfig = (props) => {
 
     return (
         <div>
+            <h5 className="mt-3">Configuration</h5>
             <table className="table table-hover table-layout-fixed my-3">
                 <tbody>
                     <tr>
                         <td rowSpan={3} width="20%"> 
                             <FaEdit size={21} className="iconBlue" onClick={() => {props.showPathInput()}}/> &nbsp;
                             <FaSyncAlt size={21} className="iconBlue" onClick={() => {syncMasterPathGroup()}}/> &nbsp;                             
+                            <FaFolderOpen size={21} className="iconBlue" onClick={() => {props.toggleMasterFiles()}}/> &nbsp;
                             <span className="badge bg-primary align-text-bottom text-white pointer">Reload</span>
                         </td>                            
-                        <td>Master path <FaFolderOpen size={21} className="iconBlue"/> </td>
+                        <td>Master path </td>
                         <td>
                         {
                             props.allGroupList[0].mastersuricata == "" ? <b>No suricata master path selected</b> : props.allGroupList[0].mastersuricata
@@ -140,6 +142,7 @@ const mapDispatchToProps = (dispatch) => ({
     changeSuricataConfigGroupPaths: (data) => dispatch(ChangeSuricataConfigGroupPaths(data)),    
     getRulesetList: (group) => dispatch(GetRulesetList(group)),    
     syncPathGroup: (sync) => dispatch(SyncPathGroup(sync)),    
+    toggleMasterFiles: () => dispatch(ToggleMasterFiles()),    
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'; 
 import { FaFolderOpen } from "react-icons/fa";
 import { ChangeSuricataStatus, CheckMD5, ShowPathInput, HidePathInput, ChangeSuricataConfigGroupPaths } from '../../../../store/groups/actions'
+import { ToggleNodeFiles } from '../../../../store/groups/actions'
 import { GetRulesetList } from '../../../../store/groups/actions'
 import { ToggleProgressBar } from '../../../../store/webUtilities/actions'
 
@@ -32,43 +33,90 @@ const SuricataNodes = (props) => {
         })
     }, [props.allGroupList])
 
+    const getNodeFiles = (nodeID) => {
+        return Object.entries(props.allGroupList || {}).map(([groupID , group]) =>{
+            return Object.entries(group.Nodes || {}).map(([nodesID , node]) =>{                
+                if(node.nuuid == nodeID){
+                    return Object.entries(props.MD5files || {}).map(([MD5nodesID , MD5node]) =>{
+                        if(node.nuuid == MD5nodesID){
+                            return Object.entries(MD5node || {}).map(([id , md5Values]) =>{
+                                return <table key={id} width="100%" className="table table-hover table-layout-fixed">
+                                    <tbody>
+                                        <tr key={md5Values.masterMD5}>
+                                            <td><b>File: </b>{md5Values.nodePath}</td>
+                                            <td><b>Master MD5: </b>{md5Values.masterMD5}</td>
+                                            <td><b>Node MD5: </b>{md5Values.nodeMD5}</td>
+                                            <td width="5%">
+                                                {
+                                                    md5Values.equals == "true"
+                                                    ?
+                                                    <span className="badge badge-pill bg-success align-text-bottom text-white">&nbsp;</span>
+                                                    :
+                                                    (
+                                                        md5Values.equals == "false"
+                                                        ?
+                                                        <span className="badge badge-pill bg-danger align-text-bottom text-white">&nbsp;</span>
+                                                        :
+                                                        <span className="badge badge-pill bg-dark align-text-bottom text-white">&nbsp;</span>
+                                                    )
+                                                }
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    </table>
+                                    
+                            })
+                        }
+                    })
+                }
+            })
+        })
+    }
+
     const MD5Content = () => {
+        var nodes = []
         const totalList = Object.entries(props.allGroupList || {}).map(([groupID , group]) =>{
             return Object.entries(group.Nodes || {}).map(([nodesID , node]) =>{
                 return Object.entries(props.MD5files || {}).map(([MD5nodesID , MD5node]) =>{
                     if(node.nuuid == MD5nodesID){
                         return Object.entries(MD5node || {}).map(([id , md5Values]) =>{
-                            console.log(id)
-                            console.log(md5Values)
-
-                            return <>
-                                <tr key={MD5nodesID}>
-                                    <td>{node.nname}</td>
-                                    <td>{node.nip}</td>
-                                    <td>
-                                        <FaFolderOpen size={21} className="iconBlue"/> &nbsp;
-                                        {    
-                                            md5Values.equals == "true"
-                                            ?
-                                            <span className="badge badge-pill bg-success align-text-bottom text-white">&nbsp;</span>
-                                            :
-                                            (
-                                                md5Values.equals == "false"
+                            if (!nodes.includes(node.nuuid)){
+                                nodes.push(node.nuuid)
+                                return <>
+                                    <tr key={node.nuuid}>
+                                        <td>{node.nname}</td>
+                                        <td>{node.nip}</td>
+                                        <td>
+                                            <FaFolderOpen size={21} className="iconBlue" onClick={() => {props.toggleNodeFiles()}}/> &nbsp;
+                                            {    
+                                                md5Values.equals == "true"
                                                 ?
-                                                <span className="badge badge-pill bg-danger align-text-bottom text-white">&nbsp;</span>
+                                                <span className="badge badge-pill bg-success align-text-bottom text-white">&nbsp;</span>
                                                 :
-                                                <span className="badge badge-pill bg-dark align-text-bottom text-white">&nbsp;</span>
-                                            )
-                                        }
-                                    </td>
-                                </tr>
-                                <tr key={MD5nodesID+'-files'}>
-                                    <td>File</td>
-                                    <td>Master MD5</td>
-                                    <td>Node MD5</td>
-                                    <td>STATUS</td>
-                                </tr>
-                            </>
+                                                (
+                                                    md5Values.equals == "false"
+                                                    ?
+                                                    <span className="badge badge-pill bg-danger align-text-bottom text-white">&nbsp;</span>
+                                                    :
+                                                    <span className="badge badge-pill bg-dark align-text-bottom text-white">&nbsp;</span>
+                                                )
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr key={node.nuuid}>
+                                        <td colSpan={3}>
+                                            {
+                                                props.showNodeFiles
+                                                ?
+                                                getNodeFiles(node.nuuid)
+                                                :
+                                                null
+                                            }
+
+                                        </td>
+                                    </tr>
+                                </>
+                            }
                         })  
                     }
                 })
@@ -78,18 +126,21 @@ const SuricataNodes = (props) => {
     }
 
     return (
-        <table className="table table-hover table-layout-fixed">
-            <thead>
-                <tr>
-                    <th>Node name</th>
-                    <th>Node IP</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {MD5Content()}
-            </tbody>
-        </table>
+        <div>
+            <h5 className="mt-3">Node files</h5>
+            <table className="table table-hover table-layout-fixed">
+                <thead>
+                    <tr>
+                        <th>Node name</th>
+                        <th>Node IP</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {MD5Content()}
+                </tbody>
+            </table>
+        </div>
     )
 }
 
@@ -100,6 +151,7 @@ const mapStateToProps = (state) => {
         allGroupList: state.groups.allGroupList,
         showSuricataConfigPath: state.groups.showSuricataConfigPath,
         rulesetList: state.groups.rulesetList,
+        showNodeFiles: state.groups.showNodeFiles,
     }
 }
 const mapDispatchToProps = (dispatch) => ({
@@ -111,6 +163,7 @@ const mapDispatchToProps = (dispatch) => ({
     hidePathInput: () => dispatch(HidePathInput()),    
     changeSuricataConfigGroupPaths: (data) => dispatch(ChangeSuricataConfigGroupPaths(data)),    
     getRulesetList: (group) => dispatch(GetRulesetList(group)),    
+    toggleNodeFiles: (group) => dispatch(ToggleNodeFiles(group)),    
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);

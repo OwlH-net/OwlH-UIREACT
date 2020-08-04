@@ -122,6 +122,7 @@ const SuricataRulesets = (props) => {
             <ModalWindow title='Delete group ruleset' subtitle='Do you want to delete the ruleset ?' 
                 variantColor='danger' btn='Delete' id='deleteRuleset' />
 
+            <h5 className="mt-3">Rulesets</h5>
             <table className="table table-hover table-layout-fixed">
                 <tbody>
                     <tr>

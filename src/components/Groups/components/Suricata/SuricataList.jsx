@@ -53,7 +53,7 @@ const SuricataList = (props) => {
 }
 
 const mapStateToProps = (state) => {
-    return {
+    return {        
         SuricataGroupList: state.groups.SuricataGroupList,
         groupToDetails: state.groups.groupToDetails,
     }
