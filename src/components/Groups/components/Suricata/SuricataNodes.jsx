@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'; 
 import { FaFolderOpen } from "react-icons/fa";
 import { ChangeSuricataStatus, CheckMD5, ShowPathInput, HidePathInput, ChangeSuricataConfigGroupPaths } from '../../../../store/groups/actions'
-import { ToggleNodeFiles } from '../../../../store/groups/actions'
-import { GetRulesetList } from '../../../../store/groups/actions'
+import { GetRulesetList, ToggleNodeFiles } from '../../../../store/groups/actions'
 import { ToggleProgressBar } from '../../../../store/webUtilities/actions'
 
 const SuricataNodes = (props) => {
@@ -19,6 +18,8 @@ const SuricataNodes = (props) => {
     useEffect(() => {           
         //get group rulesets
         props.getRulesetList(props.groupToDetails.guuid)
+        //hide node files list by default
+        props.toggleNodeFiles('')
     }, [])
 
     useEffect(() => {
@@ -35,14 +36,15 @@ const SuricataNodes = (props) => {
 
     const getNodeFiles = (nodeID) => {
         return Object.entries(props.allGroupList || {}).map(([groupID , group]) =>{
-            return Object.entries(group.Nodes || {}).map(([nodesID , node]) =>{                
+            return Object.entries(group.Nodes || {}).map(([nodesID , node]) =>{    
+            
                 if(node.nuuid == nodeID){
                     return Object.entries(props.MD5files || {}).map(([MD5nodesID , MD5node]) =>{
                         if(node.nuuid == MD5nodesID){
                             return Object.entries(MD5node || {}).map(([id , md5Values]) =>{
-                                return <table key={id} width="100%" className="table table-hover table-layout-fixed">
+                                return <table width="100%" key={id} className="table table-hover table-layout-fixed">
                                     <tbody>
-                                        <tr key={md5Values.masterMD5}>
+                                        <tr key={id}>
                                             <td><b>File: </b>{md5Values.nodePath}</td>
                                             <td><b>Master MD5: </b>{md5Values.masterMD5}</td>
                                             <td><b>Node MD5: </b>{md5Values.nodeMD5}</td>
@@ -63,8 +65,7 @@ const SuricataNodes = (props) => {
                                             </td>
                                         </tr>
                                     </tbody>
-                                    </table>
-                                    
+                                </table>                                    
                             })
                         }
                     })
@@ -81,13 +82,15 @@ const SuricataNodes = (props) => {
                     if(node.nuuid == MD5nodesID){
                         return Object.entries(MD5node || {}).map(([id , md5Values]) =>{
                             if (!nodes.includes(node.nuuid)){
+
                                 nodes.push(node.nuuid)
-                                return <>
+
+                                return <React.Fragment key={node.nuuid}>
                                     <tr key={node.nuuid}>
                                         <td>{node.nname}</td>
                                         <td>{node.nip}</td>
                                         <td>
-                                            <FaFolderOpen size={21} className="iconBlue" onClick={() => {props.toggleNodeFiles()}}/> &nbsp;
+                                            <FaFolderOpen size={21} className="iconBlue" onClick={() => {props.toggleNodeFiles(node.nuuid)}}/> &nbsp;
                                             {    
                                                 md5Values.equals == "true"
                                                 ?
@@ -103,19 +106,24 @@ const SuricataNodes = (props) => {
                                             }
                                         </td>
                                     </tr>
-                                    <tr key={node.nuuid}>
-                                        <td colSpan={3}>
-                                            {
-                                                props.showNodeFiles
-                                                ?
-                                                getNodeFiles(node.nuuid)
-                                                :
-                                                null
-                                            }
-
-                                        </td>
+                                    <tr key={id}>
+                                        {   
+                                            node.nuuid == props.nodeFileListSelected && props.showNodeFiles
+                                            ?
+                                            <td colSpan={3}>
+                                                {
+                                                    props.showNodeFiles
+                                                    ?
+                                                    getNodeFiles(node.nuuid)
+                                                    :
+                                                    null
+                                                }
+                                            </td>
+                                            :
+                                            null
+                                        }
                                     </tr>
-                                </>
+                                </React.Fragment>
                             }
                         })  
                     }
@@ -152,6 +160,7 @@ const mapStateToProps = (state) => {
         showSuricataConfigPath: state.groups.showSuricataConfigPath,
         rulesetList: state.groups.rulesetList,
         showNodeFiles: state.groups.showNodeFiles,
+        nodeFileListSelected: state.groups.nodeFileListSelected,
     }
 }
 const mapDispatchToProps = (dispatch) => ({
@@ -163,7 +172,7 @@ const mapDispatchToProps = (dispatch) => ({
     hidePathInput: () => dispatch(HidePathInput()),    
     changeSuricataConfigGroupPaths: (data) => dispatch(ChangeSuricataConfigGroupPaths(data)),    
     getRulesetList: (group) => dispatch(GetRulesetList(group)),    
-    toggleNodeFiles: (group) => dispatch(ToggleNodeFiles(group)),    
+    toggleNodeFiles: (node) => dispatch(ToggleNodeFiles(node)),    
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);

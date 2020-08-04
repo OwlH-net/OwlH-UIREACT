@@ -16,6 +16,7 @@ const initialState = {
   isEdit: false,
   showNodeFiles: false,
   showMasterFiles: false,
+  nodeFileListSelected: '',
 }
 
 function getAllGroups(state, data) {
@@ -127,10 +128,12 @@ function displayRulesetList(state, data) {
     }
 }
 
-function toggleNodeFiles(state) {
+function toggleNodeFiles(state,node) {
+  console.log(node);
   return {
       ...state,
       showNodeFiles: !state.showNodeFiles,
+      nodeFileListSelected: node
     }
 }
 
@@ -159,7 +162,7 @@ export default function webUtilities(state = initialState, action) {
       case ActionTypes.HIDE_PATH_INPUT:  
         return hideInputPathSuricata(state);
       case ActionTypes.TOGGLE_SHOW_NODE_FILES:  
-        return toggleNodeFiles(state);
+        return toggleNodeFiles(state, action.payload);
       case ActionTypes.GET_MD5_FILES:  
         return getMD5Files(state, action.payload);
       case ActionTypes.DISPLAY_RULESET_LIST:  

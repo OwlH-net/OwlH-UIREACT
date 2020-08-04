@@ -326,9 +326,10 @@ export function EditGroupSelected(data) {
     }
 }
 
-export function ToggleNodeFiles() {
+export function ToggleNodeFiles(node) {
     return {
-      type: ActionTypes.TOGGLE_SHOW_NODE_FILES
+      type: ActionTypes.TOGGLE_SHOW_NODE_FILES,
+      payload: node
     }
 }
 
