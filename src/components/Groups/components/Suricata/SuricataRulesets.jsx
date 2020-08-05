@@ -76,7 +76,7 @@ const SuricataRulesets = (props) => {
                 {
                     rset.checked == "true"
                     ?
-                    <span className="badge badge-pill bg-dark align-text-bottom text-white size18">{rset.name} | <FaTrash size={18} className="iconRed" onClick={() => {deleteRuleset(id,  rset.name)}}/> </span>
+                    <span >{rset.name} | <FaTrash size={18} className="iconRed" onClick={() => {deleteRuleset(id,  rset.name)}}/> </span>
                     :
                     null
                 }
@@ -123,7 +123,7 @@ const SuricataRulesets = (props) => {
                 variantColor='danger' btn='Delete' id='deleteRuleset' />
 
             <h5 className="mt-3">Rulesets</h5>
-            <table className="table table-hover table-layout-fixed">
+            <table className="table table-layout-fixed">
                 <tbody>
                     <tr>
                         <td width="20%">

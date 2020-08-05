@@ -351,6 +351,12 @@ export function ToggleMasterFiles() {
     }
 }
 
+export function ResetDisplaynodeFileList() {
+    return {
+      type: ActionTypes.RESET_DISPLAY_NODE_FILES
+    }
+}
+
 export function ShowGroupForm() {
     return {
       type: ActionTypes.DISPLAY_FORM_GROUP

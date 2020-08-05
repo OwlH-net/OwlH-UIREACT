@@ -10,7 +10,8 @@ const initialState = {
     isMasterActive: true,
     alertList: [],
     passwordChange: {},
-
+    fileToDisplay: '',
+    fileTypeToDisplay: '',
 }
 
 function toggleModalWindowStatus(state, data) {
@@ -90,6 +91,14 @@ function addAlertToAlertList(state, data) {
   }
 }
 
+function saveFileToDisplay(state, data) {  
+  return {
+    ...state, 
+    fileToDisplay: data.file,
+    fileTypeToDisplay: data.type
+  }
+}
+
 function getModalActionSelected(state, data) {
   return {
     ...state, 
@@ -128,6 +137,8 @@ export default function webUtilities(state = initialState, action) {
       return toggleModalWindowStatus(state, action.payload);
     case ActionTypes.MODAL_ACTION_SELECTED:  
       return getModalActionSelected(state, action.payload);
+    case ActionTypes.FILE_TO_DISPLAY:  
+      return saveFileToDisplay(state, action.payload);
     default:
       return state;
   }

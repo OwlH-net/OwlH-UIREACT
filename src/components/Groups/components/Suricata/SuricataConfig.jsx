@@ -51,7 +51,7 @@ const SuricataConfig = (props) => {
     return (
         <div>
             <h5 className="mt-3">Configuration</h5>
-            <table className="table table-hover table-layout-fixed my-3">
+            <table className="table table-layout-fixed my-3">
                 <tbody>
                     <tr>
                         <td rowSpan={3} width="20%"> 
@@ -84,7 +84,7 @@ const SuricataConfig = (props) => {
             {
                 props.showSuricataConfigPath 
                 ?                
-                <table className="table table-hover table-layout-fixed my-3">
+                <table className="table table-layout-fixed my-3">
                     <tbody>
                         <tr>
                             <td>                              

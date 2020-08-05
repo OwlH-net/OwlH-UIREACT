@@ -481,6 +481,26 @@ function ChangePaths(req) {
   })
 }
 
+function GetFileContent(req) {
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': req.headers.token,
+    'user': req.headers.user
+  }
+  return axios.put(`${url}/master/getFileContentByType`,req.body, 
+                  {
+                    httpsAgent: httsAgent,
+                    headers: newHeader
+                  }
+                )
+  .then(resp => {
+    return resp.data
+  })
+  .catch(resp => {
+    return resp.data
+  })
+}
+
 function addGroup(req) {
   let newHeader = {
     'Content-Type': 'application/json',
@@ -626,5 +646,6 @@ module.exports = {
   DeleteExpertGroupRuleset,
   AddRulesetsToGroup,
   SyncPathGroup,
-  SyncGroupRulesets
+  SyncGroupRulesets,
+  GetFileContent
 }

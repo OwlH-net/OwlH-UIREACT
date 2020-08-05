@@ -129,4 +129,34 @@ export function ToggleProgressBar(status) {
   }
 }
   
+export function SaveFileDataToDisplay(dataFile, dataType) {
+  return {
+    type: ActionTypes.FILE_TO_DISPLAY,
+    payload: {
+      file: dataFile, 
+      type: dataType, 
+    }
+  }
+}
+  
+export function GetFileContent(data) {
 
+  const token = GetToken()
+  const username = GetUserName()
+
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
+  }
+  let newConfig = {headers: newHeaders}
+
+  return (dispatch) => {    
+    //check default credentials
+    axios.put('/api/getFileContent', JSON.stringify(data), newConfig)
+    .then(resp => {
+      dispatch(ToggleProgressBar(false))
+      console.log(resp.data)
+    })
+  }
+}

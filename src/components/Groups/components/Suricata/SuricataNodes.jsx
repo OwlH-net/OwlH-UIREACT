@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'; 
 import { FaFolderOpen } from "react-icons/fa";
 import { ChangeSuricataStatus, CheckMD5, ShowPathInput, HidePathInput, ChangeSuricataConfigGroupPaths } from '../../../../store/groups/actions'
-import { GetRulesetList, ToggleNodeFiles } from '../../../../store/groups/actions'
+import { GetRulesetList, ToggleNodeFiles, ResetDisplaynodeFileList } from '../../../../store/groups/actions'
 import { ToggleProgressBar } from '../../../../store/webUtilities/actions'
 
 const SuricataNodes = (props) => {
@@ -18,8 +18,8 @@ const SuricataNodes = (props) => {
     useEffect(() => {           
         //get group rulesets
         props.getRulesetList(props.groupToDetails.guuid)
-        //hide node files list by default
-        props.toggleNodeFiles('')
+        //Reset nodeFileListSelected and showNodeFiles
+        props.resetDisplaynodeFileList()
     }, [])
 
     useEffect(() => {
@@ -109,16 +109,13 @@ const SuricataNodes = (props) => {
                                     <tr key={id}>
                                         {   
                                             node.nuuid == props.nodeFileListSelected && props.showNodeFiles
-                                            ?
+                                            ?                                            
                                             <td colSpan={3}>
                                                 {
-                                                    props.showNodeFiles
-                                                    ?
-                                                    getNodeFiles(node.nuuid)
-                                                    :
-                                                    null
+                                                    getNodeFiles(node.nuuid)                                                    
                                                 }
                                             </td>
+                                            
                                             :
                                             null
                                         }
@@ -173,6 +170,7 @@ const mapDispatchToProps = (dispatch) => ({
     changeSuricataConfigGroupPaths: (data) => dispatch(ChangeSuricataConfigGroupPaths(data)),    
     getRulesetList: (group) => dispatch(GetRulesetList(group)),    
     toggleNodeFiles: (node) => dispatch(ToggleNodeFiles(node)),    
+    resetDisplaynodeFileList: () => dispatch(ResetDisplaynodeFileList()),    
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);

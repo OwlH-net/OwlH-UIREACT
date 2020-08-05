@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { FaFile } from "react-icons/fa";
 import { ChangeSuricataStatus, ShowPathInput, HidePathInput, ChangeSuricataConfigGroupPaths } from '../../../../store/groups/actions'
 import { GetRulesetList, ToggleMasterFiles } from '../../../../store/groups/actions'
-import { ToggleProgressBar } from '../../../../store/webUtilities/actions'
-import { NODE_TO_EDIT } from '../../../../store/node/node-action-types';
+import { ToggleProgressBar, SaveFileDataToDisplay } from '../../../../store/webUtilities/actions'
+import { Route, Link, BrowserRouter, NavLink } from 'react-router-dom';
 
 const SuricataMasterFilesList = (props) => {
 
@@ -23,7 +23,7 @@ const SuricataMasterFilesList = (props) => {
                 if(!paths.includes(node.masterPath)){
                     paths.push(node.masterPath)
                     return <tr key={nodeID}>                    
-                        <td><FaFile size={21} className="iconBlue"/> {node.masterPath} </td>
+                        <td><NavLink to="FileContent" onClick={() => {props.saveFileDataToDisplay(props.allGroupList[0].mastersuricata + node.masterPath, 'group')}}> <FaFile title="display file content" size={21} className="iconBlue"/> </NavLink> {node.masterPath}  </td>
                         <td>{node.masterMD5}</td>
                     </tr>
                 }
@@ -76,6 +76,7 @@ const mapDispatchToProps = (dispatch) => ({
     changeSuricataConfigGroupPaths: (data) => dispatch(ChangeSuricataConfigGroupPaths(data)),    
     getRulesetList: (group) => dispatch(GetRulesetList(group)),    
     toggleMasterFiles: (group) => dispatch(ToggleMasterFiles(group)),    
+    saveFileDataToDisplay: (file, desc) => dispatch(SaveFileDataToDisplay(file, desc)),    
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);

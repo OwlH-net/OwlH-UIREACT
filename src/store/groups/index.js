@@ -129,11 +129,18 @@ function displayRulesetList(state, data) {
 }
 
 function toggleNodeFiles(state,node) {
-  console.log(node);
   return {
       ...state,
       showNodeFiles: !state.showNodeFiles,
       nodeFileListSelected: node
+    }
+}
+
+function resetDisplayNodeFiles(state) {
+  return {
+      ...state,
+      showNodeFiles: false,
+      nodeFileListSelected: ''
     }
 }
 
@@ -171,6 +178,8 @@ export default function webUtilities(state = initialState, action) {
         return getRulesetList(state, action.payload);
       case ActionTypes.DISPLAY_MASTER_FILES:  
         return displayMasterFiles(state);
+      case ActionTypes.RESET_DISPLAY_NODE_FILES:  
+        return resetDisplayNodeFiles(state);
       default:
         return state;
     }
