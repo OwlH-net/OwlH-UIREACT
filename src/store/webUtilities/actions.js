@@ -156,7 +156,14 @@ export function GetFileContent(data) {
     axios.put('/api/getFileContent', JSON.stringify(data), newConfig)
     .then(resp => {
       dispatch(ToggleProgressBar(false))
-      console.log(resp.data)
+      dispatch(accFileContentToDisplay(resp.data))
     })
+  }
+}
+  
+export function accFileContentToDisplay(data) {
+  return {
+    type: ActionTypes.FILE_CONTENT_TO_DISPLAY,
+    payload: data
   }
 }

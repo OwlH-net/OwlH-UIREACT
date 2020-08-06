@@ -146,6 +146,11 @@ router.put('/getFileContent', async (req, res, next) => {
   res.status(200).json(reg)
 })
 
+router.put('/syncAllSuricataGroup', async (req, res, next) => {
+  const reg = await OwlHService.SyncAllSuricataGroup(req)
+  res.status(200).json(reg)
+})
+
 router.get('/getGroupSelectedRulesets/:uuid', async (req, res, next) => {
   const ping = await OwlHService.GetGroupSelectedRulesets(req)
   res.status(200).json(ping)

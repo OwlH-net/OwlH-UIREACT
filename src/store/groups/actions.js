@@ -109,6 +109,7 @@ export function SyncPathGroup(data) {
       .then(resp => {
       
         dispatch(ToggleProgressBar(false))
+        dispatch(GetMD5(data, false))
 
         if(resp.data.ack == "false"){
           dispatch(AddAlertToAlertList({
@@ -166,6 +167,44 @@ export function AddGroup(data) {
     }
 }
 
+export function SyncAllSuricataGroup(groupID) {
+    const token = GetToken()
+    const username = GetUserName()
+  
+    let newHeaders = {
+      ...config.headers, 
+      'user': username,
+      'token': token
+    }
+    let newConfig = {headers: newHeaders}
+
+    return (dispatch) => {
+      axios.put('/api/syncAllSuricataGroup', JSON.stringify(groupID), newConfig)
+      .then(resp => {
+
+        if(resp.data.permissions == "none"){
+          dispatch(PermissionsAlert())
+        }else if(resp.data.ack == "false"){
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Synchronize error ",
+            subtitle: resp.data.error,
+            variant: "danger"
+          }))
+          dispatch(toggleAlert(true))
+        }else{
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Success! ",
+            subtitle: "Group Suricata has been synchronized successfully!",
+            variant: "success"
+          }))
+          dispatch(toggleAlert(true))
+        }
+      })
+    }
+}
+
 export function SyncGroupRuleset(data) {
     const token = GetToken()
     const username = GetUserName()
@@ -204,7 +243,7 @@ export function SyncGroupRuleset(data) {
     }
 }
 
-export function CheckMD5(data) {
+export function GetMD5(data, showBanner) {
     const token = GetToken()
     const username = GetUserName()
   
@@ -230,6 +269,47 @@ export function CheckMD5(data) {
           }))
           dispatch(toggleAlert(true))
         }else{
+          if(showBanner){
+            dispatch(AddAlertToAlertList({
+              id: new Date() / 1000+'-valid',
+              title: "Get file MD5 ",
+              subtitle: "Files reloaded successfully!",
+              variant: "success"
+            }))
+            dispatch(toggleAlert(true))
+          }
+          dispatch(accCheckMD5(resp.data))
+        }
+      })
+    }
+}
+
+export function CheckMD5(data) {
+    const token = GetToken()
+    const username = GetUserName()
+  
+    let newHeaders = {
+      ...config.headers, 
+      'user': username,
+      'token': token
+    }
+    let newConfig = {headers: newHeaders}
+
+    return (dispatch) => {
+      axios.put('/api/getMD5files', JSON.stringify(data), newConfig)
+      .then(resp => {
+
+        if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Error getting MD5! ",
+            subtitle: resp.data.error,
+            variant: "danger"
+          }))
+          dispatch(toggleAlert(true))
+        }else{         
           dispatch(accCheckMD5(resp.data))
         }
       })
@@ -278,6 +358,7 @@ export function ChangeSuricataConfigGroupPaths(data) {
         dispatch(toggleAlert(true))          
         dispatch(HidePathInput())
         dispatch(GetAllGroups())
+        dispatch(CheckMD5())
       }
     })
   }
@@ -351,7 +432,7 @@ export function ToggleMasterFiles() {
     }
 }
 
-export function ResetDisplaynodeFileList() {
+export function ResetDisplayNodeFileList() {
     return {
       type: ActionTypes.RESET_DISPLAY_NODE_FILES
     }

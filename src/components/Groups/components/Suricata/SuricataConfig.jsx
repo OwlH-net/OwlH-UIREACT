@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { FaPlus, FaSyncAlt, FaEdit, FaFolderOpen, FaFile } from "react-icons/fa";
-import { ChangeSuricataStatus, CheckMD5, ShowPathInput, HidePathInput, ChangeSuricataConfigGroupPaths } from '../../../../store/groups/actions'
+import { ChangeSuricataStatus, CheckMD5, GetMD5, ShowPathInput, HidePathInput, ChangeSuricataConfigGroupPaths } from '../../../../store/groups/actions'
 import { GetRulesetList, SyncPathGroup, ToggleMasterFiles } from '../../../../store/groups/actions'
 import { ToggleProgressBar } from '../../../../store/webUtilities/actions'
 
@@ -58,7 +58,7 @@ const SuricataConfig = (props) => {
                             <FaEdit size={21} className="iconBlue" onClick={() => {props.showPathInput()}}/> &nbsp;
                             <FaSyncAlt size={21} className="iconBlue" onClick={() => {syncMasterPathGroup()}}/> &nbsp;                             
                             <FaFolderOpen size={21} className="iconBlue" onClick={() => {props.toggleMasterFiles()}}/> &nbsp;
-                            <span className="badge bg-primary align-text-bottom text-white pointer">Reload</span>
+                            <span className="badge bg-primary align-text-bottom text-white pointer" onClick={() => {props.getMD5(suriConfigPath, true)}}>Reload</span>
                         </td>                            
                         <td>Master path </td>
                         <td>
@@ -67,10 +67,6 @@ const SuricataConfig = (props) => {
                         }
                         </td>
                     </tr>                   
-                    {/* <tr>
-                        <td><FaFile size={21} className="iconBlue"/> <b>Path: </b> </td>
-                        <td><b>MD5: </b>{masterMD5}</td>
-                    </tr> */}
                     <tr>
                         <td>Node path</td>
                         <td>
@@ -137,6 +133,7 @@ const mapDispatchToProps = (dispatch) => ({
     getGroupSuricataList: (groupID) => dispatch(GetGroupSuricataList(groupID)),
     changeSuricataStatus: () => dispatch(ChangeSuricataStatus()),    
     checkMD5: (data) => dispatch(CheckMD5(data)),    
+    getMD5: (data, show) => dispatch(GetMD5(data, show)),    
     showPathInput: () => dispatch(ShowPathInput()),    
     hidePathInput: () => dispatch(HidePathInput()),    
     changeSuricataConfigGroupPaths: (data) => dispatch(ChangeSuricataConfigGroupPaths(data)),    

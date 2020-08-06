@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux'; 
 import { FaFolderOpen } from "react-icons/fa";
 import { ChangeSuricataStatus, CheckMD5, ShowPathInput, HidePathInput, ChangeSuricataConfigGroupPaths } from '../../../../store/groups/actions'
-import { GetRulesetList, ToggleNodeFiles, ResetDisplaynodeFileList } from '../../../../store/groups/actions'
+import { GetRulesetList, ToggleNodeFiles, ResetDisplayNodeFileList } from '../../../../store/groups/actions'
 import { ToggleProgressBar } from '../../../../store/webUtilities/actions'
 
 const SuricataNodes = (props) => {
@@ -19,7 +19,7 @@ const SuricataNodes = (props) => {
         //get group rulesets
         props.getRulesetList(props.groupToDetails.guuid)
         //Reset nodeFileListSelected and showNodeFiles
-        props.resetDisplaynodeFileList()
+        props.resetDisplayNodeFileList()
     }, [])
 
     useEffect(() => {
@@ -34,7 +34,7 @@ const SuricataNodes = (props) => {
         })
     }, [props.allGroupList])
 
-    const getNodeFiles = (nodeID) => {
+    const getNodeFiles = (nodeID) => {        
         return Object.entries(props.allGroupList || {}).map(([groupID , group]) =>{
             return Object.entries(group.Nodes || {}).map(([nodesID , node]) =>{    
             
@@ -54,13 +54,7 @@ const SuricataNodes = (props) => {
                                                     ?
                                                     <span className="badge badge-pill bg-success align-text-bottom text-white">&nbsp;</span>
                                                     :
-                                                    (
-                                                        md5Values.equals == "false"
-                                                        ?
-                                                        <span className="badge badge-pill bg-danger align-text-bottom text-white">&nbsp;</span>
-                                                        :
-                                                        <span className="badge badge-pill bg-dark align-text-bottom text-white">&nbsp;</span>
-                                                    )
+                                                    <span className="badge badge-pill bg-danger align-text-bottom text-white">&nbsp;</span>                                                    
                                                 }
                                             </td>
                                         </tr>
@@ -75,60 +69,134 @@ const SuricataNodes = (props) => {
     }
 
     const MD5Content = () => {
-        var nodes = []
-        const totalList = Object.entries(props.allGroupList || {}).map(([groupID , group]) =>{
-            return Object.entries(group.Nodes || {}).map(([nodesID , node]) =>{
-                return Object.entries(props.MD5files || {}).map(([MD5nodesID , MD5node]) =>{
-                    if(node.nuuid == MD5nodesID){
-                        return Object.entries(MD5node || {}).map(([id , md5Values]) =>{
-                            if (!nodes.includes(node.nuuid)){
+        var nodesList = []
+        return Object.entries(props.allGroupList || {}).map(([groupID , group]) =>{
+            return Object.entries(group.Nodes || {}).map(([nodeArrayID , node]) =>{                
+                //create node list
+                if (!nodesList.includes(node.nuuid)){
+                    nodesList.push(node.nuuid)
 
-                                nodes.push(node.nuuid)
+                    return Object.entries(props.MD5files || {}).map(([MD5nodesID , MD5node]) =>{
+                        if(node.nuuid == MD5nodesID){
+                            var nodeFilesExists = false;
+                            var nodeFileEquals = true;
+                            Object.entries(MD5node || {}).map(([id , md5Values]) =>{
+                                if(md5Values.nodeMD5 != ""){
+                                    nodeFilesExists = true
+                                }
+                                if(md5Values.nodeMD5 != md5Values.masterMD5){
+                                    nodeFileEquals = false
+                                }
+                            })
 
-                                return <React.Fragment key={node.nuuid}>
-                                    <tr key={node.nuuid}>
-                                        <td>{node.nname}</td>
-                                        <td>{node.nip}</td>
-                                        <td>
-                                            <FaFolderOpen size={21} className="iconBlue" onClick={() => {props.toggleNodeFiles(node.nuuid)}}/> &nbsp;
-                                            {    
-                                                md5Values.equals == "true"
-                                                ?
-                                                <span className="badge badge-pill bg-success align-text-bottom text-white">&nbsp;</span>
-                                                :
-                                                (
-                                                    md5Values.equals == "false"
-                                                    ?
-                                                    <span className="badge badge-pill bg-danger align-text-bottom text-white">&nbsp;</span>
-                                                    :
-                                                    <span className="badge badge-pill bg-dark align-text-bottom text-white">&nbsp;</span>
-                                                )
-                                            }
-                                        </td>
-                                    </tr>
-                                    <tr key={id}>
-                                        {   
-                                            node.nuuid == props.nodeFileListSelected && props.showNodeFiles
-                                            ?                                            
-                                            <td colSpan={3}>
-                                                {
-                                                    getNodeFiles(node.nuuid)                                                    
-                                                }
-                                            </td>
-                                            
+                            return <React.Fragment key={node.nuuid}>
+                                <tr key={node.nuuid}>
+                                    <td>{node.nname}</td>
+                                    <td>{node.nip}</td>
+                                    <td>
+                                        <FaFolderOpen size={21} className="iconBlue" onClick={() => {props.toggleNodeFiles(node.nuuid)}}/> &nbsp;
+                                        {    
+                                            !nodeFilesExists
+                                            ?
+                                            <span className="badge badge-pill bg-secondary align-text-bottom text-white">&nbsp;</span>
                                             :
-                                            null
+                                            (
+                                                !nodeFileEquals
+                                                ?
+                                                <span className="badge badge-pill bg-danger align-text-bottom text-white">&nbsp;</span>
+                                                :
+                                                <span className="badge badge-pill bg-success align-text-bottom text-white">&nbsp;</span>
+                                            )
                                         }
-                                    </tr>
-                                </React.Fragment>
-                            }
-                        })  
-                    }
-                })
+                                    </td>
+                                </tr>
+                                <tr key={nodeArrayID}>
+                                    {   
+                                        node.nuuid == props.nodeFileListSelected && props.showNodeFiles
+                                        ?                                            
+                                        <td colSpan={3}>
+                                            {
+                                                getNodeFiles(node.nuuid)                                                    
+                                            }
+                                        </td>                                            
+                                        :
+                                        null
+                                    }
+                                </tr>
+                            </React.Fragment>
+                        }                        
+                    })
+                }                
             })
         })
-        return totalList
     }
+                    // return Object.entries(props.MD5files || {}).map(([MD5nodesID , MD5node]) =>{                                               
+
+                    //     if(node.nuuid == MD5nodesID){
+
+                    //         if(Object.keys(MD5node).length > 0){
+                    //             return Object.entries(MD5node || {}).map(([id , md5Values]) =>{
+                                    
+                    //                 return <React.Fragment key={node.nuuid}>
+                    //                     <tr key={node.nuuid}>
+                    //                         <td>{node.nname}</td>
+                    //                         <td>{node.nip}</td>
+                    //                         <td>
+                    //                             <FaFolderOpen size={21} className="iconBlue" onClick={() => {props.toggleNodeFiles(node.nuuid)}}/> &nbsp;
+                    //                             {    
+                    //                                 md5Values.equals == "true"
+                    //                                 ?
+                    //                                 <span className="badge badge-pill bg-success align-text-bottom text-white">&nbsp;</span>
+                    //                                 :
+                    //                                 (
+                    //                                     md5Values.equals == "false"
+                    //                                     ?
+                    //                                     <span className="badge badge-pill bg-danger align-text-bottom text-white">&nbsp;</span>
+                    //                                     :
+                    //                                     <span className="badge badge-pill bg-dark align-text-bottom text-white">&nbsp;</span>
+                    //                                 )
+                    //                             }
+                    //                         </td>
+                    //                     </tr>
+                    //                     <tr key={id}>
+                    //                         {   
+                    //                             node.nuuid == props.nodeFileListSelected && props.showNodeFiles
+                    //                             ?                                            
+                    //                             <td colSpan={3}>
+                    //                                 {
+                    //                                     getNodeFiles(node.nuuid)                                                    
+                    //                                 }
+                    //                             </td>                                            
+                    //                             :
+                    //                             null
+                    //                         }
+                    //                     </tr>
+                    //                 </React.Fragment>
+                                    
+                    //             })  
+                    //         }else{
+                    //             return <React.Fragment key={node.nuuid}>
+                    //                 <tr key={node.nuuid}>
+                    //                     <td>{node.nname}</td>
+                    //                     <td>{node.nip}</td>
+                    //                     <td>
+                    //                         <FaFolderOpen size={21} className="iconBlue" onClick={() => {props.toggleNodeFiles(node.nuuid)}}/> &nbsp;
+                    //                         <span className="badge badge-pill bg-secondary align-text-bottom text-white">&nbsp;</span>
+                    //                     </td>
+                    //                 </tr>
+                    //                 <tr key={MD5nodesID}>
+                    //                     {   
+                    //                         node.nuuid == props.nodeFileListSelected && props.showNodeFiles
+                    //                         ?
+                    //                         <td colSpan={3}><b>There are no files...</b></td>
+                    //                         :
+                    //                         null
+                    //                     }
+                    //                 </tr>
+                    //             </React.Fragment>
+                    //         }
+                    //     }
+                    // })                
 
     return (
         <div>
@@ -170,7 +238,7 @@ const mapDispatchToProps = (dispatch) => ({
     changeSuricataConfigGroupPaths: (data) => dispatch(ChangeSuricataConfigGroupPaths(data)),    
     getRulesetList: (group) => dispatch(GetRulesetList(group)),    
     toggleNodeFiles: (node) => dispatch(ToggleNodeFiles(node)),    
-    resetDisplaynodeFileList: () => dispatch(ResetDisplaynodeFileList()),    
+    resetDisplayNodeFileList: () => dispatch(ResetDisplayNodeFileList()),    
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);

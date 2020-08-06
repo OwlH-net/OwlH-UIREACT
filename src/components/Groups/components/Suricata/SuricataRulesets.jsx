@@ -127,7 +127,7 @@ const SuricataRulesets = (props) => {
                 <tbody>
                     <tr>
                         <td width="20%">
-                            <FaPlus size={21} className="iconBlue" onClick={() => {getGroupRuleset()}} />
+                            <FaPlus size={21} className="iconBlue" onClick={() => {getGroupRuleset()}} /> &nbsp;
                             <FaSyncAlt size={21} className="iconBlue" onClick={() => {SynchronizeGroupRuleset()}}/> 
                         </td>
                         <td colSpan={2}> 

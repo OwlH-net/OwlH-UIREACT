@@ -3,20 +3,11 @@ import { connect } from 'react-redux';
 import Menu from '../Menu/Menu'
 import Banner from '../Banner/Banner'
 import Footer from '../Footer'
-import { GetFileContent, ToggleProgressBar } from '../../../store/webUtilities/actions';
+import FileContent from './FileContent'
+import { ToggleProgressBar } from '../../../store/webUtilities/actions';
 import  { useHistory } from 'react-router-dom'
 
 const index = (props) => {
-
-    useEffect(() => {
-        props.toggleProgressBar(true)
-
-        props.getFileContent({
-            file: props.fileToDisplay,
-            type:props.fileTypeToDisplay
-        })
-    }, [])
-
     return (
         <div>
             {
@@ -37,12 +28,10 @@ const index = (props) => {
                 <a className="btn btn-secondary float-right text-decoration-none text-white right mx-1" onClick={() => {}}>Close</a>
             </div>
 
-<br />
-<br />
-<br />
-<br />
+            <br/>
+            <br/>
 
-            {/* <FileContent /> */}
+            <FileContent />
 
             <div className="text-right mt-3">
                 <a className="btn btn-primary float-right text-decoration-none text-white right" onClick={() => {}}>Save</a>

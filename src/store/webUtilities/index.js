@@ -10,6 +10,7 @@ const initialState = {
     isMasterActive: true,
     alertList: [],
     passwordChange: {},
+    fileContentObject: {},
     fileToDisplay: '',
     fileTypeToDisplay: '',
 }
@@ -113,6 +114,13 @@ function deleteAlertToAlertList(state, data) {
   }
 }
 
+function saveFileContentToDisplay(state, data) {
+  return {
+    ...state, 
+    fileContentObject: data
+  }
+}
+
 export default function webUtilities(state = initialState, action) {
   switch(action.type) {
     case ActionTypes.SHOW_SPINNER:  
@@ -139,6 +147,8 @@ export default function webUtilities(state = initialState, action) {
       return getModalActionSelected(state, action.payload);
     case ActionTypes.FILE_TO_DISPLAY:  
       return saveFileToDisplay(state, action.payload);
+    case ActionTypes.FILE_CONTENT_TO_DISPLAY:  
+      return saveFileContentToDisplay(state, action.payload);
     default:
       return state;
   }

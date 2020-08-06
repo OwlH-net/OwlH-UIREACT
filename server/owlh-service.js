@@ -421,6 +421,26 @@ function SyncAnalyzer(req) {
   })
 }
 
+function SyncAllSuricataGroup(req) {
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': req.headers.token,
+    'user': req.headers.user
+  }
+  return axios.put(`${url}/group/syncAllSuricataGroup`,req.body, 
+                  {
+                    httpsAgent: httsAgent,
+                    headers: newHeader
+                  }
+                )
+  .then(resp => {
+    return resp.data
+  })
+  .catch(resp => {
+    return resp.data
+  })
+}
+
 function ChangeSuricataStatus(req) {
   let newHeader = {
     'Content-Type': 'application/json',
@@ -647,5 +667,6 @@ module.exports = {
   AddRulesetsToGroup,
   SyncPathGroup,
   SyncGroupRulesets,
-  GetFileContent
+  GetFileContent,
+  SyncAllSuricataGroup
 }
