@@ -9,7 +9,7 @@ import { Route, Link, BrowserRouter, NavLink } from 'react-router-dom';
 const SuricataMasterFilesList = (props) => {
 
     useEffect(() => {
-        {props.showMasterFiles ? props.toggleMasterFiles():null}
+        {props.showMasterFiles ? props.toggleMasterFiles():null}        
     }, [])
 
     useEffect(() => {

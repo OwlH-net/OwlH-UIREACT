@@ -6,8 +6,15 @@ import Footer from '../Footer'
 import FileContent from './FileContent'
 import { ToggleProgressBar } from '../../../store/webUtilities/actions';
 import  { useHistory } from 'react-router-dom'
+import AlertDialog from '../AlertDialog'
 
 const index = (props) => {
+
+    //Call alert list for every map item
+    const alertItems = (props.alertList || []).map(alert => {
+        return <AlertDialog key={alert.id} id={alert.id} title={alert.title} subtitle={alert.subtitle} variant={alert.variant}/>
+    })
+
     return (
         <div>
             {
@@ -20,23 +27,13 @@ const index = (props) => {
             }
 
             <Menu />
+
+            {alertItems}
+
             <Banner title="Display Files" subtitle="file name here" />  
             {props.progressBar ? <ProgressBar animated now={100} /> : null}
-
-            <div className="text-right mb-3">
-                <a className="btn btn-primary float-right text-decoration-none text-white right" onClick={() => {}}>Save</a>
-                <a className="btn btn-secondary float-right text-decoration-none text-white right mx-1" onClick={() => {}}>Close</a>
-            </div>
-
-            <br/>
-            <br/>
-
+        
             <FileContent />
-
-            <div className="text-right mt-3">
-                <a className="btn btn-primary float-right text-decoration-none text-white right" onClick={() => {}}>Save</a>
-                <a className="btn btn-secondary float-right text-decoration-none text-white right mx-1" onClick={() => {}}>Close</a>
-            </div>
 
             <Footer />
         </div>
@@ -49,6 +46,7 @@ const mapStateToProps = (state) => {
         allGroupList: state.groups.allGroupList,
         fileToDisplay: state.webUtilities.fileToDisplay,
         fileTypeToDisplay: state.webUtilities.fileTypeToDisplay,
+        alertList: state.webUtilities.alertList,
     }
 }
 const mapDispatchToProps = (dispatch) => ({

@@ -140,7 +140,6 @@ export function SaveFileDataToDisplay(dataFile, dataType) {
 }
   
 export function GetFileContent(data) {
-
   const token = GetToken()
   const username = GetUserName()
 
@@ -160,10 +159,51 @@ export function GetFileContent(data) {
     })
   }
 }
-  
 export function accFileContentToDisplay(data) {
   return {
     type: ActionTypes.FILE_CONTENT_TO_DISPLAY,
     payload: data
   }
 }
+  
+export function SaveNewFileContent(data) {
+  const token = GetToken()
+  const username = GetUserName()
+
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
+  }
+  let newConfig = {headers: newHeaders}
+
+  return (dispatch) => {    
+    //check default credentials
+    axios.put('/api/saveNewFileContent', JSON.stringify(data), newConfig)
+    .then(resp => {
+      console.log(resp.data)
+      dispatch(ToggleProgressBar(false))
+
+      if(resp.data.ack == "true"){
+        dispatch(AddAlertToAlertList({
+          id: new Date() / 1000+'-valid',
+          title: "Success! ",
+          subtitle: "The file has been updated successfully.",
+          variant: "success"
+        }))
+        dispatch(toggleAlert(true))
+        dispatch(accFileContentToDisplay(resp.data))
+      }else{
+        dispatch(AddAlertToAlertList({
+          id: new Date() / 1000+'-valid',
+          title: "Error getting MD5! ",
+          subtitle: resp.data.error,
+          variant: "danger"
+        }))
+        dispatch(toggleAlert(true))
+      }
+
+    })
+  }
+}
+  

@@ -59,6 +59,30 @@ function getLogin(data) {
     })
 }
 
+function saveNewFileContent(req) {
+  let token = req.headers.token
+  let username = req.headers.user
+
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': token,
+    'user': username
+  }
+
+  return axios.put(`${url}/master/saveNewFileContent`,req.body,
+                    {
+                      httpsAgent: httsAgent,
+                      headers: newHeader
+                    }
+                  )
+    .then(resp => {
+      return resp.data
+    })
+    .catch(resp => {
+      return resp.data
+    })
+}
+
 function SyncGroupRulesets(req) {
   let token = req.headers.token
   let username = req.headers.user
@@ -668,5 +692,6 @@ module.exports = {
   SyncPathGroup,
   SyncGroupRulesets,
   GetFileContent,
-  SyncAllSuricataGroup
+  SyncAllSuricataGroup,
+  saveNewFileContent
 }

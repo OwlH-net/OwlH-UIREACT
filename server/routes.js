@@ -26,6 +26,11 @@ router.put('/pass', async (req, res, next) => {
   res.status(200).json(pass)
 })
 
+router.put('/saveNewFileContent', async (req, res, next) => {
+  const pass = await OwlHService.saveNewFileContent(req)
+  res.status(200).json(pass)
+})
+
 router.get('/nodes', async (req, res, next) => {
   const nodes = await OwlHService.getNodes(req)
   res.status(200).json(nodes)

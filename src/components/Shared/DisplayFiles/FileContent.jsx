@@ -1,36 +1,47 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { connect } from 'react-redux';
-import { GetFileContent, ToggleProgressBar } from '../../../store/webUtilities/actions';
-import JoditEditor from "jodit-react";
+import { GetFileContent, ToggleProgressBar, SaveNewFileContent } from '../../../store/webUtilities/actions';
+import { useHistory } from "react-router-dom";
 
 const FileContent = (props) => {
-
+    let history = useHistory();
+    const [newFileContent, SetNewFileContent] = useState('')
     useEffect(() => {
-        props.toggleProgressBar(true)
-
         props.getFileContent({
             file: props.fileToDisplay,
             type: props.fileTypeToDisplay
         })
     }, [])
-
-    const [content, setContent] = useState(props.fileContentObject.fileContent)
-    const editor = useRef(null)
-	
-	const config = {
-		readonly: false // all options from https://xdsoft.net/jodit/doc/
-	}
     
+    const getNewFileContent = () => {
+        props.toggleProgressBar(true)
+        props.saveNewFileContent({
+            path: props.fileToDisplay,
+            content: newFileContent ,
+        })
+    }
+
+    const handleChange = (e) => {
+        SetNewFileContent(event.target.value)
+    }    
 
     return (
-        <JoditEditor
-            ref={editor}
-            value={content}
-            config={config}
-            tabIndex={1} // tabIndex of textarea
-            onBlur={newContent => setContent(newContent)} // preferred to use only this option to update the content for performance reasons
-            onChange={() => {}}
-        />
+        <div>
+            <div className="text-right mb-3">
+                <a className="btn btn-primary float-right text-decoration-none text-white right" onClick={() => {getNewFileContent()}}>Save</a>
+                <a className="btn btn-secondary float-right text-decoration-none text-white right mx-1" onClick={() => {history.goBack()}}>Close</a>
+            </div>
+
+            <br/>
+            <br/>
+            <textarea className="form-control width100 height1000px" rows={25} defaultValue={props.fileContentObject.fileContent} onChange={handleChange}/>
+
+            <div className="text-right mt-3">
+                <a className="btn btn-primary float-right text-decoration-none text-white right" onClick={() => {getNewFileContent()}}>Save</a>
+                <a className="btn btn-secondary float-right text-decoration-none text-white right mx-1" onClick={() => {history.goBack()}}>Close</a>
+            </div>
+
+        </div>
     )
 }
 
@@ -47,6 +58,7 @@ const mapDispatchToProps = (dispatch) => ({
     toggleProgressBar: (status) => dispatch(ToggleProgressBar(status)),
     getFileContent: (data) => dispatch(GetFileContent(data)),
     toggleProgressBar: (status) => dispatch(ToggleProgressBar(status)),
+    saveNewFileContent: (data) => dispatch(SaveNewFileContent(data)),
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);
