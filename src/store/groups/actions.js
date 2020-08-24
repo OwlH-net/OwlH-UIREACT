@@ -407,6 +407,20 @@ export function EditGroupSelected(data) {
     }
 }
 
+export function MasterFileName(file) {
+    return {
+      type: ActionTypes.MASTER_FILE_NAME,
+      payload: file
+    }
+}
+
+export function MasterFilePath(path) {
+    return {
+      type: ActionTypes.MASTER_FILE_PATH,
+      payload: path
+    }
+}
+
 export function ToggleNodeFiles(node) {
     return {
       type: ActionTypes.TOGGLE_SHOW_NODE_FILES,

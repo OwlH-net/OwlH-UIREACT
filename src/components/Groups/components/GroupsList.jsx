@@ -9,6 +9,7 @@ import { Route, Link, BrowserRouter, NavLink } from 'react-router-dom';
 const GroupsList = (props) => {
     const [allGroups, setAllGroups] = useState([])
     const [groupSelected, setGroupSelected] = useState('')
+    const [groupNameSelected, setGroupNameSelected] = useState('')
 
     //getAllNodes
     useEffect(() => {
@@ -43,6 +44,12 @@ const GroupsList = (props) => {
         props.saveGroupSelected(val)        
     }
 
+    const accDeleteGroup = (name, id) => {
+        props.closeGroupForm(); 
+        deleteGroup(id)
+        setGroupNameSelected(name)
+    }
+
     const groupsData = () => {
         const totalList = Object.entries(allGroups || {}).map(([id , val]) =>
         {
@@ -58,7 +65,7 @@ const GroupsList = (props) => {
                         <div>
                             <FaEdit size={21} className="iconBlue" onClick={() => {showEditGroup(val)}}/> &nbsp;
                             <NavLink to="GroupDetails"  onClick={() => {props.groupToDetails(val)}}><FaEye size={21} className="iconBlue" onClick={() => {loadDetails(val)}}/></NavLink>&nbsp;
-                            <FaTrashAlt size={21} className="iconRed" onClick={() => {props.closeGroupForm(); deleteGroup(val.guuid)}}/>
+                            <FaTrashAlt size={21} className="iconRed" onClick={() => {accDeleteGroup(val.gname, val.guuid)}}/>
                         </div>
                     </td>
                 </tr>
@@ -70,7 +77,7 @@ const GroupsList = (props) => {
     return (
         <div>
             {/* modal window */}
-            <ModalWindow title='Delete group' subtitle='Are you sure you want to delete this group?'
+            <ModalWindow title='Delete group' subtitle={'Are you sure you want to delete group '+groupNameSelected+' ?'}
                 variantColor='danger' btn='Delete' id='deleteGroup' />            
 
             {Object.keys(props.allGroupList || []).length <= 0

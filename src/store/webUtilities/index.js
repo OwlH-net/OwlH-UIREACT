@@ -11,6 +11,8 @@ const initialState = {
     alertList: [],
     passwordChange: {},
     fileContentObject: {},
+    fileContentName: '',
+    fileContentContent: '',
     fileToDisplay: '',
     fileTypeToDisplay: '',
 }
@@ -117,7 +119,9 @@ function deleteAlertToAlertList(state, data) {
 function saveFileContentToDisplay(state, data) {
   return {
     ...state, 
-    fileContentObject: data
+    fileContentObject: data,
+    fileContentName: data.fileName,
+    fileContentContent: JSON.parse(data.fileContent)
   }
 }
 

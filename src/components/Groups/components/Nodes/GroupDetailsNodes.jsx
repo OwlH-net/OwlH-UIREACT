@@ -8,6 +8,7 @@ import ModalWindow from '../../../Shared/ModalWindow'
 
 const GroupDetailsNodes = (props) => {
     const [nodeSelected, setNodeSelected] = useState('')
+    const [nodeNameSelected, setNodeNameSelected] = useState('')
 
     useEffect(() => {
         nodesForThisGroup(props.groupToDetails.guuid)
@@ -43,7 +44,7 @@ const GroupDetailsNodes = (props) => {
                     return <tr key={nodesId}>
                         <td>{nodes.nname}</td>
                         <td>{nodes.nip}</td>
-                        <td> <FaTrashAlt size={21} className="iconRed" onClick={() => {deleteGroup(nodes.dbuuid)}}/></td>
+                        <td> <FaTrashAlt size={21} className="iconRed" onClick={() => {deleteGroup(nodes.nname, nodes.dbuuid)}}/></td>
                     </tr>
                 })
             }
@@ -51,14 +52,15 @@ const GroupDetailsNodes = (props) => {
         return totalList
     }
 
-    const deleteGroup = (dbuuid) => {
+    const deleteGroup = (nodeName, dbuuid) => {
         props.toggleModal(true)
         setNodeSelected(dbuuid)
+        setNodeNameSelected(nodeName)
     }
 
     return (
         <div>
-            <ModalWindow title='Delete node group' subtitle='Are you sure you want to delete this node from this group?'
+            <ModalWindow title='Delete node group' subtitle={'Are you sure you want to delete node '+nodeNameSelected+' from this group?'}
                 variantColor='danger' btn='Delete' id='deleteGroupNode' />
 
             <div>

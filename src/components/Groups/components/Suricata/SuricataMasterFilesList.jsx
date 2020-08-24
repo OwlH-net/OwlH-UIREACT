@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { FaFile } from "react-icons/fa";
 import { ChangeSuricataStatus, ShowPathInput, HidePathInput, ChangeSuricataConfigGroupPaths } from '../../../../store/groups/actions'
-import { GetRulesetList, ToggleMasterFiles } from '../../../../store/groups/actions'
+import { GetRulesetList, ToggleMasterFiles, MasterFileName, MasterFilePath } from '../../../../store/groups/actions'
 import { ToggleProgressBar, SaveFileDataToDisplay } from '../../../../store/webUtilities/actions'
 import { Route, Link, BrowserRouter, NavLink } from 'react-router-dom';
 
@@ -16,6 +16,12 @@ const SuricataMasterFilesList = (props) => {
         GetMasterMD5()
     }, [props.MD5files])
 
+    const FileContentButton = (path,file) => {
+        props.masterFilePath(path)
+        props.masterFileName(file)
+        props.saveFileDataToDisplay(path + file, 'group')
+    }    
+
     const GetMasterMD5 = () => {
         var paths = []
         return Object.entries(props.MD5files || {}).map(([uuid , val]) =>{
@@ -23,7 +29,7 @@ const SuricataMasterFilesList = (props) => {
                 if(!paths.includes(node.masterPath)){
                     paths.push(node.masterPath)
                     return <tr key={nodeID}>                    
-                        <td><NavLink to="FileContent" onClick={() => {props.saveFileDataToDisplay(props.allGroupList[0].mastersuricata + node.masterPath, 'group')}}> <FaFile title="display file content" size={21} className="iconBlue"/> </NavLink> {node.masterPath}  </td>
+                        <td><NavLink to="FileContent" onClick={() => {FileContentButton(props.allGroupList[0].mastersuricata, node.masterPath)}}> <FaFile title="display file content" size={21} className="iconBlue"/> </NavLink> {node.masterPath}  </td>
                         <td>{node.masterMD5}</td>
                     </tr>
                 }
@@ -77,6 +83,8 @@ const mapDispatchToProps = (dispatch) => ({
     getRulesetList: (group) => dispatch(GetRulesetList(group)),    
     toggleMasterFiles: (group) => dispatch(ToggleMasterFiles(group)),    
     saveFileDataToDisplay: (file, desc) => dispatch(SaveFileDataToDisplay(file, desc)),    
+    masterFilePath: (path) => dispatch(MasterFilePath(path)),
+    masterFileName: (file) => dispatch(MasterFileName(file))
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);

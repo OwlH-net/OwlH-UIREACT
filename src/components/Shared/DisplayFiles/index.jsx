@@ -30,7 +30,7 @@ const index = (props) => {
 
             {alertItems}
 
-            <Banner title="Display Files" subtitle="file name here" />  
+            <Banner title={"Display File - "+props.masterFile.replace('/','')} subtitle={"Path: "+props.masterPath + props.masterFile} />  
             {props.progressBar ? <ProgressBar animated now={100} /> : null}
         
             <FileContent />
@@ -42,6 +42,8 @@ const index = (props) => {
 
 const mapStateToProps = (state) => {
     return {
+        masterFile: state.groups.masterFile,
+        masterPath: state.groups.masterPath,
         groupToDetails: state.groups.groupToDetails,
         allGroupList: state.groups.allGroupList,
         fileToDisplay: state.webUtilities.fileToDisplay,

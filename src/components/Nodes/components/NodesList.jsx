@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 const NodesList = (props) => {
 
     const [nodeSelected, setNodeSelected] = useState('')
+    const [nodeNameSelected, setNodeNameSelected] = useState('')
     const [nodesFiltered, setNodesFiltered] = useState([])
     //reload nodes for take current node status
     useEffect(() => {
@@ -34,10 +35,6 @@ const NodesList = (props) => {
         {props.sortIP == 'asc' ? sortedObj = props.allNodesList.sort(compareIpAsc) : sortedObj = props.allNodesList.sort(compareIpDesc)}
         setNodesFiltered(sortedObj)
     }, [props.sortIP]);
-
-    // useEffect(() => {
-    //     nodeStatusReload()
-    // }, []);
 
     const nodeStatusReload = () => {
         props.getNodes()
@@ -94,9 +91,10 @@ const NodesList = (props) => {
     }
 
     //Set current node uuid
-    const deleteCurrentNode = (id) => {
+    const deleteCurrentNode = (name,id) => {
         setNodeSelected(id)
         props.toggleModal(true)
+        setNodeNameSelected(name)
     }
     
     //Set current node uuid
@@ -145,7 +143,7 @@ const NodesList = (props) => {
                             <FaBoxOpen size={21} className="iconBlue"/> Manage node <br/>
                             <hr style={{ color: "dodgerblue", backgroundColor: "dodgerblue", height: 1}}/>
                             <FaEdit size={21} className="iconBlue" onClick={() => {modifyCurrentNode(val.uuid, val)}}/> Modify node<br/>
-                            <FaTrashAlt size={21} className="iconRed" onClick={() => {deleteCurrentNode(val.uuid)}}/> Delete node <br/>
+                            <FaTrashAlt size={21} className="iconRed" onClick={() => {deleteCurrentNode(val.name, val.uuid)}}/> Delete node <br/>
                         </span>
                     </td>
                 </tr>
@@ -157,7 +155,7 @@ const NodesList = (props) => {
     return (        
         <div>
             {/* modal window */}
-            <ModalWindow title='Delete node' subtitle='Are you sure you want to delete this node?' 
+            <ModalWindow title='Delete node' subtitle={'Are you sure you want to delete node '+nodeNameSelected+' ?'}
                 variantColor='danger' btn='Delete' id='deleteNode' />
 
                 {Object.keys(props.allNodesList || []).length <= 0 
@@ -187,7 +185,7 @@ const mapStateToProps = (state) => {
         sortName: state.node.sortName,
         sortIP: state.node.sortIP,
         filterByStatus: state.node.filterByStatus,
-        allNodesList: state.node.allNodesList,
+        allNodesList: state.node.allNodesList,        
         // modal: state.webUtilities.modal,
         modalActionSelected: state.webUtilities.modalActionSelected,
     }
@@ -198,7 +196,7 @@ const mapDispatchToProps = (dispatch) => ({
     toggleModal: (status) => dispatch(ToggleModalWindow(status)),
     modalButtonClicked: (option) => dispatch(ModalButtonClicked(option)),
     getNodes: () => dispatch(getAllNodes()),
-    nodeToEdit: (status) => dispatch(NodeToEdit(status))
+    nodeToEdit: (status) => dispatch(NodeToEdit(status)),
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);

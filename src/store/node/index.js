@@ -130,6 +130,7 @@ function SetSearchBar(state, data) {
   }
 }
 
+
 export default function webUtilities(state = initialState, action) {
     switch(action.type) {
       case ActionTypes.GET_ALL_NODES:  

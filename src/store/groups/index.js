@@ -17,6 +17,8 @@ const initialState = {
   showNodeFiles: false,
   showMasterFiles: false,
   nodeFileListSelected: '',
+  masterFile: '',
+  masterPath: '',
 }
 
 function getAllGroups(state, data) {
@@ -144,6 +146,20 @@ function resetDisplayNodeFiles(state) {
     }
 }
 
+function saveMasterFile(state, data) {
+  return {
+      ...state,
+      masterFile: data
+    }
+}
+
+function saveMasterPath(state, data) {
+  return {
+      ...state,
+      masterPath: data
+    }
+}
+
 export default function webUtilities(state = initialState, action) {
     switch(action.type) {
       case ActionTypes.GET_ALL_GROUPS:  
@@ -180,6 +196,10 @@ export default function webUtilities(state = initialState, action) {
         return displayMasterFiles(state);
       case ActionTypes.RESET_DISPLAY_NODE_FILES:  
         return resetDisplayNodeFiles(state);
+      case ActionTypes.MASTER_FILE_NAME:  
+        return saveMasterFile(state, action.payload);
+      case ActionTypes.MASTER_FILE_PATH:  
+        return saveMasterPath(state, action.payload);
       default:
         return state;
     }

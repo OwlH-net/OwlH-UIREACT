@@ -119,7 +119,7 @@ const SuricataRulesets = (props) => {
 
     return (
         <div>
-            <ModalWindow title='Delete group ruleset' subtitle='Do you want to delete the ruleset ?' 
+            <ModalWindow title='Delete group ruleset' subtitle={'Are you sure you want to delete ruleset '+rulesetSelected.rsetName+' ?'}
                 variantColor='danger' btn='Delete' id='deleteRuleset' />
 
             <h5 className="mt-3">Rulesets</h5>
