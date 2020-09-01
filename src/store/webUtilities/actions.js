@@ -1,5 +1,5 @@
 import * as ActionTypes from './utils-action-types';
-import {GetUserName, GetToken} from '../../components/Shared/CheckToken'
+import {GetUserName, GetToken, RemoveToken} from '../../components/Shared/CheckToken'
 import {getAllNodes} from '../node/actions'
 import axios from 'axios'
 
@@ -27,6 +27,7 @@ export function defaultCredentials() {
     //check default credentials
     axios.get('/api/about', config)
     .then(resp => {
+      if(resp.data.token == "none"){RemoveToken()}
       dispatch(getDefaultCredentials(resp.data))
     })
   }
@@ -54,6 +55,7 @@ export function changePassword(data) {
     //check default credentials
     axios.put('/api/pass', JSON.stringify(data), newConfig)
     .then(resp => {
+      if(resp.data.token == "none"){RemoveToken()}
       dispatch(setChangePassword(resp.data))
     })
   }
@@ -155,6 +157,7 @@ export function GetFileContent(data) {
     axios.put('/api/getFileContent', JSON.stringify(data), newConfig)
     .then(resp => {
       dispatch(ToggleProgressBar(false))
+      if(resp.data.token == "none"){RemoveToken()}
       dispatch(accFileContentToDisplay(resp.data))
     })
   }
@@ -181,9 +184,9 @@ export function SaveNewFileContent(data) {
     //check default credentials
     axios.put('/api/saveNewFileContent', JSON.stringify(data), newConfig)
     .then(resp => {
-      console.log(resp.data)
+      
       dispatch(ToggleProgressBar(false))
-
+      if(resp.data.token == "none"){RemoveToken()}
       if(resp.data.ack == "true"){
         dispatch(AddAlertToAlertList({
           id: new Date() / 1000+'-valid',

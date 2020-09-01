@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { GetFileContent, ToggleProgressBar, SaveNewFileContent } from '../../../store/webUtilities/actions';
 import { useHistory } from "react-router-dom";
 import ReactJson from 'react-json-view'
-import { json } from 'body-parser';
 
 const FileContent = (props) => {
     let history = useHistory();
@@ -11,9 +10,12 @@ const FileContent = (props) => {
     const [jsonObject, SetJSONObject] = useState('')
     
     useEffect(() => {
-        SetJSONObject(props.fileContentObject.fileContent)
-        console.log(props.fileContentObject.fileContent)
-    }, [props.fileContentObject.fileContentContent])
+        var content = validateJSON(props.fileContentObject.fileContent)
+        if (content){
+            var data = JSON.parse(props.fileContentObject.fileContent);
+            SetJSONObject(data)
+        }
+    }, [props.fileContentObject.fileContent])
 
     useEffect(() => {
         SetJSONObject(props.fileContentObject)
@@ -23,6 +25,15 @@ const FileContent = (props) => {
         })
     }, [])
     
+    function validateJSON(body) {
+        try {
+            var data = JSON.parse(body);
+            return true;
+        } catch(e) {
+            return false;
+        }
+      }
+
     const setNewFileContent = () => {
         props.toggleProgressBar(true)
         props.saveNewFileContent({
@@ -44,9 +55,13 @@ const FileContent = (props) => {
 
             <br/>
             <br/>
-            {/* <textarea className="form-control width100 height1000px" rows={25} defaultValue={props.fileContentObject.fileContent} onChange={handleChange}/> */}
-            {/* <ReactJson src={jsonObject} /> */}
-            {/* {jsonObject} */}
+
+            {jsonObject != '' 
+            ?
+            <ReactJson name="false" src={jsonObject} />
+            :
+            <textarea className="form-control width100 height1000px" rows={25} defaultValue={props.fileContentObject.fileContent} onChange={handleChange}/>
+            }
 
             <div className="text-right mt-3">
                 <a className="btn btn-primary float-right text-decoration-none text-white right" onClick={() => {setNewFileContent()}}>Save</a>

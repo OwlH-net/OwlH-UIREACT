@@ -1,5 +1,5 @@
 import * as ActionTypes from './group-action-types';
-import {GetUserName, GetToken} from '../../components/Shared/CheckToken'
+import {GetUserName, GetToken, RemoveToken} from '../../components/Shared/CheckToken'
 import { ToggleProgressBar, AddAlertToAlertList, toggleAlert, PermissionsAlert } from '../webUtilities/actions'
 import axios from 'axios'
 
@@ -24,7 +24,7 @@ export function GetGroupSuricataList(groupID) {
     axios.get('/api/getGroupSuricataList/'+groupID, newConfig)
     .then(resp => {
       dispatch(ToggleProgressBar(false))   
-      
+      if(resp.data.token == "none"){RemoveToken()}
       if(resp.data.permissions == "none"){
         dispatch(PermissionsAlert())
       }else if(resp.data.permissions == "none"){
@@ -66,7 +66,7 @@ export function GetAllGroups() {
       .then(resp => {        
 
         dispatch(ToggleProgressBar(false))
-
+        if(resp.data.token == "none"){RemoveToken()}
         if(resp.data == null){
           dispatch(accGetAllGroups({}))
         }            
@@ -110,7 +110,7 @@ export function SyncPathGroup(data) {
       
         dispatch(ToggleProgressBar(false))
         dispatch(GetMD5(data, false))
-
+        if(resp.data.token == "none"){RemoveToken()}
         if(resp.data.ack == "false"){
           dispatch(AddAlertToAlertList({
             id: new Date() / 1000+'-valid',
@@ -149,6 +149,7 @@ export function AddGroup(data) {
       .then(resp => {
       
         dispatch(ToggleProgressBar(false))
+        if(resp.data.token == "none"){RemoveToken()}
         if(resp.data.permissions == "none"){
         dispatch(PermissionsAlert())
       }else if(resp.data.ack == "false"){
@@ -181,7 +182,7 @@ export function SyncAllSuricataGroup(groupID) {
     return (dispatch) => {
       axios.put('/api/syncAllSuricataGroup', JSON.stringify(groupID), newConfig)
       .then(resp => {
-
+        if(resp.data.token == "none"){RemoveToken()}
         if(resp.data.permissions == "none"){
           dispatch(PermissionsAlert())
         }else if(resp.data.ack == "false"){
@@ -219,7 +220,7 @@ export function SyncGroupRuleset(data) {
     return (dispatch) => {
       axios.put('/api/syncGroupRulesets', JSON.stringify(data), newConfig)
       .then(resp => {
-
+        if(resp.data.token == "none"){RemoveToken()}
         if(resp.data.permissions == "none"){
           dispatch(PermissionsAlert())
         }else if(resp.data.ack == "false"){
@@ -257,7 +258,7 @@ export function GetMD5(data, showBanner) {
     return (dispatch) => {
       axios.put('/api/getMD5files', JSON.stringify(data), newConfig)
       .then(resp => {
-
+        if(resp.data.token == "none"){RemoveToken()}
         if(resp.data.permissions == "none"){
         dispatch(PermissionsAlert())
       }else if(resp.data.ack == "false"){
@@ -298,7 +299,7 @@ export function CheckMD5(data) {
     return (dispatch) => {
       axios.put('/api/getMD5files', JSON.stringify(data), newConfig)
       .then(resp => {
-
+        if(resp.data.token == "none"){RemoveToken()}
         if(resp.data.permissions == "none"){
         dispatch(PermissionsAlert())
       }else if(resp.data.ack == "false"){
@@ -336,8 +337,8 @@ export function ChangeSuricataConfigGroupPaths(data) {
     return (dispatch) => {
       axios.put('/api/changePaths', JSON.stringify(data), newConfig)
       .then(resp => {
-
         dispatch(ToggleProgressBar(false))
+        if(resp.data.token == "none"){RemoveToken()}
         if(resp.data.permissions == "none"){
         dispatch(PermissionsAlert())
       }else if(resp.data.ack == "false"){
@@ -380,7 +381,7 @@ export function EditGroupSelected(data) {
       .then(resp => {
 
         dispatch(ToggleProgressBar(false))
-
+        if(resp.data.token == "none"){RemoveToken()}
         if(resp.data.permissions == "none"){
         dispatch(PermissionsAlert())
       }else if(resp.data.ack == "false"){
@@ -499,7 +500,7 @@ export function DeleteGroup(nodeUUID) {
     axios.delete('/api/deleteGroup/'+nodeUUID, newConfig)
     .then(resp => {
       dispatch(ToggleProgressBar(false))
-
+      if(resp.data.token == "none"){RemoveToken()}
       if(resp.data.permissions == "none"){
         dispatch(PermissionsAlert())
       }else if(resp.data.ack == "false"){
@@ -533,7 +534,7 @@ export function ShowNodesGroupForm(guuid) {
     .then(resp => {
       
       dispatch(ToggleProgressBar(false))
-      
+      if(resp.data.token == "none"){RemoveToken()}
       if(resp.data.permissions == "none"){
         dispatch(PermissionsAlert())
       }else if(resp.data.ack == "false"){
@@ -586,7 +587,7 @@ export function GetRulesetList(guuid) {
     axios.get('/api/getGroupSelectedRulesets/'+guuid, newConfig)
     .then(resp => {
       dispatch(ToggleProgressBar(false))
-
+      if(resp.data.token == "none"){RemoveToken()}
       if(resp.data.permissions == "none"){
         dispatch(PermissionsAlert())
       }else if(resp.data.ack == "false"){
@@ -627,7 +628,7 @@ export function AddNodesToGroup(data) {
     .then(resp => {
       
       dispatch(ToggleProgressBar(false))
-
+      if(resp.data.token == "none"){RemoveToken()}
       if(resp.data.permissions == "none"){
         dispatch(PermissionsAlert())
       }else if(resp.data.ack == "false"){
@@ -663,7 +664,7 @@ export function AnalyzerStatus(data) {
     .then(resp => {
 
       dispatch(ToggleProgressBar(false))
-
+      if(resp.data.token == "none"){RemoveToken()}
       if(resp.data.permissions == "none"){
         dispatch(PermissionsAlert())
       }else if(resp.data.ack == "false"){
@@ -698,7 +699,7 @@ export function ChangeSuricataStatus(data) {
     .then(resp => {
 
       dispatch(ToggleProgressBar(false))
-
+      if(resp.data.token == "none"){RemoveToken()}
       if(resp.data.permissions == "none"){
         dispatch(PermissionsAlert())
       }else if(resp.data.ack == "false"){
@@ -733,7 +734,7 @@ export function SyncAnalyzer(data) {
     .then(resp => {
 
       dispatch(ToggleProgressBar(false))
-      
+      if(resp.data.token == "none"){RemoveToken()}
       if(resp.data.permissions == "none"){
         dispatch(PermissionsAlert())
       }else if(resp.data.ack == "false"){
@@ -767,7 +768,7 @@ export function DeleteGroupNode(nodeUUID) {
     .then(resp => {
 
       dispatch(ToggleProgressBar(false))
-      
+      if(resp.data.token == "none"){RemoveToken()}
       if(resp.data.permissions == "none"){
         dispatch(PermissionsAlert())
       }else if(resp.data.ack == "false"){
@@ -801,7 +802,7 @@ export function DeleteRulesetSelected(values) {
     .then(resp => {
 
       dispatch(ToggleProgressBar(false))
-      
+      if(resp.data.token == "none"){RemoveToken()}
       if(resp.data.permissions == "none"){
         dispatch(PermissionsAlert())
       }else if(resp.data.ack == "false"){
@@ -836,7 +837,7 @@ export function AddRulesetsToGroup(data) {
     .then(resp => {
 
       dispatch(ToggleProgressBar(false))
-      
+      if(resp.data.token == "none"){RemoveToken()}
       if(resp.data.permissions == "none"){
         dispatch(PermissionsAlert())
       }else if(resp.data.ack == "false"){

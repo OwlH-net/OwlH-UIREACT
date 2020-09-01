@@ -1,5 +1,5 @@
 import * as ActionTypes from './node-action-types';
-import {GetUserName, GetToken} from '../../components/Shared/CheckToken'
+import {GetUserName, GetToken, RemoveToken} from '../../components/Shared/CheckToken'
 import {ToggleProgressBar, AddAlertToAlertList, toggleAlert, PermissionsAlert} from '../webUtilities/actions'
 import axios from 'axios'
 
@@ -23,9 +23,9 @@ export function getAllNodes() {
     return (dispatch) => {
       axios.get('/api/nodes', newConfig)
       .then(resp => {
-
         dispatch(ToggleProgressBar(false))
 
+        if(resp.data.token == "none"){RemoveToken()}
         if(resp.data.permissions == "none"){
           dispatch(PermissionsAlert())
         }else if(resp.data.ack == "false"){
@@ -89,9 +89,9 @@ export function DeleteNode(nodeUUID) {
   return (dispatch) => {
     axios.delete('/api/deleteNode/'+nodeUUID, newConfig)
     .then(resp => {
-      console.log(resp.data);
       dispatch(ToggleProgressBar(false))
 
+      if(resp.data.token == "none"){RemoveToken()}
       if(resp.data.permissions == "none"){
         dispatch(PermissionsAlert())
       }else if(resp.data.ack == "false"){
@@ -126,6 +126,8 @@ export function RegisterNode(nodeUUID) {
       .then(resp => {        
         
         dispatch(ToggleProgressBar(false))
+        
+        if(resp.data.token == "none"){RemoveToken()}
         if(resp.data.permissions == "none"){
           dispatch(PermissionsAlert())
         }else if(resp.data.ack == "false"){
@@ -160,6 +162,7 @@ export function Enroll(data) {
       .then(resp => {        
         dispatch(ToggleProgressBar(false))
 
+        if(resp.data.token == "none"){RemoveToken()}
         if(resp.data.permissions == "none"){
           dispatch(PermissionsAlert())
         }else if(resp.data.ack == "false"){
@@ -233,6 +236,7 @@ export function EditNode(node) {
     .then(resp => {
 
       dispatch(ToggleProgressBar(false))
+      if(resp.data.token == "none"){RemoveToken()}
       if(resp.data.permissions == "none"){
         dispatch(PermissionsAlert())
       }else if(resp.data.ack == "false"){
