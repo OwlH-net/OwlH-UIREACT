@@ -121,7 +121,7 @@ function saveFileContentToDisplay(state, data) {
     ...state, 
     fileContentObject: data,
     fileContentName: data.fileName,
-    fileContentContent: JSON.parse(data.fileContent)
+    fileContentContent: data.fileContent
   }
 }
 
