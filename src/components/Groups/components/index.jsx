@@ -11,8 +11,7 @@ import {ProgressBar} from 'react-bootstrap'
 import AlertDialog from '../../Shared/AlertDialog'
 
 const index = (props) => {
-
-    // getAllNodes
+    
     useEffect(() => {
         props.toggleProgressBar(true);
         props.getAllGroups();  

@@ -1,6 +1,5 @@
 import * as ActionTypes from './utils-action-types';
 import {GetUserName, GetToken, RemoveToken} from '../../components/Shared/CheckToken'
-import {getAllNodes} from '../node/actions'
 import axios from 'axios'
 
 const config = {

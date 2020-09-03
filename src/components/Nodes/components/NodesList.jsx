@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { FaBoxOpen, FaEdit, FaTrashAlt } from "react-icons/fa";
 import NodeStatus from './NodeStatus'
 import ModalWindow from '../../Shared/ModalWindow'
-import { SetLoading, getAllNodes, DeleteNode, NodeToEdit } from '../../../store/node/actions'
+import { SetLoading, GetAllNodes, DeleteNode, NodeToEdit } from '../../../store/node/actions'
 import { ToggleModalWindow, ModalButtonClicked } from '../../../store/webUtilities/actions'
 import { connect } from 'react-redux';
 
@@ -138,6 +138,9 @@ const NodesList = (props) => {
                     <td key={val.uuid+'-status'}>
                         <NodeStatus key={val.uuid+'-node'} registrationStatus={val.token} status={val.status} nodeUUID={val.uuid}/>        
                     </td>
+                    <td key={val.uuid+'-tag'}>
+                        <p>sdfgsdfg</p>
+                    </td>
                     <td key={val.uuid+'-actions'}>
                         <span>
                             <FaBoxOpen size={21} className="iconBlue"/> Manage node <br/>
@@ -167,7 +170,8 @@ const NodesList = (props) => {
                             <tr>
                                 <th>Node name</th>
                                 <th>Node status</th>
-                                <th width="25%">Actions</th>
+                                <th>Node Tag</th>
+                                <th width="20%">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -195,7 +199,7 @@ const mapDispatchToProps = (dispatch) => ({
     deleteNode: (node) => dispatch(DeleteNode(node)),
     toggleModal: (status) => dispatch(ToggleModalWindow(status)),
     modalButtonClicked: (option) => dispatch(ModalButtonClicked(option)),
-    getNodes: () => dispatch(getAllNodes()),
+    getNodes: () => dispatch(GetAllNodes()),
     nodeToEdit: (status) => dispatch(NodeToEdit(status)),
 })
 

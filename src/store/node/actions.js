@@ -9,7 +9,7 @@ const config = {
   }
 }
 
-export function getAllNodes() {
+export function GetAllNodes() {
     const token = GetToken()
     const username = GetUserName()
   
@@ -46,6 +46,47 @@ export function getAllNodes() {
 function accGetAllNodes(data) {
     return {
       type: ActionTypes.GET_ALL_NODES,
+      payload: data
+    }
+}
+
+export function GetAllTags() {
+    const token = GetToken()
+    const username = GetUserName()
+  
+    let newHeaders = {
+      ...config.headers, 
+      'user': username,
+      'token': token
+    }
+    let newConfig = {headers: newHeaders}
+
+    return (dispatch) => {
+      axios.get('/api/tags', newConfig)
+      .then(resp => {
+        dispatch(ToggleProgressBar(false))
+
+        if(resp.data.token == "none"){RemoveToken()}
+        if(resp.data.permissions == "none"){
+          dispatch(PermissionsAlert())
+        }else if(resp.data.ack == "false"){
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Error getting node tags! ",
+            subtitle: resp.data.error,
+            variant: "danger"
+          }))
+          dispatch(toggleAlert(true))
+        }else{
+          dispatch(accGetAllTags(resp.data))
+        }
+
+      })
+    }
+  }
+function accGetAllTags(data) {
+    return {
+      type: ActionTypes.GET_ALL_TAGS,
       payload: data
     }
 }
@@ -103,7 +144,7 @@ export function DeleteNode(nodeUUID) {
         }))
         dispatch(toggleAlert(true))
       }else{
-        dispatch(getAllNodes())
+        dispatch(GetAllNodes())
       }
     })
   }
@@ -139,7 +180,7 @@ export function RegisterNode(nodeUUID) {
           }))
           dispatch(toggleAlert(true))
         }else{
-          dispatch(getAllNodes())
+          dispatch(GetAllNodes())
         }
     })
   }
@@ -174,7 +215,7 @@ export function Enroll(data) {
           }))
           dispatch(toggleAlert(true))
         }else{
-          dispatch(getAllNodes())
+          dispatch(GetAllNodes())
         }
     })
   }
@@ -257,7 +298,7 @@ export function EditNode(node) {
         dispatch(toggleAlert(true))
 
         dispatch(ToggleAddNodeForm())
-        dispatch(getAllNodes())
+        dispatch(GetAllNodes())
       }
       
     })

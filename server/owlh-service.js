@@ -23,7 +23,6 @@ function readConfiguration() {
 }
 
 readConfiguration()
-console.log(url)
 
 function saveConfiguration(data) {
   configuration = JSON.stringify(data);
@@ -156,6 +155,30 @@ function getNodes(req) {
   }
 
   return axios.get(`${url}/node/getAllNodesReact`,
+                    {
+                      httpsAgent: httsAgent,
+                      headers: newHeader
+                    }
+                  )
+    .then(resp => {
+      return resp.data
+    })
+    .catch(resp => {
+      return resp.data
+    })
+}
+
+function getTags(req) {
+  let token = req.headers.token
+  let username = req.headers.user
+
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': token,
+    'user': username
+  }
+
+  return axios.get(`${url}/node/getAllTags`,
                     {
                       httpsAgent: httsAgent,
                       headers: newHeader
@@ -693,5 +716,6 @@ module.exports = {
   SyncGroupRulesets,
   GetFileContent,
   SyncAllSuricataGroup,
-  saveNewFileContent
+  saveNewFileContent,
+  getTags,
 }

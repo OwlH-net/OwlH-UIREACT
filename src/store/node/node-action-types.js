@@ -1,4 +1,5 @@
 export const GET_ALL_NODES = 'GET_ALL_NODES'
+export const GET_ALL_TAGS = 'GET_ALL_TAGS'
 export const PING_NODE = 'PING_NODE'
 export const RESET_LOADING_NODE = 'RESET_LOADING_NODE'
 export const SET_LOADING_NODE = 'SET_LOADING_NODE'

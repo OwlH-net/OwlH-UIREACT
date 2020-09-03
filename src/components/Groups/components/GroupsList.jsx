@@ -11,7 +11,6 @@ const GroupsList = (props) => {
     const [groupSelected, setGroupSelected] = useState('')
     const [groupNameSelected, setGroupNameSelected] = useState('')
 
-    //getAllNodes
     useEffect(() => {
         props.toggleProgressBar(false);
         setAllGroups(props.allGroupList)

@@ -5,6 +5,7 @@ import { ToggleProgressBar } from '../../../store/webUtilities/actions'
 import { EditNode, ToggleAddNodeForm } from '../../../store/node/actions'
 
 const AddNodeForm = (props) =>  {
+    const [tagsList, setTagList] = useState([])
     const [groupsSelected, setGroupsSelected] = useState([])
     const [formData, setFormData] = useState({
         name: "",
@@ -13,6 +14,25 @@ const AddNodeForm = (props) =>  {
         nodeuser: "",
         nodepass: ""
     });
+
+    //create tags array
+    useEffect(() => {
+        Object.entries(props.allTagsList || []).map(([id , tag]) => {
+            var exists = false;
+            (tagsList || []).map(currentTag => {
+                console.log(currentTag);
+                console.log(tag.tagName);
+                console.log("------------------");
+
+                if(currentTag == tag.tagName){
+                    exists = true
+                }
+            })
+            if(!exists){
+                setTagList(tag.tagName);
+            }
+        })
+    },[])
 
     //load current node data if button 'edit node' is pressed
     useEffect(() => {
@@ -34,13 +54,6 @@ const AddNodeForm = (props) =>  {
             })
         }
     },[props.isEditNode])
-
-    const groupItems = (props.allGroupList || []).map(group => {
-        return <ul className="checkbox-grid" key={group["guuid"]}>
-            <input type="checkbox" value={group["guuid"]} name={group["gname"]} onChange={handleCheck}/>
-            <label htmlFor={group["gname"]}>&nbsp;{group["gname"]}</label>
-        </ul>
-    })
 
     const getData = () => {             
         const enrollData = {
@@ -74,6 +87,28 @@ const AddNodeForm = (props) =>  {
             [event.target.name]: event.target.value
         })
     }
+
+    const groupItems = (props.allGroupList || []).map(group => {
+        return <ul className="checkbox-grid" key={group["guuid"]}>
+            <input type="checkbox" value={group["guuid"]} name={group["gname"]} onChange={handleCheck}/>
+            <label htmlFor={group["gname"]}>&nbsp;{group["gname"]}</label>
+        </ul>
+    })  
+
+    // const nodeTagsLabels = Object.entries(props.allTagsList || []).map(([id , tag]) => {
+        
+    //     setTagList()
+    //     // return <span key={id} className="badge bg-success bg-rounded align-text-bottom text-white float-right pointer">{tag}</span>
+    // })
+
+    // const allTags = (tagsList || []).map(val => {
+    //     // return <span key={id} className="badge bg-success bg-rounded align-text-bottom text-white float-right pointer">{currentTag}</span>
+    // })
+
+    const allTags = Object.entries(tagsList || []).map(currentTag => {
+        console.log(currentTag);
+        // return <p>{val}</p>
+    })
 
     return (
         <div>
@@ -133,6 +168,27 @@ const AddNodeForm = (props) =>  {
                         </div>
                     </div>
 
+
+                    <div>
+                        <br/>
+                        <h4>Add Tags</h4>   
+                        <div className="input-group mt-3 container">
+                            <input className="form-control" type="text" placeholder="Add tag to node..." aria-label="Add tags..."/>
+                            <a className="btn btn-primary float-right text-decoration-none text-white">Add</a>
+                        </div>   
+                        <div>   
+                            {allTags}                 
+                        </div>   
+                    </div>
+
+                    {/* <div>
+                        <br/>
+                        <div className="form-group col-md-6">
+                            <input type="text" className="form-control" name="nodepass" placeholder="Add tags to node..." />
+                            <button type="button" className="m-3 p-2 w-25 btn btn-primary"><h5>Add tag</h5></button>
+                        </div>
+                    </div> */}
+
                     {
                         props.nodeToEdit.id == undefined || props.nodeToEdit.id == null || props.nodeToEdit.id == ""
                         ?
@@ -163,6 +219,7 @@ const mapStateToProps = (state) => {
         allGroupList: state.groups.allGroupList,
         nodeToEdit: state.node.nodeToEdit,
         isEditNode: state.node.isEditNode,
+        allTagsList: state.node.allTagsList,
     }
 }
 

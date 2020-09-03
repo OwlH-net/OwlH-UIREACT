@@ -3,14 +3,6 @@ const OwlHService = require('./owlh-service')
 
 const router = express.Router()
 
-
-// router.get('/login', async (req, res, next) => {
-//   console.log('GET')
-//   console.log(req.body)
-//   const login = await OwlHService.getLogin(req.body)
-//   console.log(login)
-//   res.status(200).json(login)
-// })
 router.put('/login', async (req, res, next) => {
   const login = await OwlHService.getLogin(req.body)
   res.status(200).json(login)
@@ -36,10 +28,10 @@ router.get('/nodes', async (req, res, next) => {
   res.status(200).json(nodes)
 })
 
-// router.get('/pingNode/:uuid', async (req, res, next) => {
-//   const ping = await OwlHService.pingNode(req)
-//   res.status(200).json(ping)
-// })
+router.get('/tags', async (req, res, next) => {
+  const tags = await OwlHService.getTags(req)
+  res.status(200).json(tags)
+})
 
 router.delete('/deleteExpertGroupRuleset', async (req, res, next) => {
   const del = await OwlHService.DeleteExpertGroupRuleset(req)

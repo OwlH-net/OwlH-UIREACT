@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Menu from '../../Shared/Components/Menu/Menu'
 import Banner from '../../Shared/Components/Banner/Banner'
 import Footer from '../../Shared/Footer'
-import { ToggleAddNodeForm, getAllNodes, ShowNodes, SortTableIP, SortTableName, SetSearchBar } from '../../../store/node/actions'
+import { ToggleAddNodeForm, GetAllNodes, GetAllTags, ShowNodes, SortTableIP, SortTableName, SetSearchBar } from '../../../store/node/actions'
 import { ToggleProgressBar } from '../../../store/webUtilities/actions'
 import { GetAllGroups } from '../../../store/groups/actions'
 import NodesList from './NodesList'
@@ -19,6 +19,7 @@ const index = (props) => {
         props.toggleProgressBar(true);
         props.getNodes()
         props.getAllGroups();
+        props.getAllTags();
     }, [])
     
     const searchHandleChange = (e) => {
@@ -86,7 +87,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({    
     sortTableIP: () => dispatch(SortTableIP()),
     sortTableName: () => dispatch(SortTableName()),
-    getNodes: () => dispatch(getAllNodes()),
+    getNodes: () => dispatch(GetAllNodes()),
+    getAllTags: () => dispatch(GetAllTags()),
     toggleAddNodeForm: () => dispatch(ToggleAddNodeForm()),
     toggleProgressBar: (status) => dispatch(ToggleProgressBar(status)),
     getAllGroups: () => dispatch(GetAllGroups()),

@@ -3,6 +3,7 @@ import * as ActionTypes from './node-action-types';
 
 const initialState = {
   allNodesList: [],
+  allTagsList: {},
   sortIP: 'asc',
   search: '',
   sortName: 'asc',
@@ -23,6 +24,13 @@ function getAllNodes(state, data) {
   return {
     ...state,
     allNodesList: data
+  }
+}
+
+function getAllTags(state, data) {
+  return {
+    ...state,
+    allTagsList: data
   }
 }
 
@@ -135,6 +143,8 @@ export default function webUtilities(state = initialState, action) {
     switch(action.type) {
       case ActionTypes.GET_ALL_NODES:  
         return getAllNodes(state, action.payload);
+      case ActionTypes.GET_ALL_TAGS:  
+        return getAllTags(state, action.payload);
       case ActionTypes.PING_NODE:  
         return pingNode(state, action.payload);
       case ActionTypes.RESET_LOADING_NODE:  
