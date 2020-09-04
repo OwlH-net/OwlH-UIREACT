@@ -23,6 +23,9 @@ export function GetAllNodes() {
     return (dispatch) => {
       axios.get('/api/nodes', newConfig)
       .then(resp => {
+
+        console.log(resp);
+
         dispatch(ToggleProgressBar(false))
 
         if(resp.data.token == "none"){RemoveToken()}

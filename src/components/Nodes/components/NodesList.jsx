@@ -125,6 +125,13 @@ const NodesList = (props) => {
             nodesAfterFilterAndSearch = nodesAfterFilter
         }
 
+        const tagsList = (tags) => { 
+            var tagsArray =  tags.split(",");
+            return (tagsArray || []).map(tag => {
+                return <li key={tag}>{tag}</li>
+            })
+        }
+
         const totalList = Object.entries(nodesAfterFilterAndSearch || {}).map(([id , val]) =>
         {
             return (
@@ -139,7 +146,7 @@ const NodesList = (props) => {
                         <NodeStatus key={val.uuid+'-node'} registrationStatus={val.token} status={val.status} nodeUUID={val.uuid}/>        
                     </td>
                     <td key={val.uuid+'-tag'}>
-                        <p>sdfgsdfg</p>
+                        {val.tags != '' ? <ul>{tagsList(val.tags)}</ul> : <b>No tags...</b>}
                     </td>
                     <td key={val.uuid+'-actions'}>
                         <span>

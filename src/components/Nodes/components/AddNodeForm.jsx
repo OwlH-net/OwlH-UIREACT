@@ -3,8 +3,11 @@ import { connect } from 'react-redux';
 import { Enroll } from '../../../store/node/actions'
 import { ToggleProgressBar } from '../../../store/webUtilities/actions'
 import { EditNode, ToggleAddNodeForm } from '../../../store/node/actions'
+import { FaTrash } from "react-icons/fa";
 
 const AddNodeForm = (props) =>  {
+    const [labelList, setLabelList] = useState([])
+    const [newLabel, setNewLabel] = useState('')
     const [tagsList, setTagList] = useState([])
     const [groupsSelected, setGroupsSelected] = useState([])
     const [formData, setFormData] = useState({
@@ -17,21 +20,19 @@ const AddNodeForm = (props) =>  {
 
     //create tags array
     useEffect(() => {
+        var newArray = tagsList
         Object.entries(props.allTagsList || []).map(([id , tag]) => {
-            var exists = false;
+            var exists = false;             
             (tagsList || []).map(currentTag => {
-                console.log(currentTag);
-                console.log(tag.tagName);
-                console.log("------------------");
-
                 if(currentTag == tag.tagName){
                     exists = true
                 }
             })
             if(!exists){
-                setTagList(tag.tagName);
+                newArray.push(tag.tagName)
             }
         })
+        setTagList(newArray);
     },[])
 
     //load current node data if button 'edit node' is pressed
@@ -58,6 +59,7 @@ const AddNodeForm = (props) =>  {
     const getData = () => {             
         const enrollData = {
             Node:formData,
+            Tags:labelList.toString(),
             Group:groupsSelected,
             Suricata:{}
         }   
@@ -88,6 +90,31 @@ const AddNodeForm = (props) =>  {
         })
     }
 
+    const handleChangeAddLabel = (e) => {
+        setNewLabel(event.target.value)
+    }
+    
+    const removeLabel = (item) => {
+        const master = labelList.filter(master => master != item);
+        setLabelList(master)
+    }
+
+    const addNewLabelToList = () => {
+        //check if tag already exists
+        var tagAlreadyExists = false
+        const allLabels = Object.entries(labelList || []).map(([id , val]) => {
+            if(val == newLabel || newLabel == ''){
+                tagAlreadyExists = true
+            }
+        })
+        if(!tagAlreadyExists){
+            //add new label to array
+            setLabelList([...labelList, newLabel])
+        }
+        //restart input text label
+        setNewLabel('')
+    }
+
     const groupItems = (props.allGroupList || []).map(group => {
         return <ul className="checkbox-grid" key={group["guuid"]}>
             <input type="checkbox" value={group["guuid"]} name={group["gname"]} onChange={handleCheck}/>
@@ -95,19 +122,24 @@ const AddNodeForm = (props) =>  {
         </ul>
     })  
 
-    // const nodeTagsLabels = Object.entries(props.allTagsList || []).map(([id , tag]) => {
+    const showTagsEditNode = () =>{        
+        var tagsArray = props.nodeToEdit.tags.split(",");
+        setLabelList(tagsArray)
         
-    //     setTagList()
-    //     // return <span key={id} className="badge bg-success bg-rounded align-text-bottom text-white float-right pointer">{tag}</span>
-    // })
+        // const values = Object.entries(labelList || []).map(([id , tag]) => {
+        //     console.log(tag);
+        //     return <span key={id} className="badge bg-rounded bg-secondary align-text-bottom text-white float-left mr-1">{tag} &nbsp; 
+        //             <FaTrash onClick={() => {removeLabel(tag)}} size={15} className="iconRed pointer"/>
+        //         </span>
+        // })
+        // return values
+        
+    }
 
-    // const allTags = (tagsList || []).map(val => {
-    //     // return <span key={id} className="badge bg-success bg-rounded align-text-bottom text-white float-right pointer">{currentTag}</span>
-    // })
-
-    const allTags = Object.entries(tagsList || []).map(currentTag => {
-        console.log(currentTag);
-        // return <p>{val}</p>
+    const allLabelsDisplayed = Object.entries(labelList || []).map(([id , val]) => {
+        return <span key={id} className="badge bg-rounded bg-secondary align-text-bottom text-white float-left mr-1">{val} &nbsp; 
+                    <FaTrash onClick={() => {removeLabel(val)}} size={15} className="iconRed pointer"/>
+                </span>
     })
 
     return (
@@ -173,21 +205,21 @@ const AddNodeForm = (props) =>  {
                         <br/>
                         <h4>Add Tags</h4>   
                         <div className="input-group mt-3 container">
-                            <input className="form-control" type="text" placeholder="Add tag to node..." aria-label="Add tags..."/>
-                            <a className="btn btn-primary float-right text-decoration-none text-white">Add</a>
+                            <input className="form-control" type="text" placeholder="Add tag to node..." aria-label="Add tags..." value={newLabel} onChange={handleChangeAddLabel}/>
+                            <a className="btn btn-primary float-right text-decoration-none text-white" onClick={ ()=> {addNewLabelToList()}}>Add</a>
                         </div>   
-                        <div>   
-                            {allTags}                 
+                        <br />
+                        <div className="input-group mt-3 container">   
+                            {
+                                props.nodeToEdit.id == undefined || props.nodeToEdit.id == null || props.nodeToEdit.id == "" 
+                                ?
+                                null
+                                :
+                                <>{showTagsEditNode()}</>
+                            }
+                            {allLabelsDisplayed}
                         </div>   
                     </div>
-
-                    {/* <div>
-                        <br/>
-                        <div className="form-group col-md-6">
-                            <input type="text" className="form-control" name="nodepass" placeholder="Add tags to node..." />
-                            <button type="button" className="m-3 p-2 w-25 btn btn-primary"><h5>Add tag</h5></button>
-                        </div>
-                    </div> */}
 
                     {
                         props.nodeToEdit.id == undefined || props.nodeToEdit.id == null || props.nodeToEdit.id == ""
@@ -212,7 +244,8 @@ const AddNodeForm = (props) =>  {
                 </form>
             </div>
         </div>
-    )}
+    )
+}
 
 const mapStateToProps = (state) => {
     return {
@@ -220,6 +253,7 @@ const mapStateToProps = (state) => {
         nodeToEdit: state.node.nodeToEdit,
         isEditNode: state.node.isEditNode,
         allTagsList: state.node.allTagsList,
+        allNodesList: state.node.allNodesList,        
     }
 }
 
@@ -231,4 +265,4 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);
-export default withProps(AddNodeForm)
+export default withProps(AddNodeForm)   
