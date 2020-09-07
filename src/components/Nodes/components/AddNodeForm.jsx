@@ -124,7 +124,9 @@ const AddNodeForm = (props) =>  {
 
     const showTagsEditNode = () =>{        
         var tagsArray = props.nodeToEdit.tags.split(",");
-        setLabelList(tagsArray)
+        console.log(tagsArray);
+        
+        setLabelList([...labelList, tagsArray])
         
         // const values = Object.entries(labelList || []).map(([id , tag]) => {
         //     console.log(tag);
@@ -141,6 +143,9 @@ const AddNodeForm = (props) =>  {
                     <FaTrash onClick={() => {removeLabel(val)}} size={15} className="iconRed pointer"/>
                 </span>
     })
+    // const editAllLabelsDisplayed = {
+    //     props.nodeToEdit.tags.split(",")
+    // }
 
     return (
         <div>
@@ -210,13 +215,13 @@ const AddNodeForm = (props) =>  {
                         </div>   
                         <br />
                         <div className="input-group mt-3 container">   
-                            {
+                            {/* {
                                 props.nodeToEdit.id == undefined || props.nodeToEdit.id == null || props.nodeToEdit.id == "" 
                                 ?
-                                null
+                                {allLabelsDisplayed}
                                 :
-                                <>{showTagsEditNode()}</>
-                            }
+                                null
+                            } */}
                             {allLabelsDisplayed}
                         </div>   
                     </div>
