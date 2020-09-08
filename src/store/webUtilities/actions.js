@@ -72,6 +72,13 @@ export function showSpinner() {
     payload: true
   }
 }
+
+export function SelectedTag(data) {
+  return {
+    type: ActionTypes.SAVE_SUGGESTION,
+    payload: data
+  }
+}
   
 export function hideSpinner() {
   return {

@@ -374,7 +374,7 @@ function editNode(req) {
     'token': req.headers.token,
     'user': req.headers.user
   }
-  return axios.put(`${url}/node`,req.body, 
+  return axios.put(`${url}/node/updateNodeReact`,req.body, 
                   {
                     httpsAgent: httsAgent,
                     headers: newHeader

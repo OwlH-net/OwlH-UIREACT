@@ -4,6 +4,7 @@ import { Enroll } from '../../../store/node/actions'
 import { ToggleProgressBar } from '../../../store/webUtilities/actions'
 import { EditNode, ToggleAddNodeForm } from '../../../store/node/actions'
 import { FaTrash } from "react-icons/fa";
+import Autocomplete from "../../Shared/Autocomplete"
 
 const AddNodeForm = (props) =>  {
     const [labelList, setLabelList] = useState([])
@@ -18,21 +19,35 @@ const AddNodeForm = (props) =>  {
         nodepass: ""
     });
 
+    //Check for suggestion selected
+    useEffect(() => {  
+        Object.entries(props.saveSuggestion || []).map(([id , tag]) => {
+            setLabelList([...labelList, tag])
+        })        
+    },[props.saveSuggestion])
+
     //create tags array
-    useEffect(() => {
-        var newArray = tagsList
-        Object.entries(props.allTagsList || []).map(([id , tag]) => {
-            var exists = false;             
-            (tagsList || []).map(currentTag => {
-                if(currentTag == tag.tagName){
-                    exists = true
+    useEffect(() => {     
+        if(props.nodeToEdit.id == undefined || props.nodeToEdit.id == null || props.nodeToEdit.id == ""){
+            var newArray = tagsList
+            Object.entries(props.allTagsList || []).map(([id , tag]) => {
+                var exists = false;             
+                (tagsList || []).map(currentTag => {
+                    if(currentTag == tag.tagName){
+                        exists = true
+                    }
+                })
+                if(!exists){
+                    newArray.push(tag.tagName)
                 }
             })
-            if(!exists){
-                newArray.push(tag.tagName)
+            setTagList(newArray);
+        }else{
+            if(props.nodeToEdit.tags != ""){
+                var editNodeTags = props.nodeToEdit.tags.split(",")
+                setLabelList(editNodeTags);
             }
-        })
-        setTagList(newArray);
+        }
     },[])
 
     //load current node data if button 'edit node' is pressed
@@ -60,7 +75,7 @@ const AddNodeForm = (props) =>  {
         const enrollData = {
             Node:formData,
             Tags:labelList.toString(),
-            Group:groupsSelected,
+            Group:{},
             Suricata:{}
         }   
 
@@ -70,9 +85,16 @@ const AddNodeForm = (props) =>  {
     }
 
     const editNodeData = () => {
+        formData.uuid = props.nodeToEdit.id            
+        const editData = {
+            Node:formData,
+            Tags:labelList.toString(),
+            Group:{},
+            Suricata:{}
+        }   
+
         props.toggleProgressBar(true)
-        formData.id = props.nodeToEdit.id    
-        props.editNode(formData)
+        props.editNode(editData)
     }
 
     function handleCheck(e){
@@ -122,30 +144,11 @@ const AddNodeForm = (props) =>  {
         </ul>
     })  
 
-    const showTagsEditNode = () =>{        
-        var tagsArray = props.nodeToEdit.tags.split(",");
-        console.log(tagsArray);
-        
-        setLabelList([...labelList, tagsArray])
-        
-        // const values = Object.entries(labelList || []).map(([id , tag]) => {
-        //     console.log(tag);
-        //     return <span key={id} className="badge bg-rounded bg-secondary align-text-bottom text-white float-left mr-1">{tag} &nbsp; 
-        //             <FaTrash onClick={() => {removeLabel(tag)}} size={15} className="iconRed pointer"/>
-        //         </span>
-        // })
-        // return values
-        
-    }
-
     const allLabelsDisplayed = Object.entries(labelList || []).map(([id , val]) => {
         return <span key={id} className="badge bg-rounded bg-secondary align-text-bottom text-white float-left mr-1">{val} &nbsp; 
                     <FaTrash onClick={() => {removeLabel(val)}} size={15} className="iconRed pointer"/>
                 </span>
     })
-    // const editAllLabelsDisplayed = {
-    //     props.nodeToEdit.tags.split(",")
-    // }
 
     return (
         <div>
@@ -209,19 +212,13 @@ const AddNodeForm = (props) =>  {
                     <div>
                         <br/>
                         <h4>Add Tags</h4>   
-                        <div className="input-group mt-3 container">
+                            <Autocomplete suggestions={props.allTagsList}/>
+                        {/* <div className="input-group mt-3 container">
                             <input className="form-control" type="text" placeholder="Add tag to node..." aria-label="Add tags..." value={newLabel} onChange={handleChangeAddLabel}/>
                             <a className="btn btn-primary float-right text-decoration-none text-white" onClick={ ()=> {addNewLabelToList()}}>Add</a>
-                        </div>   
+                        </div>    */}
                         <br />
                         <div className="input-group mt-3 container">   
-                            {/* {
-                                props.nodeToEdit.id == undefined || props.nodeToEdit.id == null || props.nodeToEdit.id == "" 
-                                ?
-                                {allLabelsDisplayed}
-                                :
-                                null
-                            } */}
                             {allLabelsDisplayed}
                         </div>   
                     </div>
@@ -259,6 +256,7 @@ const mapStateToProps = (state) => {
         isEditNode: state.node.isEditNode,
         allTagsList: state.node.allTagsList,
         allNodesList: state.node.allNodesList,        
+        saveSuggestion: state.webUtilities.saveSuggestion,        
     }
 }
 
