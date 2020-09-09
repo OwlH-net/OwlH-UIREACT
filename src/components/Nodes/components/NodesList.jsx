@@ -197,8 +197,8 @@ const mapStateToProps = (state) => {
         sortIP: state.node.sortIP,
         filterByStatus: state.node.filterByStatus,
         allNodesList: state.node.allNodesList,        
-        // modal: state.webUtilities.modal,
         modalActionSelected: state.webUtilities.modalActionSelected,
+        isEditNode: state.node.isEditNode,
     }
 }
 const mapDispatchToProps = (dispatch) => ({

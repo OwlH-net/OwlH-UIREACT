@@ -4,7 +4,6 @@ const initialState = {
     spinner: false,
     progressBar: false,
     modalActionSelected: {},
-    saveSuggestion: {},
     modal: false,
     defaults: false,
     errorAlertShow: false,
@@ -110,13 +109,6 @@ function getModalActionSelected(state, data) {
   }
 }
 
-function saveSuggestionSelected(state, data) {
-  return {
-    ...state, 
-    saveSuggestion: data
-  }
-}
-
 function deleteAlertToAlertList(state, data) {
   return {
     ...state, 
@@ -161,8 +153,6 @@ export default function webUtilities(state = initialState, action) {
       return saveFileToDisplay(state, action.payload);
     case ActionTypes.FILE_CONTENT_TO_DISPLAY:  
       return saveFileContentToDisplay(state, action.payload);
-    case ActionTypes.SAVE_SUGGESTION:  
-      return saveSuggestionSelected(state, action.payload);
     default:
       return state;
   }

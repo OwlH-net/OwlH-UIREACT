@@ -24,8 +24,6 @@ export function GetAllNodes() {
       axios.get('/api/nodes', newConfig)
       .then(resp => {
 
-        console.log(resp);
-
         dispatch(ToggleProgressBar(false))
 
         if(resp.data.token == "none"){RemoveToken()}
@@ -305,5 +303,12 @@ export function EditNode(node) {
       }
       
     })
+  }
+}
+
+export function SaveSelectedTags(data) {
+  return {
+    type: ActionTypes.SAVE_SELECTED_TAGS,
+    payload: data
   }
 }

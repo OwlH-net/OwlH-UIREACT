@@ -109,9 +109,6 @@ const mapStateToProps = (state) => {
     return {
         isEdit: state.groups.isEdit,
         groupToEdit: state.groups.groupToEdit,
-        allGroupList: state.groups.allGroupList,
-        nodeToEdit: state.node.nodeToEdit,
-        isEditNode: state.node.isEditNode,
     }
 }
 

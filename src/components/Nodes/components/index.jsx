@@ -28,7 +28,6 @@ const index = (props) => {
 
     //Call alert list for every map item
     const alertItems = (props.alertList || []).map(alert => {
-        console.log(alert)
         return <AlertDialog key={alert.id} id={alert.id} title={alert.title} subtitle={alert.subtitle} variant={alert.variant}/>
     })
 

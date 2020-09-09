@@ -4,13 +4,14 @@ import * as ActionTypes from './node-action-types';
 const initialState = {
   allNodesList: [],
   allTagsList: {},
+  tagsSelected: [],
   sortIP: 'asc',
   search: '',
   sortName: 'asc',
   filterByStatus: 'all',
   addNodeForm: false,
   nodeToEdit: {},
-  isEditNode: false
+  isEditNode: false,
 }
 
 function ShowNodes(state, data) {
@@ -21,9 +22,17 @@ function ShowNodes(state, data) {
 }
 
 function getAllNodes(state, data) {
+  console.log(data);
   return {
     ...state,
     allNodesList: data
+  }
+}
+
+function saveTags(state, data) {
+  return {
+    ...state, 
+    tagsSelected: data
   }
 }
 
@@ -98,7 +107,6 @@ function resetLoadingNode(state, id) {
 }
 
 function setLoadingNode(state, id) {
-  console.log("")
   const finalNodeList = Object.entries(state.allNodesList || {}).map((item) => {
     if(item[0] == id){   
       item[1] = {
@@ -163,6 +171,8 @@ export default function webUtilities(state = initialState, action) {
         return toggleAddNode(state);
       case ActionTypes.NODE_TO_EDIT:  
         return saveNodeToEdit(state, action.payload);
+      case ActionTypes.SAVE_SELECTED_TAGS:  
+        return saveTags(state, action.payload);
       default:
         return state;
     }
