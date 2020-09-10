@@ -119,7 +119,7 @@ const NodesList = (props) => {
         //filter filtered nodes by search bar
         if(props.search != '' ){
             nodesAfterFilterAndSearch = (nodesAfterFilter || []).filter(function (key) {
-                return (key.name.includes(props.search) || key.ip.includes(props.search));
+                return (key.name.includes(props.search) || key.ip.includes(props.search) || key.tags.includes(props.search));
             });
         }else{
             nodesAfterFilterAndSearch = nodesAfterFilter

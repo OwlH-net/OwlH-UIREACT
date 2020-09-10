@@ -8,11 +8,6 @@ const Tags = (props) => {
     const [currentSuggestions, setCurrentSuggestions] = useState([])
     const [tagsList, setTagsList] = useState([])
 
-    //if node is editing, add current tags into list
-    useEffect(() => {  
-        console.log(props.tagsSelected);
-    },[props.tagsSelected])
-
     useEffect(() => {  
 
         if(props.nodeToEdit.id != undefined){           

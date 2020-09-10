@@ -22,7 +22,6 @@ function ShowNodes(state, data) {
 }
 
 function getAllNodes(state, data) {
-  console.log(data);
   return {
     ...state,
     allNodesList: data

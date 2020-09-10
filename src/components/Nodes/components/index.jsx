@@ -48,7 +48,7 @@ const index = (props) => {
                 <span onClick={() => {props.sortTableName()}} className="sort-table badge bg-secondary align-text-bottom text-white float-left mr-1 pointer" title="Sort table by Name">Sort by Name</span>
             </div>
             <div className="input-group mt-3 container">
-                <input className="form-control" type="text" placeholder="Search by name or ip..." aria-label="Search" id="search-node-details" onChange={searchHandleChange}/>
+                <input className="form-control" type="text" placeholder="Search by name, ip or tag..." aria-label="Search" id="search-node-details" onChange={searchHandleChange}/>
                 {
                     props.addNodeForm ?
                     <a className="btn btn-primary float-right text-decoration-none text-white" onClick={() => {props.toggleAddNodeForm()}}>Close add NIDS</a>:

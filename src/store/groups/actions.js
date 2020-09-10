@@ -64,24 +64,28 @@ export function GetAllGroups() {
     return (dispatch) => {
       axios.get('/api/groups', newConfig)
       .then(resp => {        
-
-        dispatch(ToggleProgressBar(false))
-        if(resp.data.token == "none"){RemoveToken()}
-        if(resp.data == null){
-          dispatch(accGetAllGroups({}))
-        }            
-        else if(resp.data.permissions == "none"){
-          dispatch(PermissionsAlert())
-        }else if(resp.data.ack == "false"){
-          dispatch(AddAlertToAlertList({
-            id: new Date() / 1000+'-valid',
-            title: "Error getting groups! ",
-            subtitle: resp.data.error,
-            variant: "danger"
-          }))
-          dispatch(toggleAlert(true))
+        
+        if(resp.data != null){
+          dispatch(ToggleProgressBar(false))
+          if(resp.data.token == "none"){RemoveToken()}
+          if(resp.data == null){
+            dispatch(accGetAllGroups({}))
+          }            
+          else if(resp.data.permissions == "none"){
+            dispatch(PermissionsAlert())
+          }else if(resp.data.ack == "false"){
+            dispatch(AddAlertToAlertList({
+              id: new Date() / 1000+'-valid',
+              title: "Error getting groups! ",
+              subtitle: resp.data.error,
+              variant: "danger"
+            }))
+            dispatch(toggleAlert(true))
+          }else{
+            dispatch(accGetAllGroups(resp.data))
+          }
         }else{
-          dispatch(accGetAllGroups(resp.data))
+          dispatch(accGetAllGroups([]))
         }
       })
     }
