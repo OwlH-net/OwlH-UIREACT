@@ -7,29 +7,20 @@ import { EditNode, ToggleAddNodeForm } from '../../../store/node/actions'
 const Groups = (props) => {
     const [groupsSelected, setGroupsSelected] = useState([])
 
-    // useEffect(() => {
-    //     const groupItems = (props.allGroupList || []).map(group => {
-    //         //check and disable default group
-    //         // if(group["guuid"] == "00000011-0000-0000-0000-000000000000"){
-    //             setGroupsSelected([...groupsSelected, group["guuid"]])
-    //             return <ul className="checkbox-grid" key={group["guuid"]}>
-    //                 <input type="checkbox" value={group["guuid"]} name={group["gname"]} checked disabled/>
-    //                 <label htmlFor={group["gname"]}>&nbsp;{group["gname"]}</label>
-    //             </ul>
-    //         }else{
-    //             return <ul className="checkbox-grid" key={group["guuid"]}>
-    //                 <input type="checkbox" value={group["guuid"]} name={group["gname"]} onChange={handleCheck}/>
-    //                 <label htmlFor={group["gname"]}>&nbsp;{group["gname"]}</label>
-    //             </ul>
-    //         }
-    //     })  
-    // },[])
+    useEffect(() => {  
+        (props.allGroupList || []).map(group => {
+            if(group["default"] == "true"){           
+                setGroupsSelected([...groupsSelected, group["guuid"]])
+            }
+        })
+    },[])
 
     const getData = () => {   
+        console.log(groupsSelected);
         const enrollData = {
             Node:props.form,
             Tags:props.tagsSelected.toString(),
-            Group:{},
+            Group:groupsSelected,
             Suricata:{}
         }   
         props.toggleProgressBar(true)
@@ -38,11 +29,12 @@ const Groups = (props) => {
     }
 
     const editNodeData = () => {
+        console.log(groupsSelected);
         props.form.uuid = props.nodeToEdit.id            
         const editData = {
             Node: props.form,
             Tags: props.tagsSelected.toString(),
-            Group:{},
+            Group:groupsSelected,
             Suricata:{}
         }   
         props.toggleProgressBar(true)
@@ -58,15 +50,14 @@ const Groups = (props) => {
     }
 
     const groupItems = (props.allGroupList || []).map(group => {
-        return <ul className="checkbox-grid" key={group["guuid"]}>
-            {/* {
-                group["guuid"] == "00000011-0000-0000-0000-000000000000"
+        return <ul className="checkbox-grid" key={group["guuid"]}>        
+            {
+                group["default"] == "true"
                 ?
-                <input type="checkbox" value={group["guuid"]} name={group["gname"]} onChange={handleCheck} checked disabled/>
+                <input type="checkbox" value={group["guuid"]} name={group["gname"]} onChange={handleCheck} checked/>
                 :
                 <input type="checkbox" value={group["guuid"]} name={group["gname"]} onChange={handleCheck}/>
-            } */}
-            <input type="checkbox" value={group["guuid"]} name={group["gname"]} onChange={handleCheck}/>
+            }
             <label htmlFor={group["gname"]}>&nbsp;{group["gname"]}</label>
         </ul>
     }) 

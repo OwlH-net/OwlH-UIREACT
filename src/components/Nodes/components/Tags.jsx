@@ -9,7 +9,6 @@ const Tags = (props) => {
     const [tagsList, setTagsList] = useState([])
 
     useEffect(() => {  
-
         if(props.nodeToEdit.id != undefined){           
             if(props.nodeToEdit.tags != ""){
                 var editNodeTags = props.nodeToEdit.tags.split(",")
