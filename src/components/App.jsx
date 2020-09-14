@@ -11,6 +11,7 @@ import OpenRules from '../components/OpenRules/components/index';
 import ChangePassword from '../components/Shared/Components/ChangePassword';
 import GroupDetails from './Groups/components/GroupDetails';
 import DisplayFiles from '../components/Shared/DisplayFiles/index';
+import Organizations from './Config/Organizations/Organizations';
 
 class App extends React.Component {
     constructor (props) {
@@ -36,6 +37,7 @@ class App extends React.Component {
             <Route path="/ChangePassword" exact component={ ChangePassword }/>
             <Route path="/GroupDetails" exact component={ GroupDetails }/>
             <Route path="/FileContent" exact component={ DisplayFiles }/>
+            <Route path="/Organizations" exact component={ Organizations }/>
           </Switch>
       </BrowserRouter>
       </div>

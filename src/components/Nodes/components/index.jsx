@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import Menu from '../../Shared/Components/Menu/Menu'
 import Banner from '../../Shared/Components/Banner/Banner'
 import Footer from '../../Shared/Footer'
-import { ToggleAddNodeForm, GetAllNodes, GetAllTags, ShowNodes, SortTableIP, SortTableName, SetSearchBar } from '../../../store/node/actions'
+import { ToggleAddNodeForm, GetAllNodes, GetAllTags, ShowNodes } from '../../../store/node/actions'
+import { SortTableIP, SortTableName, SetSearchBar, GetAllOrgs } from '../../../store/node/actions'
 import { ToggleProgressBar } from '../../../store/webUtilities/actions'
 import { GetAllGroups } from '../../../store/groups/actions'
 import NodesList from './NodesList'
@@ -20,6 +21,7 @@ const index = (props) => {
         props.getNodes()
         props.getAllGroups();
         props.getAllTags();
+        props.getAllOrgs();
     }, [])
     
     const searchHandleChange = (e) => {
@@ -93,6 +95,7 @@ const mapDispatchToProps = (dispatch) => ({
     getAllGroups: () => dispatch(GetAllGroups()),
     showNodes: (status) => dispatch(ShowNodes(status)),
     setSearchBar: (values) => dispatch(SetSearchBar(values)),
+    getAllOrgs: () => dispatch(GetAllOrgs()),
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);

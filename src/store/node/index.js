@@ -4,6 +4,7 @@ import * as ActionTypes from './node-action-types';
 const initialState = {
   allNodesList: [],
   allTagsList: {},
+  allOrgsList: {},
   tagsSelected: [],
   sortIP: 'asc',
   search: '',
@@ -145,6 +146,14 @@ function SetSearchBar(state, data) {
   }
 }
 
+function getAllOrgs(state, data) {
+  console.log(data);
+  return {
+    ...state,
+    allOrgsList: data
+  }
+}
+
 
 export default function webUtilities(state = initialState, action) {
     switch(action.type) {
@@ -172,6 +181,8 @@ export default function webUtilities(state = initialState, action) {
         return saveNodeToEdit(state, action.payload);
       case ActionTypes.SAVE_SELECTED_TAGS:  
         return saveTags(state, action.payload);
+      case ActionTypes.GET_ALL_ORGS:  
+        return getAllOrgs(state, action.payload);
       default:
         return state;
     }

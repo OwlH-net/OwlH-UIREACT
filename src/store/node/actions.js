@@ -312,3 +312,44 @@ export function SaveSelectedTags(data) {
     payload: data
   }
 }
+
+export function GetAllOrgs() {
+  const token = GetToken()
+  const username = GetUserName()
+
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
+  }
+  let newConfig = {headers: newHeaders}
+
+  return (dispatch) => {
+    axios.get('/api/getAllOrganizations', newConfig)
+    .then(resp => {
+      dispatch(ToggleProgressBar(false))
+
+      if(resp.data.token == "none"){RemoveToken()}
+      if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
+        dispatch(AddAlertToAlertList({
+          id: new Date() / 1000+'-valid',
+          title: "Error getting node organizations! ",
+          subtitle: resp.data.error,
+          variant: "danger"
+        }))
+        dispatch(toggleAlert(true))
+      }else{
+        dispatch(accGetAllOrgs(resp.data))
+      }
+
+    })
+  }
+}
+function accGetAllOrgs(data) {
+  return {
+    type: ActionTypes.GET_ALL_ORGS,
+    payload: data
+  }
+}

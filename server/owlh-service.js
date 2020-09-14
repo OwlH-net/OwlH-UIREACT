@@ -685,6 +685,30 @@ function GetGroupSelectedRulesets(req) {
     })
 }
 
+function GetAllOrganizations(req) {
+  let token = req.headers.token
+  let username = req.headers.user
+
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': token,
+    'user': username
+  }
+
+  return axios.get(`${url}/node/getAllOrganizations`,
+                    {
+                      httpsAgent: httsAgent,
+                      headers: newHeader
+                    }
+                  )
+    .then(resp => {
+      return resp.data
+    })
+    .catch(resp => {
+      return resp.data
+    })
+}
+
 module.exports = {
   enrollNode,
   GetGroupSuricataList,
@@ -718,4 +742,5 @@ module.exports = {
   SyncAllSuricataGroup,
   saveNewFileContent,
   getTags,
+  GetAllOrganizations,
 }

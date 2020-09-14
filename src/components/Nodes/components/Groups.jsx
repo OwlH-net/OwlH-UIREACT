@@ -35,6 +35,7 @@ const Groups = (props) => {
             Node: props.form,
             Tags: props.tagsSelected.toString(),
             Group:groupsSelected,
+            Orgs:props.orgsSelected.toString(),
             Suricata:{}
         }   
         props.toggleProgressBar(true)
@@ -61,6 +62,7 @@ const Groups = (props) => {
             <label htmlFor={group["gname"]}>&nbsp;{group["gname"]}</label>
         </ul>
     }) 
+    
     return (
         <div>
             {
@@ -94,6 +96,7 @@ const mapStateToProps = (state) => {
         allTagsList: state.node.allTagsList,
         allNodesList: state.node.allNodesList,        
         tagsSelected: state.node.tagsSelected,        
+        orgsSelected: state.node.orgsSelected,        
     }
 }
 

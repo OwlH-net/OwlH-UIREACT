@@ -5,6 +5,7 @@ import { ToggleProgressBar } from '../../../store/webUtilities/actions'
 import { EditNode, ToggleAddNodeForm } from '../../../store/node/actions'
 import Tags from "./Tags"
 import Groups from "./Groups"
+import Organizations from "./Organizations"
 
 const AddNodeForm = (props) =>  {   
     const [formData, setFormData] = useState({
@@ -102,8 +103,9 @@ const AddNodeForm = (props) =>  {
                     </div>
             
                     <Tags suggestions={props.allTagsList}/>
-                    
+                    <Organizations/>
                     <Groups form={formData}/>
+                    
                                   
                 </form>
             </div>
