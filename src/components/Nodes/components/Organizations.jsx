@@ -1,15 +1,27 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-
+import { SaveSelectedOrgs } from '../../../store/node/actions'
 const Organizations = (props) => {
 
     const [orgsSelected, setOrgsSelected] = useState([])
 
+    //save into store default orgs
+    useEffect(() => {  
+        Object.entries(props.allOrgsList || {}).map(([id , org]) => {
+            if(org["default"] == "true"){           
+                setOrgsSelected([...orgsSelected, id])
+                props.saveSelectedOrgs([...orgsSelected, id])
+            }
+        })
+    },[])
+
     function handleChange(e){
         if(!orgsSelected.includes(event.target.value)){
             setOrgsSelected([...orgsSelected, event.target.value])
+            props.saveSelectedOrgs([...orgsSelected, event.target.value])
         }else{
             setOrgsSelected(orgsSelected.filter((e) => ( e !== event.target.value )))
+            props.saveSelectedOrgs(orgsSelected.filter((e) => ( e !== event.target.value )))
         }
     }
 
@@ -54,7 +66,7 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    saveSelectedTags: (status) => dispatch(SaveSelectedTags(status)),
+    saveSelectedOrgs: (orgs) => dispatch(SaveSelectedOrgs(orgs)),
 })
 
 const withProps = connect(mapStateToProps,mapDispatchToProps);

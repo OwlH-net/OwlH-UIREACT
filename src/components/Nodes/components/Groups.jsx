@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { Enroll } from '../../../store/node/actions'
 import { ToggleProgressBar } from '../../../store/webUtilities/actions'
-import { EditNode, ToggleAddNodeForm } from '../../../store/node/actions'
+import { EditNode, ToggleAddNodeForm,  SaveGroupsSelected } from '../../../store/node/actions'
 
 const Groups = (props) => {
     const [groupsSelected, setGroupsSelected] = useState([])
@@ -11,42 +11,18 @@ const Groups = (props) => {
         (props.allGroupList || []).map(group => {
             if(group["default"] == "true"){           
                 setGroupsSelected([...groupsSelected, group["guuid"]])
+                props.saveGroupsSelected([...groupsSelected, group["guuid"]]);
             }
         })
     },[])
 
-    const getData = () => {   
-        console.log(groupsSelected);
-        const enrollData = {
-            Node:props.form,
-            Tags:props.tagsSelected.toString(),
-            Group:groupsSelected,
-            Suricata:{}
-        }   
-        props.toggleProgressBar(true)
-        props.enroll(enrollData)
-        props.toggleAddNodeForm()
-    }
-
-    const editNodeData = () => {
-        console.log(groupsSelected);
-        props.form.uuid = props.nodeToEdit.id            
-        const editData = {
-            Node: props.form,
-            Tags: props.tagsSelected.toString(),
-            Group:groupsSelected,
-            Orgs:props.orgsSelected.toString(),
-            Suricata:{}
-        }   
-        props.toggleProgressBar(true)
-        props.editNode(editData)
-    }
-
     function handleCheck(e){
         if(!groupsSelected.includes(event.target.value)){
             setGroupsSelected([...groupsSelected, event.target.value])
+            props.saveGroupsSelected([...groupsSelected, group["guuid"]])
         }else{
             setGroupsSelected(groupsSelected.filter((e) => ( e !== event.target.value )))
+            props.saveGroupsSelected(groupsSelected.filter((e) => ( e !== event.target.value )))
         }
     }
 
@@ -69,21 +45,15 @@ const Groups = (props) => {
                 props.nodeToEdit.id == undefined || props.nodeToEdit.id == null || props.nodeToEdit.id == ""
                 ?
                 <div>
-                    <br/>
                     <h4>Available groups</h4>      
                     <div >
                         {groupItems}
                     </div>
-                    <br/><br/><br/>
-                    <div className="text-right">
-                        <a className="btn btn-primary float-right text-decoration-none text-white right" onClick={() => {getData()}}>Add</a>
-                    </div>
                 </div>
                 :
-                <div className="text-right">
-                    <a className="btn btn-primary float-right text-decoration-none text-white right" onClick={() => {editNodeData()}}>Edit</a>
-                </div>                                               
+                null
             }      
+            <br />
         </div>
     )
 }
@@ -96,7 +66,6 @@ const mapStateToProps = (state) => {
         allTagsList: state.node.allTagsList,
         allNodesList: state.node.allNodesList,        
         tagsSelected: state.node.tagsSelected,        
-        orgsSelected: state.node.orgsSelected,        
     }
 }
 
@@ -105,6 +74,7 @@ const mapDispatchToProps = (dispatch) => ({
     editNode: (data) => dispatch(EditNode(data)),
     toggleAddNodeForm: () => dispatch(ToggleAddNodeForm()),
     toggleProgressBar: (status) => dispatch(ToggleProgressBar(status)),
+    saveGroupsSelected: (groups) => dispatch(SaveGroupsSelected(groups)),
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);

@@ -108,6 +108,7 @@ const Tags = (props) => {
             <br />
             <br />
             {allTagsList}
+            <br />
         </div>
     )
 }

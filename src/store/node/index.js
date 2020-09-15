@@ -5,7 +5,10 @@ const initialState = {
   allNodesList: [],
   allTagsList: {},
   allOrgsList: {},
+  toggleEditOrg: {id:'', status: false},
   tagsSelected: [],
+  orgsSelected: [],
+  groupsSelected: [],
   sortIP: 'asc',
   search: '',
   sortName: 'asc',
@@ -147,10 +150,37 @@ function SetSearchBar(state, data) {
 }
 
 function getAllOrgs(state, data) {
-  console.log(data);
   return {
     ...state,
     allOrgsList: data
+  }
+}
+
+function saveSelectedOrgs(state, data) {
+  return {
+    ...state,
+    orgsSelected: data
+  }
+}
+
+function saveSelectedGroups(state, data) {
+  return {
+    ...state,
+    groupsSelected: data
+  }
+}
+
+function toggleOrganization(state, data) {
+  var newData;
+  if(state.toggleEditOrg.status){
+    newData = {id: '', status: false}
+  }else{
+    newData = {id: data, status: true}
+  }
+  
+  return {
+    ...state,
+    toggleEditOrg: newData
   }
 }
 
@@ -183,6 +213,12 @@ export default function webUtilities(state = initialState, action) {
         return saveTags(state, action.payload);
       case ActionTypes.GET_ALL_ORGS:  
         return getAllOrgs(state, action.payload);
+      case ActionTypes.SAVE_SELECTED_ORGS:  
+        return saveSelectedOrgs(state, action.payload);
+      case ActionTypes.SAVE_SELECTED_GROUPS:  
+        return saveSelectedGroups(state, action.payload);
+      case ActionTypes.TOGGLE_EDIT_ORG:  
+        return toggleOrganization(state, action.payload);
       default:
         return state;
     }

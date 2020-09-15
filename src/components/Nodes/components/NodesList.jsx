@@ -125,7 +125,7 @@ const NodesList = (props) => {
             nodesAfterFilterAndSearch = nodesAfterFilter
         }
 
-        const tagsList = (tags) => { 
+        const paramsList = (tags) => { 
             var tagsArray =  tags.split(",");
             return (tagsArray || []).map(tag => {
                 return <li key={tag}>{tag}</li>
@@ -146,7 +146,10 @@ const NodesList = (props) => {
                         <NodeStatus key={val.uuid+'-node'} registrationStatus={val.token} status={val.status} nodeUUID={val.uuid}/>        
                     </td>
                     <td key={val.uuid+'-tag'}>
-                        {val.tags != '' ? <ul>{tagsList(val.tags)}</ul> : <b>No tags...</b>}
+                        {val.tags != '' ? <ul>{paramsList(val.tags)}</ul> : <b>No tags...</b>}
+                    </td>
+                    <td key={val.uuid+'-org'}>
+                        {val.orgs != '' ? <ul>{paramsList(val.orgs)}</ul> : <b>No orgs...</b>}
                     </td>
                     <td key={val.uuid+'-actions'}>
                         <span>
@@ -178,6 +181,7 @@ const NodesList = (props) => {
                                 <th>Node name</th>
                                 <th>Node status</th>
                                 <th>Node Tag</th>
+                                <th>Node Orgs</th>
                                 <th width="20%">Actions</th>
                             </tr>
                         </thead>

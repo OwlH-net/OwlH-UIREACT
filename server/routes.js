@@ -148,6 +148,11 @@ router.put('/syncAllSuricataGroup', async (req, res, next) => {
   res.status(200).json(reg)
 })
 
+router.put('/editOrganization', async (req, res, next) => {
+  const reg = await OwlHService.EditOrganization(req)
+  res.status(200).json(reg)
+})
+
 router.get('/getGroupSelectedRulesets/:uuid', async (req, res, next) => {
   const ping = await OwlHService.GetGroupSelectedRulesets(req)
   res.status(200).json(ping)
@@ -156,6 +161,11 @@ router.get('/getGroupSelectedRulesets/:uuid', async (req, res, next) => {
 router.get('/getAllOrganizations', async (req, res, next) => {
   const ping = await OwlHService.GetAllOrganizations(req)
   res.status(200).json(ping)
+})
+
+router.delete('/deleteOrg/:uuid', async (req, res, next) => {
+  const del = await OwlHService.DeleteOrg(req)
+  res.status(200).json(del)
 })
 
 module.exports = router

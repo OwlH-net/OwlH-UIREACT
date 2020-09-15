@@ -7,7 +7,7 @@ import Tags from "./Tags"
 import Groups from "./Groups"
 import Organizations from "./Organizations"
 
-const AddNodeForm = (props) =>  {   
+const AddNodeForm = (props) =>  {
     const [formData, setFormData] = useState({
         name: "",
         ip: "",
@@ -36,7 +36,44 @@ const AddNodeForm = (props) =>  {
             })
         }
     },[props.isEditNode])
-    
+
+    //add node button
+    const getData = () => {
+        const enrollData = {
+            Node:formData,
+            Tags:props.tagsSelected,
+            Group:props.groupsSelected,
+            Orgs:props.orgsSelected,
+            Suricata:{}
+        }
+        console.log(enrollData);
+        props.toggleProgressBar(true)
+        //check if node is creating or editing
+        {
+            props.nodeToEdit.id == undefined || props.nodeToEdit.id == null || props.nodeToEdit.id == ""
+            ?
+            props.enroll(enrollData)
+            :
+            props.editNode(editData)
+        }
+        props.toggleAddNodeForm()
+    }
+
+    // //edit node button
+    // const editNodeData = () => {
+    //     console.log(groupsSelected);
+    //     props.form.uuid = props.nodeToEdit.id
+    //     const editData = {
+    //         Node:props.form,
+    //         Tags:props.tagsSelected.toString(),
+    //         Group:props.groupsSelected.toString(),
+    //         Orgs:props.orgsSelected.toString(),
+    //         Suricata:{}
+    //     }
+    //     props.toggleProgressBar(true)
+    //     props.editNode(editData)
+    // }
+
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -47,13 +84,13 @@ const AddNodeForm = (props) =>  {
     return (
         <div>
             <div>
-                <form> 
+                <form>
                     {
                         props.nodeToEdit.id == undefined || props.nodeToEdit.id == null || props.nodeToEdit.id == ""
-                        ?                 
-                        <h4>Add node form</h4>      
+                        ?
+                        <h4>Add node form</h4>
                         :
-                        <h4>Edit node form</h4>      
+                        <h4>Edit node form</h4>
                     }
                     <div className="form-row">
                         <div className="form-group col-md-6">
@@ -101,12 +138,22 @@ const AddNodeForm = (props) =>  {
                             </div>
                         </div>
                     </div>
-            
+
                     <Tags suggestions={props.allTagsList}/>
                     <Organizations/>
                     <Groups form={formData}/>
-                    
-                                  
+
+                    {/* Display button according to edit status */}
+                    <div className="text-right">
+                    {
+                        props.nodeToEdit.id == undefined || props.nodeToEdit.id == null || props.nodeToEdit.id == ""
+                        ?
+                        <a className="btn btn-primary float-right text-decoration-none text-white right" onClick={() => {getData()}}>Add</a>
+                        :
+                        <a className="btn btn-primary float-right text-decoration-none text-white right" onClick={() => {getData()}}>Edit</a>
+                    }
+                    </div>
+
                 </form>
             </div>
         </div>
@@ -119,8 +166,10 @@ const mapStateToProps = (state) => {
         nodeToEdit: state.node.nodeToEdit,
         isEditNode: state.node.isEditNode,
         allTagsList: state.node.allTagsList,
-        allNodesList: state.node.allNodesList,        
-        tagsSelected: state.node.tagsSelected,        
+        allNodesList: state.node.allNodesList,
+        tagsSelected: state.node.tagsSelected,
+        groupsSelected: state.node.groupsSelected,
+        orgsSelected: state.node.orgsSelected,
     }
 }
 
@@ -132,4 +181,4 @@ const mapDispatchToProps = (dispatch) => ({
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);
-export default withProps(AddNodeForm)   
+export default withProps(AddNodeForm)

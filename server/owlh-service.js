@@ -58,6 +58,30 @@ function getLogin(data) {
     })
 }
 
+function EditOrganization(req) {
+  let token = req.headers.token
+  let username = req.headers.user
+
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': token,
+    'user': username
+  }
+
+  return axios.put(`${url}/node/editOrganization`,req.body,
+                    {
+                      httpsAgent: httsAgent,
+                      headers: newHeader
+                    }
+                  )
+    .then(resp => {
+      return resp.data
+    })
+    .catch(resp => {
+      return resp.data
+    })
+}
+
 function saveNewFileContent(req) {
   let token = req.headers.token
   let username = req.headers.user
@@ -709,8 +733,33 @@ function GetAllOrganizations(req) {
     })
 }
 
+function DeleteOrg(req) {
+  let token = req.headers.token
+  let username = req.headers.user
+
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': token,
+    'user': username
+  }
+
+  return axios.delete(`${url}/node/deleteOrg/${req.params.uuid}`,
+                  {
+                    httpsAgent: httsAgent,
+                    headers: newHeader
+                  }
+                )
+  .then(resp => {
+    return resp.data
+  })
+  .catch(resp => {
+    return resp.data
+  })
+}
+
 module.exports = {
   enrollNode,
+  DeleteOrg,
   GetGroupSuricataList,
   AllNodesGroup,
   getLogin,
@@ -743,4 +792,5 @@ module.exports = {
   saveNewFileContent,
   getTags,
   GetAllOrganizations,
+  EditOrganization,
 }

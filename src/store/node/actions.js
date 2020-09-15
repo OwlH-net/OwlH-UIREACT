@@ -23,7 +23,7 @@ export function GetAllNodes() {
     return (dispatch) => {
       axios.get('/api/nodes', newConfig)
       .then(resp => {
-
+        console.log(resp.data);
         dispatch(ToggleProgressBar(false))
 
         if(resp.data.token == "none"){RemoveToken()}
@@ -187,6 +187,43 @@ export function RegisterNode(nodeUUID) {
   }
 }
 
+export function EditOrg(data) {
+  const token = GetToken()
+  const username = GetUserName()
+
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
+  }
+  
+  let newConfig = {headers: newHeaders}
+
+  return (dispatch)  => {
+    axios.put('/api/editOrganization', JSON.stringify(data) ,newConfig)
+      .then(resp => {        
+        
+        dispatch(ToggleProgressBar(false))
+        dispatch(ToggleEditOrganization())
+        
+        if(resp.data.token == "none"){RemoveToken()}
+        if(resp.data.permissions == "none"){
+          dispatch(PermissionsAlert())
+        }else if(resp.data.ack == "false"){
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Edit Organization error ",
+            subtitle: resp.data.error,
+            variant: "danger"
+          }))
+          dispatch(toggleAlert(true))
+        }else{
+          dispatch(GetAllOrgs())
+        }
+    })
+  }
+}
+
 export function Enroll(data) {
   const token = GetToken()
   const username = GetUserName()
@@ -297,8 +334,6 @@ export function EditNode(node) {
           variant: "success"
         }))
         dispatch(toggleAlert(true))
-
-        dispatch(ToggleAddNodeForm())
         dispatch(GetAllNodes())
       }
       
@@ -351,5 +386,60 @@ function accGetAllOrgs(data) {
   return {
     type: ActionTypes.GET_ALL_ORGS,
     payload: data
+  }
+}
+
+export function DeleteOrg(orgID) {
+  const token = GetToken()
+  const username = GetUserName()
+
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
+  }
+  let newConfig = {headers: newHeaders}
+
+  return (dispatch) => {
+    axios.delete('/api/deleteOrg/'+orgID, newConfig)
+    .then(resp => {
+      dispatch(ToggleProgressBar(false))
+
+      if(resp.data.token == "none"){RemoveToken()}
+      if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
+        dispatch(AddAlertToAlertList({
+          id: new Date() / 1000+'-valid',
+          title: "Error deleting org! ",
+          subtitle: resp.data.error,
+          variant: "danger"
+        }))
+        dispatch(toggleAlert(true))
+      }else{
+        dispatch(GetAllOrgs())
+      }
+    })
+  }
+}
+
+export function SaveSelectedOrgs(data) {
+  return {
+    type: ActionTypes.SAVE_SELECTED_ORGS,
+    payload: data
+  }
+}
+
+export function SaveGroupsSelected(data) {
+  return {
+    type: ActionTypes.SAVE_SELECTED_GROUPS,
+    payload: data
+  }
+}
+
+export function ToggleEditOrganization(id) {
+  return {
+    type: ActionTypes.TOGGLE_EDIT_ORG,
+    payload: id
   }
 }
