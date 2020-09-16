@@ -58,6 +58,30 @@ function getLogin(data) {
     })
 }
 
+function AddOrganization(req) {
+  let token = req.headers.token
+  let username = req.headers.user
+
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': token,
+    'user': username
+  }
+
+  return axios.put(`${url}/master/addOrganization`,req.body,
+                    {
+                      httpsAgent: httsAgent,
+                      headers: newHeader
+                    }
+                  )
+    .then(resp => {
+      return resp.data
+    })
+    .catch(resp => {
+      return resp.data
+    })
+}
+
 function EditOrganization(req) {
   let token = req.headers.token
   let username = req.headers.user
@@ -637,6 +661,30 @@ function deleteGroup(req) {
   })
 }
 
+function GetAllOrganizationNodes(req) {
+  let token = req.headers.token
+  let username = req.headers.user
+
+  let newHeader = {
+    'Content-Type': 'application/json',
+    'token': token,
+    'user': username
+  }
+
+  return axios.get(`${url}/master/getAllOrganizationNodes/${req.params.uuid}`,
+                    {
+                      httpsAgent: httsAgent,
+                      headers: newHeader
+                    }
+                  )
+    .then(resp => {
+      return resp.data
+    })
+    .catch(resp => {
+      return resp.data
+    })
+}
+
 function AllNodesGroup(req) {
   let token = req.headers.token
   let username = req.headers.user
@@ -793,4 +841,6 @@ module.exports = {
   getTags,
   GetAllOrganizations,
   EditOrganization,
+  AddOrganization,
+  GetAllOrganizationNodes,
 }

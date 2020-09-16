@@ -191,7 +191,6 @@ const ChangePassword = (props) => {
 const mapStateToProps = (state) => {
     return {
         passwordChange: state.webUtilities.passwordChange,
-        errorAlertShow: state.webUtilities.errorAlertShow,
         alertList: state.webUtilities.alertList
     }
 }

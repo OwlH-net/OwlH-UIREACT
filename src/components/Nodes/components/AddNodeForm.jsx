@@ -59,21 +59,6 @@ const AddNodeForm = (props) =>  {
         props.toggleAddNodeForm()
     }
 
-    // //edit node button
-    // const editNodeData = () => {
-    //     console.log(groupsSelected);
-    //     props.form.uuid = props.nodeToEdit.id
-    //     const editData = {
-    //         Node:props.form,
-    //         Tags:props.tagsSelected.toString(),
-    //         Group:props.groupsSelected.toString(),
-    //         Orgs:props.orgsSelected.toString(),
-    //         Suricata:{}
-    //     }
-    //     props.toggleProgressBar(true)
-    //     props.editNode(editData)
-    // }
-
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -169,7 +154,7 @@ const mapStateToProps = (state) => {
         allNodesList: state.node.allNodesList,
         tagsSelected: state.node.tagsSelected,
         groupsSelected: state.node.groupsSelected,
-        orgsSelected: state.node.orgsSelected,
+        orgsSelected: state.config.orgsSelected,
     }
 }
 

@@ -93,6 +93,11 @@ router.put('/addGroupNodes', async (req, res, next) => {
   res.status(200).json(reg)
 })
 
+router.get('/getAllOrganizations/:uuid', async (req, res, next) => {
+  const ping = await OwlHService.GetAllOrganizationNodes(req)
+  res.status(200).json(ping)
+})
+
 router.get('/getAllNodesGroup/:uuid', async (req, res, next) => {
   const ping = await OwlHService.AllNodesGroup(req)
   res.status(200).json(ping)
@@ -167,5 +172,11 @@ router.delete('/deleteOrg/:uuid', async (req, res, next) => {
   const del = await OwlHService.DeleteOrg(req)
   res.status(200).json(del)
 })
+
+router.put('/addOrganization', async (req, res, next) => {
+  const reg = await OwlHService.AddOrganization(req)
+  res.status(200).json(reg)
+})
+
 
 module.exports = router

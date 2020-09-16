@@ -4,6 +4,7 @@ import login from './login'
 import groups from './groups'
 import node from './node'
 import webUtilities from './webUtilities'
+import config from './config'
 import thunk from 'redux-thunk'
 
 function configStore() {
@@ -12,7 +13,8 @@ function configStore() {
     login,
     node,
     groups,
-    webUtilities
+    webUtilities,
+    config
   })
 
 

@@ -7,7 +7,7 @@ import GroupDetailsSuricata from './Suricata/GroupDetailsSuricata'
 import Banner from '../../Shared/Components/Banner/Banner'
 import AlertDialog from '../../Shared/AlertDialog'
 import {ProgressBar} from 'react-bootstrap'
-import { ToggleProgressBar, ToggleModalWindow, ModalButtonClicked } from '../../../store/webUtilities/actions'
+import { ToggleProgressBar } from '../../../store/webUtilities/actions'
 import { GetAllGroups } from '../../../store/groups/actions'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';

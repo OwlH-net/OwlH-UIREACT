@@ -1,13 +1,9 @@
 import * as ActionTypes from './node-action-types';
 
-
 const initialState = {
   allNodesList: [],
   allTagsList: {},
-  allOrgsList: {},
-  toggleEditOrg: {id:'', status: false},
   tagsSelected: [],
-  orgsSelected: [],
   groupsSelected: [],
   sortIP: 'asc',
   search: '',
@@ -63,35 +59,6 @@ function toggleAddNode(state) {
     isEditNode: false
   }
 }
-
-// function pingNode(state, data) {
-
-//   const newNode = Object.entries(state.allNodesList || {}).filter(key => {
-    
-//     key[1] = {
-//       ...key[1],
-//       status: data.status
-//     }
-
-//     return key[0] == data.id
-//   })
-
-
-//   if (newNode.length != 0){  
-//     const newStateAllNodes = {
-//       ...state.allNodesList, 
-//       [`${newNode[0][0]}`]: newNode[0][1]
-//     }
-
-//     return {
-//       ...state,
-//       allNodesList: newStateAllNodes
-//     }
-//   }
-//   return {
-//     ...state,
-//   }
-// }
 
 function resetLoadingNode(state, id) {
   const finalNodeList = Object.entries(state.allNodesList || {}).map((item) => {
@@ -149,38 +116,10 @@ function SetSearchBar(state, data) {
   }
 }
 
-function getAllOrgs(state, data) {
-  return {
-    ...state,
-    allOrgsList: data
-  }
-}
-
-function saveSelectedOrgs(state, data) {
-  return {
-    ...state,
-    orgsSelected: data
-  }
-}
-
 function saveSelectedGroups(state, data) {
   return {
     ...state,
     groupsSelected: data
-  }
-}
-
-function toggleOrganization(state, data) {
-  var newData;
-  if(state.toggleEditOrg.status){
-    newData = {id: '', status: false}
-  }else{
-    newData = {id: data, status: true}
-  }
-  
-  return {
-    ...state,
-    toggleEditOrg: newData
   }
 }
 
@@ -211,14 +150,8 @@ export default function webUtilities(state = initialState, action) {
         return saveNodeToEdit(state, action.payload);
       case ActionTypes.SAVE_SELECTED_TAGS:  
         return saveTags(state, action.payload);
-      case ActionTypes.GET_ALL_ORGS:  
-        return getAllOrgs(state, action.payload);
-      case ActionTypes.SAVE_SELECTED_ORGS:  
-        return saveSelectedOrgs(state, action.payload);
       case ActionTypes.SAVE_SELECTED_GROUPS:  
         return saveSelectedGroups(state, action.payload);
-      case ActionTypes.TOGGLE_EDIT_ORG:  
-        return toggleOrganization(state, action.payload);
       default:
         return state;
     }

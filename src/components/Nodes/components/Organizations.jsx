@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
-import { SaveSelectedOrgs } from '../../../store/node/actions'
+import { SaveSelectedOrgs } from '../../../store/config/actions'
 const Organizations = (props) => {
 
     const [orgsSelected, setOrgsSelected] = useState([])
@@ -61,7 +61,7 @@ const Organizations = (props) => {
 const mapStateToProps = (state) => {
     return {
         nodeToEdit: state.node.nodeToEdit,
-        allOrgsList: state.node.allOrgsList,
+        allOrgsList: state.config.allOrgsList,
     }
 }
 
