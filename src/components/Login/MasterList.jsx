@@ -11,14 +11,10 @@ class MasterList extends Component {
 
     componentDidMount(){
         //Background color
-        console.log("DidMount")
         this.props.loadMasters()
     }
 
     render() {
-        console.log("MasterList props")
-        console.log(this.props.masterList)
-
         const items = (this.props.masterList || []).map(item =>{
                 return <Master key={item.name} {...item} />           
             }   

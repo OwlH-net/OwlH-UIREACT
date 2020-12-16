@@ -1,6 +1,5 @@
 import * as ActionTypes from './utils-action-types';
-import {GetUserName, GetToken} from '../../components/Shared/CheckToken'
-import {getAllNodes} from '../node/actions'
+import {GetUserName, GetToken, RemoveToken} from '../../components/Shared/CheckToken'
 import axios from 'axios'
 
 const config = {
@@ -9,11 +8,25 @@ const config = {
   }
 }
 
+export function PermissionsAlert() {
+  return (dispatch) => {
+    var newAlert = {
+      id: new Date() / 1000+'-valid',
+      title: "Error! ",
+      subtitle: "You don't have enough permissions for this action.",
+      variant: "warning"
+    }
+    dispatch(AddAlertToAlertList(newAlert))
+    dispatch(toggleAlert(true))
+  }
+}
+
 export function defaultCredentials() {
   return (dispatch) => {
     //check default credentials
     axios.get('/api/about', config)
     .then(resp => {
+      if(resp.data.token == "none"){RemoveToken()}
       dispatch(getDefaultCredentials(resp.data))
     })
   }
@@ -41,6 +54,7 @@ export function changePassword(data) {
     //check default credentials
     axios.put('/api/pass', JSON.stringify(data), newConfig)
     .then(resp => {
+      if(resp.data.token == "none"){RemoveToken()}
       dispatch(setChangePassword(resp.data))
     })
   }
@@ -116,4 +130,82 @@ export function ToggleProgressBar(status) {
   }
 }
   
+export function SaveFileDataToDisplay(dataFile, dataType) {
+  return {
+    type: ActionTypes.FILE_TO_DISPLAY,
+    payload: {
+      file: dataFile, 
+      type: dataType, 
+    }
+  }
+}
+  
+export function GetFileContent(data) {
+  const token = GetToken()
+  const username = GetUserName()
 
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
+  }
+  let newConfig = {headers: newHeaders}
+
+  return (dispatch) => {    
+    //check default credentials
+    axios.put('/api/getFileContent', JSON.stringify(data), newConfig)
+    .then(resp => {
+      dispatch(ToggleProgressBar(false))
+      if(resp.data.token == "none"){RemoveToken()}
+      dispatch(accFileContentToDisplay(resp.data))
+    })
+  }
+}
+export function accFileContentToDisplay(data) {
+  return {
+    type: ActionTypes.FILE_CONTENT_TO_DISPLAY,
+    payload: data
+  }
+}
+  
+export function SaveNewFileContent(data) {
+  const token = GetToken()
+  const username = GetUserName()
+
+  let newHeaders = {
+    ...config.headers, 
+    'user': username,
+    'token': token
+  }
+  let newConfig = {headers: newHeaders}
+
+  return (dispatch) => {    
+    //check default credentials
+    axios.put('/api/saveNewFileContent', JSON.stringify(data), newConfig)
+    .then(resp => {
+      
+      dispatch(ToggleProgressBar(false))
+      if(resp.data.token == "none"){RemoveToken()}
+      if(resp.data.ack == "true"){
+        dispatch(AddAlertToAlertList({
+          id: new Date() / 1000+'-valid',
+          title: "Success! ",
+          subtitle: "The file has been updated successfully.",
+          variant: "success"
+        }))
+        dispatch(toggleAlert(true))
+        dispatch(accFileContentToDisplay(resp.data))
+      }else{
+        dispatch(AddAlertToAlertList({
+          id: new Date() / 1000+'-valid',
+          title: "Error getting MD5! ",
+          subtitle: resp.data.error,
+          variant: "danger"
+        }))
+        dispatch(toggleAlert(true))
+      }
+
+    })
+  }
+}
+  

@@ -5,8 +5,9 @@ import GroupDetailsNodes from './Nodes/GroupDetailsNodes'
 import GroupDetailsAnalyzer from './Analyzer/GroupDetailsAnalyzer'
 import GroupDetailsSuricata from './Suricata/GroupDetailsSuricata'
 import Banner from '../../Shared/Components/Banner/Banner'
+import AlertDialog from '../../Shared/AlertDialog'
 import {ProgressBar} from 'react-bootstrap'
-import { ToggleProgressBar, ToggleModalWindow, ModalButtonClicked } from '../../../store/webUtilities/actions'
+import { ToggleProgressBar } from '../../../store/webUtilities/actions'
 import { GetAllGroups } from '../../../store/groups/actions'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
@@ -20,6 +21,11 @@ const GroupDetails = (props) => {
         props.getAllGroups();
     }, [])
     
+    //Call alert list for every map item
+    const alertItems = (props.alertList || []).map(alert => {
+        return <AlertDialog key={alert.id} id={alert.id} title={alert.title} subtitle={alert.subtitle} variant={alert.variant}/>
+    })
+
     return (        
         <div>
             {
@@ -32,7 +38,11 @@ const GroupDetails = (props) => {
             }
 
             <Menu />
-             <Banner title={"Group "+props.groupToDetails.gname} subtitle="Group details" />
+
+            {/* Alert dialog */}
+            {alertItems}
+
+            <Banner title={"Group "+props.groupToDetails.gname} subtitle="Group details" />
             {props.progressBar ? <ProgressBar animated now={100} /> : null}
 
             <Tabs className="mt-3">
@@ -53,6 +63,7 @@ const GroupDetails = (props) => {
 
 const mapStateToProps = (state) => {
     return {
+        alertList: state.webUtilities.alertList,
         progressBar: state.webUtilities.progressBar,
         groupToDetails: state.groups.groupToDetails,
         allGroupList: state.groups.allGroupList,

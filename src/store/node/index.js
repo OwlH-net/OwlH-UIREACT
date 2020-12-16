@@ -1,15 +1,17 @@
 import * as ActionTypes from './node-action-types';
 
-
 const initialState = {
   allNodesList: [],
+  allTagsList: {},
+  tagsSelected: [],
+  groupsSelected: [],
   sortIP: 'asc',
   search: '',
   sortName: 'asc',
   filterByStatus: 'all',
   addNodeForm: false,
   nodeToEdit: {},
-  isEditNode: false
+  isEditNode: false,
 }
 
 function ShowNodes(state, data) {
@@ -23,6 +25,20 @@ function getAllNodes(state, data) {
   return {
     ...state,
     allNodesList: data
+  }
+}
+
+function saveTags(state, data) {
+  return {
+    ...state, 
+    tagsSelected: data
+  }
+}
+
+function getAllTags(state, data) {
+  return {
+    ...state,
+    allTagsList: data
   }
 }
 
@@ -44,35 +60,6 @@ function toggleAddNode(state) {
   }
 }
 
-// function pingNode(state, data) {
-
-//   const newNode = Object.entries(state.allNodesList || {}).filter(key => {
-    
-//     key[1] = {
-//       ...key[1],
-//       status: data.status
-//     }
-
-//     return key[0] == data.id
-//   })
-
-
-//   if (newNode.length != 0){  
-//     const newStateAllNodes = {
-//       ...state.allNodesList, 
-//       [`${newNode[0][0]}`]: newNode[0][1]
-//     }
-
-//     return {
-//       ...state,
-//       allNodesList: newStateAllNodes
-//     }
-//   }
-//   return {
-//     ...state,
-//   }
-// }
-
 function resetLoadingNode(state, id) {
   const finalNodeList = Object.entries(state.allNodesList || {}).map((item) => {
     if(item[0] == id){   
@@ -90,7 +77,6 @@ function resetLoadingNode(state, id) {
 }
 
 function setLoadingNode(state, id) {
-  console.log("")
   const finalNodeList = Object.entries(state.allNodesList || {}).map((item) => {
     if(item[0] == id){   
       item[1] = {
@@ -130,10 +116,20 @@ function SetSearchBar(state, data) {
   }
 }
 
+function saveSelectedGroups(state, data) {
+  return {
+    ...state,
+    groupsSelected: data
+  }
+}
+
+
 export default function webUtilities(state = initialState, action) {
     switch(action.type) {
       case ActionTypes.GET_ALL_NODES:  
         return getAllNodes(state, action.payload);
+      case ActionTypes.GET_ALL_TAGS:  
+        return getAllTags(state, action.payload);
       case ActionTypes.PING_NODE:  
         return pingNode(state, action.payload);
       case ActionTypes.RESET_LOADING_NODE:  
@@ -152,6 +148,10 @@ export default function webUtilities(state = initialState, action) {
         return toggleAddNode(state);
       case ActionTypes.NODE_TO_EDIT:  
         return saveNodeToEdit(state, action.payload);
+      case ActionTypes.SAVE_SELECTED_TAGS:  
+        return saveTags(state, action.payload);
+      case ActionTypes.SAVE_SELECTED_GROUPS:  
+        return saveSelectedGroups(state, action.payload);
       default:
         return state;
     }

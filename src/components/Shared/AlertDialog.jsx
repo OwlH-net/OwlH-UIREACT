@@ -4,6 +4,7 @@ import Alert from 'react-bootstrap/Alert'
 import { toggleAlert, ResetAxiosChangePass, DeleteAlertToAlertList } from '../../store/webUtilities/actions';
 
 const AlertDialog = (props) => {
+
     useEffect (() => {
         const alertTimeout = setTimeout(function(){ disableAlert(props.id) }, 4000)
     }, [])

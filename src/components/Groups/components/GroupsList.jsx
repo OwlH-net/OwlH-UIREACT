@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import ModalWindow from '../../Shared/ModalWindow'
 import { ToggleProgressBar, ToggleModalWindow, ModalButtonClicked } from '../../../store/webUtilities/actions'
-import { DeleteGroup, ShowGroupForm, SaveGroupSelected, ShowEditForm, GroupToDetails, CloseGroupForm } from '../../../store/groups/actions'
+import { GetAllGroups, DeleteGroup, ShowGroupForm, SaveGroupSelected, ShowEditForm, GroupToDetails, CloseGroupForm } from '../../../store/groups/actions'
 import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
 import { Route, Link, BrowserRouter, NavLink } from 'react-router-dom';
 
 const GroupsList = (props) => {
     const [allGroups, setAllGroups] = useState([])
     const [groupSelected, setGroupSelected] = useState('')
+    const [groupNameSelected, setGroupNameSelected] = useState('')
 
-    //getAllNodes
     useEffect(() => {
         props.toggleProgressBar(false);
         setAllGroups(props.allGroupList)
@@ -43,6 +43,12 @@ const GroupsList = (props) => {
         props.saveGroupSelected(val)        
     }
 
+    const accDeleteGroup = (name, id) => {
+        props.closeGroupForm(); 
+        deleteGroup(id)
+        setGroupNameSelected(name)
+    }
+
     const groupsData = () => {
         const totalList = Object.entries(allGroups || {}).map(([id , val]) =>
         {
@@ -58,7 +64,7 @@ const GroupsList = (props) => {
                         <div>
                             <FaEdit size={21} className="iconBlue" onClick={() => {showEditGroup(val)}}/> &nbsp;
                             <NavLink to="GroupDetails"  onClick={() => {props.groupToDetails(val)}}><FaEye size={21} className="iconBlue" onClick={() => {loadDetails(val)}}/></NavLink>&nbsp;
-                            <FaTrashAlt size={21} className="iconRed" onClick={() => {props.closeGroupForm(); deleteGroup(val.guuid)}}/>
+                            <FaTrashAlt size={21} className="iconRed" onClick={() => {accDeleteGroup(val.gname, val.guuid)}}/>
                         </div>
                     </td>
                 </tr>
@@ -70,12 +76,12 @@ const GroupsList = (props) => {
     return (
         <div>
             {/* modal window */}
-            <ModalWindow title='Delete group' subtitle='Are you sure you want to delete this group?'
-                variantColor='danger' btn='Delete' id='deleteGroup' />
+            <ModalWindow title='Delete group' subtitle={'Are you sure you want to delete group '+groupNameSelected+' ?'}
+                variantColor='danger' btn='Delete' id='deleteGroup' />            
 
             {Object.keys(props.allGroupList || []).length <= 0
                 ?
-                    <div></div>
+                    <h3 className="text-center">There are no groups created</h3>
                 :
                 <div>
                     <table className="table table-hover table-layout-fixed">
@@ -107,12 +113,13 @@ const mapDispatchToProps = (dispatch) => ({
     toggleProgressBar: (status) => dispatch(ToggleProgressBar(status)),
     deleteGroup: (group) => dispatch(DeleteGroup(group)),
     toggleModal: (status) => dispatch(ToggleModalWindow(status)),
+    modalButtonClicked: (option) => dispatch(ModalButtonClicked(option)),
     showGroupForm: () => dispatch(ShowGroupForm()),
     saveGroupSelected: (group) => dispatch(SaveGroupSelected(group)),
-    modalButtonClicked: (option) => dispatch(ModalButtonClicked(option)),
     showEditForm: () => dispatch(ShowEditForm()),
     groupToDetails: (group) => dispatch(GroupToDetails(group)),
     closeGroupForm: () => dispatch(CloseGroupForm()),
+    getAllGroups: () => dispatch(GetAllGroups()),
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);

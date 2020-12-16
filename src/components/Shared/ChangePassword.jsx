@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import Menu from '../../Shared/Components/Menu/Menu'
-import Banner from '../../Shared/Components/Banner/Banner'
+import Menu from './Components/Menu/Menu'
+import Banner from './Components/Banner/Banner'
 import { connect } from 'react-redux';
-import { changePassword, toggleAlert, ResetAxiosChangePass, AddAlertToAlertList } from '../../../store/webUtilities/actions';
-import {GetUserName} from '../CheckToken';
-import { validateChangePasswordForm } from '../validation'
+import { changePassword, toggleAlert, ResetAxiosChangePass, AddAlertToAlertList } from '../../store/webUtilities/actions';
+import {GetUserName} from './CheckToken';
+import { validateChangePasswordForm } from './validation'
 import ReactPasswordStrength from 'react-password-strength';
-import AlertDialog from '../AlertDialog'
+import AlertDialog from './AlertDialog'
 
 const ChangePassword = (props) => {
     const [alerts, setAlert] = useState([])
@@ -191,7 +191,6 @@ const ChangePassword = (props) => {
 const mapStateToProps = (state) => {
     return {
         passwordChange: state.webUtilities.passwordChange,
-        errorAlertShow: state.webUtilities.errorAlertShow,
         alertList: state.webUtilities.alertList
     }
 }

@@ -8,7 +8,7 @@ import { Route, Link, BrowserRouter, NavLink } from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Dropdown from 'react-bootstrap/Dropdown';
-import {CheckToken, RemoveToken, GetUserName} from '../../CheckToken'
+import {CheckToken, RemoveToken, GetUserName} from '../CheckToken'
 import ChangePassLink from './ChangePassLink';
 
 const Menu = () => {

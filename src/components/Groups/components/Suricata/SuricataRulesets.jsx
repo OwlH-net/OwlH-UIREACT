@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { FaPlus, FaSyncAlt, FaTrash } from "react-icons/fa";
-import { DisplayAddRulesetForm, GetRulesetList, DeleteRulesetSelected, AddRulesetsToGroup } from '../../../../store/groups/actions'
+import { DisplayAddRulesetForm, GetRulesetList, DeleteRulesetSelected, AddRulesetsToGroup, SyncGroupRuleset } from '../../../../store/groups/actions'
 import { ToggleProgressBar, ToggleModalWindow, ModalButtonClicked } from '../../../../store/webUtilities/actions'
 import ModalWindow from '../../../Shared/ModalWindow'
 
@@ -37,6 +37,9 @@ const SuricataRulesets = (props) => {
             </tr>
         })
         return  <>
+            <tr>
+                <td colSpan={3}><h5>Add ruleset to group</h5></td>
+            </tr>
             {totalList}
             <tr className="background-grey">
                 <td colSpan={3}>
@@ -73,7 +76,7 @@ const SuricataRulesets = (props) => {
                 {
                     rset.checked == "true"
                     ?
-                    <span className="badge badge-pill bg-dark align-text-bottom text-white size18">{rset.name} | <FaTrash size={18} className="iconRed" onClick={() => {deleteRuleset(id,  rset.name)}}/> </span>
+                    <span >{rset.name} | <FaTrash size={18} className="iconRed" onClick={() => {deleteRuleset(id,  rset.name)}}/> </span>
                     :
                     null
                 }
@@ -88,11 +91,18 @@ const SuricataRulesets = (props) => {
         props.getRulesetList(props.groupToDetails.guuid)
     }
 
+    const SynchronizeGroupRuleset = () => {
+        props.syncGroupRuleset({
+            uuid: props.groupToDetails.guuid
+        })
+    }
+
     //modal for delete
     const deleteRuleset = (id, name) => {
         setRulesetSelected({rsetID: id ,rsetName: name})
         props.toggleModal(true)
     }
+
     useEffect(() => {
         if(props.modalActionSelected.status){            
             //call delete node and get all nodes at axios
@@ -109,13 +119,17 @@ const SuricataRulesets = (props) => {
 
     return (
         <div>
-            <ModalWindow title='Delete group ruleset' subtitle='Do you want to delete the ruleset ?' 
+            <ModalWindow title='Delete group ruleset' subtitle={'Are you sure you want to delete ruleset '+rulesetSelected.rsetName+' ?'}
                 variantColor='danger' btn='Delete' id='deleteRuleset' />
 
-            <table className="table table-hover table-layout-fixed">
+            <h5 className="mt-3">Rulesets</h5>
+            <table className="table table-layout-fixed">
                 <tbody>
                     <tr>
-                        <td width="20%">Ruleset <FaPlus size={21} className="iconBlue" onClick={() => {getGroupRuleset()}} /> <FaSyncAlt size={21} className="iconBlue"/> </td>
+                        <td width="20%">
+                            <FaPlus size={21} className="iconBlue" onClick={() => {getGroupRuleset()}} /> &nbsp;
+                            <FaSyncAlt size={21} className="iconBlue" onClick={() => {SynchronizeGroupRuleset()}}/> 
+                        </td>
                         <td colSpan={2}> 
                             {currentRulesetsSelected()}
                         </td>
@@ -151,6 +165,7 @@ const mapDispatchToProps = (dispatch) => ({
     modalButtonClicked: (option) => dispatch(ModalButtonClicked(option)),
     deleteRulesetSelected: (data) => dispatch(DeleteRulesetSelected(data)),
     addRulesetsToGroup: (data) => dispatch(AddRulesetsToGroup(data)),
+    syncGroupRuleset: (data) => dispatch(SyncGroupRuleset(data)),
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);

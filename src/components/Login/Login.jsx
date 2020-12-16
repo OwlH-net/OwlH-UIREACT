@@ -26,11 +26,9 @@ class Login extends Component {
             password: this.state.password
         }
         //display token
-        console.log("display sipinner")        
         this.props.displaySpinner()
 
         //get token from server
-        console.log("Sending data")        
         this.props.userLoginToken(data)
     }
 
@@ -46,11 +44,22 @@ class Login extends Component {
         //load message when admin credentials are default
         this.props.checkDefaultCredentials()      
     }
+    
+    // checkAlerts(){
+    //     console.log(props.alertList)
+    //     return (props.alertList || []).map(alert => {
+    //         return <AlertDialog key={alert.id} id={alert.id} title={alert.title} subtitle={alert.subtitle} variant={alert.variant}/>
+    //     })
+    // }
 
     render() {
         return (
             <div className="backgroundLogin text-center p-5">
             {/* <AlertDialog key={alert.id} id={alert.id} title={alert.title} subtitle={alert.subtitle} variant={alert.variant}/> */}
+            {/* {this.checkAlerts} */}
+                {/* {
+                    console.log(this.props.alertList)
+                } */}
                 {
                     !this.props.isMasterActive 
                     ? <span id="master-offline-banner" className="badge bg-danger align-text-bottom text-white m-3 p-3"><b>Master connection error! </b>The master selected is currently unavailable</span>

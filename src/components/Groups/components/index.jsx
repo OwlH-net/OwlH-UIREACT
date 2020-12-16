@@ -8,18 +8,27 @@ import GroupForm from './GroupForm'
 import { GetAllGroups, ShowGroupForm } from '../../../store/groups/actions'
 import { ToggleProgressBar } from '../../../store/webUtilities/actions'
 import {ProgressBar} from 'react-bootstrap'
+import AlertDialog from '../../Shared/AlertDialog'
 
 const index = (props) => {
-
-    //getAllNodes
+    
     useEffect(() => {
         props.toggleProgressBar(true);
-        props.getAllGroups();
+        props.getAllGroups();  
     }, [])
+        
+    //Call alert list for every map item
+    const alertItems = (props.alertList || []).map(alert => {
+        return <AlertDialog key={alert.id} id={alert.id} title={alert.title} subtitle={alert.subtitle} variant={alert.variant}/>
+    })
 
     return (
         <div>
             <Menu />   
+
+            {/* Alert dialog */}
+            {alertItems}
+
             <Banner title="Groups" subtitle="all groups list" />  
             {props.progressBar ? <ProgressBar animated now={100} /> : null}
 
@@ -42,9 +51,11 @@ const index = (props) => {
 
 const mapStateToProps = (state) => {
     return {
+        allGroupList: state.groups.allGroupList,
         isEdit: state.groups.isEdit,
         isShowGroupForm: state.groups.isShowGroupForm,
         progressBar: state.webUtilities.progressBar,
+        alertList: state.webUtilities.alertList,
     }
 }
 const mapDispatchToProps = (dispatch) => ({    

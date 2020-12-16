@@ -10,7 +10,11 @@ const initialState = {
     isMasterActive: true,
     alertList: [],
     passwordChange: {},
-
+    fileContentObject: {},
+    fileContentName: '',
+    fileContentContent: '',
+    fileToDisplay: '',
+    fileTypeToDisplay: '',
 }
 
 function toggleModalWindowStatus(state, data) {
@@ -83,10 +87,18 @@ function toggleProgressBarStatus(state, data) {
   }
 }
 
-function addAlertToAlertList(state, data) {
+function addAlertToAlertList(state, data) {  
   return {
     ...state, 
     alertList: [...state.alertList, data]
+  }
+}
+
+function saveFileToDisplay(state, data) {  
+  return {
+    ...state, 
+    fileToDisplay: data.file,
+    fileTypeToDisplay: data.type
   }
 }
 
@@ -101,6 +113,15 @@ function deleteAlertToAlertList(state, data) {
   return {
     ...state, 
     alertList: state.alertList.filter(alert => alert.id != data)
+  }
+}
+
+function saveFileContentToDisplay(state, data) {
+  return {
+    ...state, 
+    fileContentObject: data,
+    fileContentName: data.fileName,
+    fileContentContent: data.fileContent
   }
 }
 
@@ -128,6 +149,10 @@ export default function webUtilities(state = initialState, action) {
       return toggleModalWindowStatus(state, action.payload);
     case ActionTypes.MODAL_ACTION_SELECTED:  
       return getModalActionSelected(state, action.payload);
+    case ActionTypes.FILE_TO_DISPLAY:  
+      return saveFileToDisplay(state, action.payload);
+    case ActionTypes.FILE_CONTENT_TO_DISPLAY:  
+      return saveFileContentToDisplay(state, action.payload);
     default:
       return state;
   }

@@ -1,6 +1,6 @@
 import * as ActionTypes from './group-action-types';
-import {GetUserName, GetToken} from '../../components/Shared/CheckToken'
-import {ToggleProgressBar} from '../webUtilities/actions'
+import {GetUserName, GetToken, RemoveToken} from '../../components/Shared/CheckToken'
+import { ToggleProgressBar, AddAlertToAlertList, toggleAlert, PermissionsAlert } from '../webUtilities/actions'
 import axios from 'axios'
 
 const config = {
@@ -23,8 +23,23 @@ export function GetGroupSuricataList(groupID) {
   return (dispatch) => {
     axios.get('/api/getGroupSuricataList/'+groupID, newConfig)
     .then(resp => {
-      dispatch(ToggleProgressBar(false))
-      dispatch(accGetGroupSuricataList(resp.data))
+      dispatch(ToggleProgressBar(false))   
+      if(resp.data.token == "none"){RemoveToken()}
+      if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
+        dispatch(AddAlertToAlertList({
+          id: new Date() / 1000+'-valid',
+          title: "Error getting Suricata List! ",
+          subtitle: resp.data.error,
+          variant: "danger"
+        }))
+        dispatch(toggleAlert(true))
+      }else{
+        dispatch(accGetGroupSuricataList(resp.data))
+      }
     })
   }
 }
@@ -48,9 +63,30 @@ export function GetAllGroups() {
 
     return (dispatch) => {
       axios.get('/api/groups', newConfig)
-      .then(resp => {
-        dispatch(accGetAllGroups(resp.data))
-        dispatch(ToggleProgressBar(false))
+      .then(resp => {        
+        
+        if(resp.data != null){
+          dispatch(ToggleProgressBar(false))
+          if(resp.data.token == "none"){RemoveToken()}
+          if(resp.data == null){
+            dispatch(accGetAllGroups({}))
+          }            
+          else if(resp.data.permissions == "none"){
+            dispatch(PermissionsAlert())
+          }else if(resp.data.ack == "false"){
+            dispatch(AddAlertToAlertList({
+              id: new Date() / 1000+'-valid',
+              title: "Error getting groups! ",
+              subtitle: resp.data.error,
+              variant: "danger"
+            }))
+            dispatch(toggleAlert(true))
+          }else{
+            dispatch(accGetAllGroups(resp.data))
+          }
+        }else{
+          dispatch(accGetAllGroups([]))
+        }
       })
     }
 }
@@ -58,6 +94,46 @@ function accGetAllGroups(data) {
     return {
       type: ActionTypes.GET_ALL_GROUPS,
       payload: data
+    }
+}
+
+export function SyncPathGroup(data) {
+    const token = GetToken()
+    const username = GetUserName()
+  
+    let newHeaders = {
+      ...config.headers, 
+      'user': username,
+      'token': token
+    }
+    let newConfig = {headers: newHeaders}
+
+    return (dispatch) => {
+      axios.post('/api/syncPathGroup', JSON.stringify(data), newConfig)
+      .then(resp => {
+      
+        dispatch(ToggleProgressBar(false))
+        dispatch(GetMD5(data, false))
+        if(resp.data.token == "none"){RemoveToken()}
+        if(resp.data.ack == "false"){
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Error sync paths ",
+            subtitle: resp.data.error,
+            variant: "danger"
+          }))
+          dispatch(toggleAlert(true))
+        }else{
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Success! ",
+            subtitle: "Paths synchronized successfully!",
+            variant: "success"
+          }))
+          dispatch(toggleAlert(true))
+        }
+      
+      })
     }
 }
 
@@ -75,8 +151,140 @@ export function AddGroup(data) {
     return (dispatch) => {
       axios.post('/api/group', JSON.stringify(data), newConfig)
       .then(resp => {
+      
         dispatch(ToggleProgressBar(false))
-        dispatch(GetAllGroups())
+        if(resp.data.token == "none"){RemoveToken()}
+        if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Error adding groups! ",
+            subtitle: resp.data.error,
+            variant: "danger"
+          }))
+          dispatch(toggleAlert(true))
+        }else{
+          dispatch(GetAllGroups())
+        }
+
+      })
+    }
+}
+
+export function SyncAllSuricataGroup(groupID) {
+    const token = GetToken()
+    const username = GetUserName()
+  
+    let newHeaders = {
+      ...config.headers, 
+      'user': username,
+      'token': token
+    }
+    let newConfig = {headers: newHeaders}
+
+    return (dispatch) => {
+      axios.put('/api/syncAllSuricataGroup', JSON.stringify(groupID), newConfig)
+      .then(resp => {
+        if(resp.data.token == "none"){RemoveToken()}
+        if(resp.data.permissions == "none"){
+          dispatch(PermissionsAlert())
+        }else if(resp.data.ack == "false"){
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Synchronize error ",
+            subtitle: resp.data.error,
+            variant: "danger"
+          }))
+          dispatch(toggleAlert(true))
+        }else{
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Success! ",
+            subtitle: "Group Suricata has been synchronized successfully!",
+            variant: "success"
+          }))
+          dispatch(toggleAlert(true))
+        }
+      })
+    }
+}
+
+export function SyncGroupRuleset(data) {
+    const token = GetToken()
+    const username = GetUserName()
+  
+    let newHeaders = {
+      ...config.headers, 
+      'user': username,
+      'token': token
+    }
+    let newConfig = {headers: newHeaders}
+
+    return (dispatch) => {
+      axios.put('/api/syncGroupRulesets', JSON.stringify(data), newConfig)
+      .then(resp => {
+        if(resp.data.token == "none"){RemoveToken()}
+        if(resp.data.permissions == "none"){
+          dispatch(PermissionsAlert())
+        }else if(resp.data.ack == "false"){
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Error getting MD5! ",
+            subtitle: resp.data.error,
+            variant: "danger"
+          }))
+          dispatch(toggleAlert(true))
+        }else{
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Success! ",
+            subtitle: "Ruleset synchronized successfully.",
+            variant: "success"
+          }))
+          dispatch(toggleAlert(true))
+        }
+      })
+    }
+}
+
+export function GetMD5(data, showBanner) {
+    const token = GetToken()
+    const username = GetUserName()
+  
+    let newHeaders = {
+      ...config.headers, 
+      'user': username,
+      'token': token
+    }
+    let newConfig = {headers: newHeaders}
+
+    return (dispatch) => {
+      axios.put('/api/getMD5files', JSON.stringify(data), newConfig)
+      .then(resp => {
+        if(resp.data.token == "none"){RemoveToken()}
+        if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Error getting MD5! ",
+            subtitle: resp.data.error,
+            variant: "danger"
+          }))
+          dispatch(toggleAlert(true))
+        }else{
+          if(showBanner){
+            dispatch(AddAlertToAlertList({
+              id: new Date() / 1000+'-valid',
+              title: "Get file MD5 ",
+              subtitle: "Files reloaded successfully!",
+              variant: "success"
+            }))
+            dispatch(toggleAlert(true))
+          }
+          dispatch(accCheckMD5(resp.data))
+        }
       })
     }
 }
@@ -95,7 +303,20 @@ export function CheckMD5(data) {
     return (dispatch) => {
       axios.put('/api/getMD5files', JSON.stringify(data), newConfig)
       .then(resp => {
-        dispatch(accCheckMD5(resp.data))
+        if(resp.data.token == "none"){RemoveToken()}
+        if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Error getting MD5! ",
+            subtitle: resp.data.error,
+            variant: "danger"
+          }))
+          dispatch(toggleAlert(true))
+        }else{         
+          dispatch(accCheckMD5(resp.data))
+        }
       })
     }
 }
@@ -121,10 +342,31 @@ export function ChangeSuricataConfigGroupPaths(data) {
       axios.put('/api/changePaths', JSON.stringify(data), newConfig)
       .then(resp => {
         dispatch(ToggleProgressBar(false))
+        if(resp.data.token == "none"){RemoveToken()}
+        if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
+        dispatch(AddAlertToAlertList({
+          id: new Date() / 1000+'-valid',
+          title: "Error changing paths! ",
+          subtitle: resp.data.error,
+          variant: "danger"
+        }))
+        dispatch(toggleAlert(true))
+      }else{
+        dispatch(AddAlertToAlertList({
+          id: new Date() / 1000+'-valid',
+          title: "Changing paths",
+          subtitle: "Path changed successfully!",
+          variant: "success"
+        }))
+        dispatch(toggleAlert(true))          
         dispatch(HidePathInput())
         dispatch(GetAllGroups())
-      })
-    }
+        dispatch(CheckMD5())
+      }
+    })
+  }
 }
 
 export function EditGroupSelected(data) {
@@ -141,9 +383,53 @@ export function EditGroupSelected(data) {
     return (dispatch) => {
       axios.put('/api/editGroup', JSON.stringify(data), newConfig)
       .then(resp => {
+
         dispatch(ToggleProgressBar(false))
-        dispatch(GetAllGroups())
+        if(resp.data.token == "none"){RemoveToken()}
+        if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Error editing group! ",
+            subtitle: resp.data.error,
+            variant: "danger"
+          }))
+          dispatch(toggleAlert(true))
+        }else{
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Edit group! ",
+            subtitle: "The group has been edited successfully",
+            variant: "success"
+          }))
+          dispatch(toggleAlert(true))
+
+          dispatch(GetAllGroups())
+        }
+
       })
+    }
+}
+
+export function MasterFileName(file) {
+    return {
+      type: ActionTypes.MASTER_FILE_NAME,
+      payload: file
+    }
+}
+
+export function MasterFilePath(path) {
+    return {
+      type: ActionTypes.MASTER_FILE_PATH,
+      payload: path
+    }
+}
+
+export function ToggleNodeFiles(node) {
+    return {
+      type: ActionTypes.TOGGLE_SHOW_NODE_FILES,
+      payload: node
     }
 }
 
@@ -156,6 +442,18 @@ export function ShowPathInput() {
 export function HidePathInput() {
     return {
       type: ActionTypes.HIDE_PATH_INPUT
+    }
+}
+
+export function ToggleMasterFiles() {
+    return {
+      type: ActionTypes.DISPLAY_MASTER_FILES
+    }
+}
+
+export function ResetDisplayNodeFileList() {
+    return {
+      type: ActionTypes.RESET_DISPLAY_NODE_FILES
     }
 }
 
@@ -206,7 +504,20 @@ export function DeleteGroup(nodeUUID) {
     axios.delete('/api/deleteGroup/'+nodeUUID, newConfig)
     .then(resp => {
       dispatch(ToggleProgressBar(false))
-      dispatch(GetAllGroups())
+      if(resp.data.token == "none"){RemoveToken()}
+      if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
+        dispatch(AddAlertToAlertList({
+          id: new Date() / 1000+'-valid',
+          title: "Error deleting group! ",
+          subtitle: resp.data.error,
+          variant: "danger"
+        }))
+        dispatch(toggleAlert(true))
+      }else{
+        dispatch(GetAllGroups())
+      }
     })
   }
 }
@@ -225,8 +536,23 @@ export function ShowNodesGroupForm(guuid) {
   return (dispatch) => {
     axios.get('/api/getAllNodesGroup/'+guuid, newConfig)
     .then(resp => {
-      dispatch(accShowNodesGroupForm(resp.data))
+      
       dispatch(ToggleProgressBar(false))
+      if(resp.data.token == "none"){RemoveToken()}
+      if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
+        dispatch(AddAlertToAlertList({
+          id: new Date() / 1000+'-valid',
+          title: "Error getting group nodes! ",
+          subtitle: resp.data.error,
+          variant: "danger"
+        }))
+        dispatch(toggleAlert(true))
+      }else{
+        dispatch(accShowNodesGroupForm(resp.data))
+      }
+
     })
   }
 }
@@ -265,7 +591,21 @@ export function GetRulesetList(guuid) {
     axios.get('/api/getGroupSelectedRulesets/'+guuid, newConfig)
     .then(resp => {
       dispatch(ToggleProgressBar(false))
-      dispatch(accGetRulesetList(resp.data))
+      if(resp.data.token == "none"){RemoveToken()}
+      if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
+        dispatch(AddAlertToAlertList({
+          id: new Date() / 1000+'-valid',
+          title: "Error getting ruleset list! ",
+          subtitle: resp.data.error,
+          variant: "danger"
+        }))
+        dispatch(toggleAlert(true))
+      }else{
+        dispatch(accGetRulesetList(resp.data))
+      }
+
     })
   }
 }
@@ -290,9 +630,24 @@ export function AddNodesToGroup(data) {
   return (dispatch) => {
     axios.put('/api/addGroupNodes', JSON.stringify(data), newConfig)
     .then(resp => {
+      
       dispatch(ToggleProgressBar(false))
-      dispatch(HideAllNodesGroup())
-      dispatch(GetAllGroups())
+      if(resp.data.token == "none"){RemoveToken()}
+      if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
+        dispatch(AddAlertToAlertList({
+          id: new Date() / 1000+'-valid',
+          title: "Error adding groups! ",
+          subtitle: resp.data.error,
+          variant: "danger"
+        }))
+        dispatch(toggleAlert(true))
+      }else{
+        dispatch(HideAllNodesGroup())
+        dispatch(GetAllGroups())
+      }
+
     })
   }
 }
@@ -311,7 +666,23 @@ export function AnalyzerStatus(data) {
   return (dispatch) => {
     axios.put('/api/analyzer', JSON.stringify(data), newConfig)
     .then(resp => {
-      dispatch(GetAllGroups())
+
+      dispatch(ToggleProgressBar(false))
+      if(resp.data.token == "none"){RemoveToken()}
+      if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
+        dispatch(AddAlertToAlertList({
+          id: new Date() / 1000+'-valid',
+          title: "Error Changing analyzer status! ",
+          subtitle: resp.data.error,
+          variant: "danger"
+        }))
+        dispatch(toggleAlert(true))
+      }else{
+        dispatch(GetAllGroups())
+      }
+
     })
   }
 }
@@ -330,7 +701,23 @@ export function ChangeSuricataStatus(data) {
   return (dispatch) => {
     axios.put('/api/changeSuricataStatus', JSON.stringify(data), newConfig)
     .then(resp => {
-      dispatch(GetAllGroups())
+
+      dispatch(ToggleProgressBar(false))
+      if(resp.data.token == "none"){RemoveToken()}
+      if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
+        dispatch(AddAlertToAlertList({
+          id: new Date() / 1000+'-valid',
+          title: "Error changing Suricata status! ",
+          subtitle: resp.data.error,
+          variant: "danger"
+        }))
+        dispatch(toggleAlert(true))
+      }else{
+        dispatch(GetAllGroups())
+      }
+
     })
   }
 }
@@ -349,7 +736,22 @@ export function SyncAnalyzer(data) {
   return (dispatch) => {
     axios.put('/api/syncAnalyzerData', JSON.stringify(data), newConfig)
     .then(resp => {
-      dispatch(GetAllGroups())
+
+      dispatch(ToggleProgressBar(false))
+      if(resp.data.token == "none"){RemoveToken()}
+      if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
+        dispatch(AddAlertToAlertList({
+          id: new Date() / 1000+'-valid',
+          title: "Error Analyzer sync! ",
+          subtitle: resp.data.error,
+          variant: "danger"
+        }))
+        dispatch(toggleAlert(true))
+      }else{
+        dispatch(GetAllGroups())
+      }
     })
   }
 }
@@ -368,8 +770,22 @@ export function DeleteGroupNode(nodeUUID) {
   return (dispatch) => {
     axios.delete('/api/deleteNodeGroup/'+nodeUUID, newConfig)
     .then(resp => {
+
       dispatch(ToggleProgressBar(false))
-      dispatch(GetAllGroups())
+      if(resp.data.token == "none"){RemoveToken()}
+      if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
+        dispatch(AddAlertToAlertList({
+          id: new Date() / 1000+'-valid',
+          title: "Error deleting group node! ",
+          subtitle: resp.data.error,
+          variant: "danger"
+        }))
+        dispatch(toggleAlert(true))
+      }else{
+        dispatch(GetAllGroups())
+      }
     })
   }
 }
@@ -384,15 +800,27 @@ export function DeleteRulesetSelected(values) {
     'token': token
   }
   let newConfig = {headers: newHeaders}
-  let deleteData = {data: JSON.stringify(values)}
 
-  console.log(deleteData)
   return (dispatch) => {
-    axios.delete('/api/deleteExpertGroupRuleset', {deleteData, newConfig})
+    axios.delete('/api/deleteExpertGroupRuleset', {data:JSON.stringify(values), headers: newHeaders})
     .then(resp => {
-      console.log(resp.data)
+
       dispatch(ToggleProgressBar(false))
-      dispatch(GetRulesetList(values.uuid))
+      if(resp.data.token == "none"){RemoveToken()}
+      if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
+        dispatch(AddAlertToAlertList({
+          id: new Date() / 1000+'-valid',
+          title: "Error deleting ruleset! ",
+          subtitle: resp.data.error,
+          variant: "danger"
+        }))
+        dispatch(toggleAlert(true))
+      }else{
+        dispatch(GetRulesetList(values.uuid))
+      }
+
     })
   }
 }
@@ -411,9 +839,24 @@ export function AddRulesetsToGroup(data) {
   return (dispatch) => {
     axios.put('/api/addRulesetsToGroup', JSON.stringify(data), newConfig)
     .then(resp => {
+
       dispatch(ToggleProgressBar(false))
-      dispatch(DisplayAddRulesetForm(false))
-      dispatch(GetRulesetList(data.uuid))
+      if(resp.data.token == "none"){RemoveToken()}
+      if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
+        dispatch(AddAlertToAlertList({
+          id: new Date() / 1000+'-valid',
+          title: "Error adding ruleset! ",
+          subtitle: resp.data.error,
+          variant: "danger"
+        }))
+        dispatch(toggleAlert(true))
+      }else{
+        dispatch(DisplayAddRulesetForm(false))
+        dispatch(GetRulesetList(data.uuid))
+      }
+
     })
   }
 }

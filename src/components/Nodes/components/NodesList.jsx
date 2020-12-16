@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { FaBoxOpen, FaEdit, FaTrashAlt } from "react-icons/fa";
 import NodeStatus from './NodeStatus'
 import ModalWindow from '../../Shared/ModalWindow'
-import { SetLoading, getAllNodes, DeleteNode, NodeToEdit } from '../../../store/node/actions'
-import { ToggleModalWindow, ModalButtonClicked, ToggleProgressBar } from '../../../store/webUtilities/actions'
+import { SetLoading, GetAllNodes, DeleteNode, NodeToEdit } from '../../../store/node/actions'
+import { ToggleModalWindow, ModalButtonClicked } from '../../../store/webUtilities/actions'
 import { connect } from 'react-redux';
 
 const NodesList = (props) => {
 
     const [nodeSelected, setNodeSelected] = useState('')
+    const [nodeNameSelected, setNodeNameSelected] = useState('')
     const [nodesFiltered, setNodesFiltered] = useState([])
     //reload nodes for take current node status
     useEffect(() => {
@@ -34,10 +35,6 @@ const NodesList = (props) => {
         {props.sortIP == 'asc' ? sortedObj = props.allNodesList.sort(compareIpAsc) : sortedObj = props.allNodesList.sort(compareIpDesc)}
         setNodesFiltered(sortedObj)
     }, [props.sortIP]);
-
-    useEffect(() => {
-        nodeStatusReload()
-    }, []);
 
     const nodeStatusReload = () => {
         props.getNodes()
@@ -94,9 +91,10 @@ const NodesList = (props) => {
     }
 
     //Set current node uuid
-    const deleteCurrentNode = (id) => {
+    const deleteCurrentNode = (name,id) => {
         setNodeSelected(id)
         props.toggleModal(true)
+        setNodeNameSelected(name)
     }
     
     //Set current node uuid
@@ -121,10 +119,17 @@ const NodesList = (props) => {
         //filter filtered nodes by search bar
         if(props.search != '' ){
             nodesAfterFilterAndSearch = (nodesAfterFilter || []).filter(function (key) {
-                return (key.name.includes(props.search) || key.ip.includes(props.search));
+                return (key.name.includes(props.search) || key.ip.includes(props.search) || key.tags.includes(props.search));
             });
         }else{
             nodesAfterFilterAndSearch = nodesAfterFilter
+        }
+
+        const paramsList = (tags) => { 
+            var tagsArray =  tags.split(",");
+            return (tagsArray || []).map(tag => {
+                return <li key={tag}>{tag}</li>
+            })
         }
 
         const totalList = Object.entries(nodesAfterFilterAndSearch || {}).map(([id , val]) =>
@@ -140,12 +145,18 @@ const NodesList = (props) => {
                     <td key={val.uuid+'-status'}>
                         <NodeStatus key={val.uuid+'-node'} registrationStatus={val.token} status={val.status} nodeUUID={val.uuid}/>        
                     </td>
+                    <td key={val.uuid+'-tag'}>
+                        {val.tags != '' ? <ul>{paramsList(val.tags)}</ul> : <b>No tags...</b>}
+                    </td>
+                    <td key={val.uuid+'-org'}>
+                        {val.orgs != '' ? <ul>{paramsList(val.orgs)}</ul> : <b>No orgs...</b>}
+                    </td>
                     <td key={val.uuid+'-actions'}>
                         <span>
                             <FaBoxOpen size={21} className="iconBlue"/> Manage node <br/>
                             <hr style={{ color: "dodgerblue", backgroundColor: "dodgerblue", height: 1}}/>
                             <FaEdit size={21} className="iconBlue" onClick={() => {modifyCurrentNode(val.uuid, val)}}/> Modify node<br/>
-                            <FaTrashAlt size={21} className="iconRed" onClick={() => {deleteCurrentNode(val.uuid)}}/> Delete node <br/>
+                            <FaTrashAlt size={21} className="iconRed" onClick={() => {deleteCurrentNode(val.name, val.uuid)}}/> Delete node <br/>
                         </span>
                     </td>
                 </tr>
@@ -157,26 +168,28 @@ const NodesList = (props) => {
     return (        
         <div>
             {/* modal window */}
-            <ModalWindow title='Delete node' subtitle='Are you sure you want to delete this node?' 
+            <ModalWindow title='Delete node' subtitle={'Are you sure you want to delete node '+nodeNameSelected+' ?'}
                 variantColor='danger' btn='Delete' id='deleteNode' />
 
-            {Object.keys(props.allNodesList || []).length <= 0 
+                {Object.keys(props.allNodesList || []).length <= 0 
                 ?
-                    <div></div>
+                    <h3 className="text-center">No nodes created</h3>
                 :
                     <table className="table table-hover table-layout-fixed">
                         <thead>
                             <tr>
                                 <th>Node name</th>
                                 <th>Node status</th>
-                                <th width="25%">Actions</th>
+                                <th>Node Tag</th>
+                                <th>Node Orgs</th>
+                                <th width="20%">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {nodesData()}
                         </tbody>
                     </table>
-            }
+                }
         </div>
     )
 }
@@ -187,9 +200,9 @@ const mapStateToProps = (state) => {
         sortName: state.node.sortName,
         sortIP: state.node.sortIP,
         filterByStatus: state.node.filterByStatus,
-        allNodesList: state.node.allNodesList,
-        // modal: state.webUtilities.modal,
+        allNodesList: state.node.allNodesList,        
         modalActionSelected: state.webUtilities.modalActionSelected,
+        isEditNode: state.node.isEditNode,
     }
 }
 const mapDispatchToProps = (dispatch) => ({
@@ -197,9 +210,8 @@ const mapDispatchToProps = (dispatch) => ({
     deleteNode: (node) => dispatch(DeleteNode(node)),
     toggleModal: (status) => dispatch(ToggleModalWindow(status)),
     modalButtonClicked: (option) => dispatch(ModalButtonClicked(option)),
-    getNodes: () => dispatch(getAllNodes()),
-    toggleProgressBar: (status) => dispatch(ToggleProgressBar(status)),
-    nodeToEdit: (status) => dispatch(NodeToEdit(status))
+    getNodes: () => dispatch(GetAllNodes()),
+    nodeToEdit: (status) => dispatch(NodeToEdit(status)),
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);

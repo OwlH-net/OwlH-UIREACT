@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import  SuricataList from './SuricataList'
-import { ChangeSuricataStatus } from '../../../../store/groups/actions'
+import { ChangeSuricataStatus, SyncAllSuricataGroup } from '../../../../store/groups/actions'
 import SuricataRulesets from './SuricataRulesets'
 import SuricataConfig from './SuricataConfig'
 import SuricataNodes from './SuricataNodes'
@@ -92,10 +92,10 @@ const GroupDetailsSuricata = (props) => {
                         </div>
                     :
                         <>
-                            <a className="btn btn-primary float-right text-decoration-none text-white right" onClick={() => {}}>Sync</a>
-                            <SuricataRulesets />
+                            <a className="btn btn-primary float-right text-decoration-none text-white right" onClick={() => {props.syncAllSuricataGroup({uuid: props.groupToDetails.guuid})}}>Sync</a>
+                            <SuricataRulesets />                            
                             <SuricataConfig />
-                            <SuricataMasterFilesList />
+                            <SuricataMasterFilesList />                            
                             <SuricataNodes />
                         </>
                 }
@@ -117,6 +117,7 @@ const mapDispatchToProps = (dispatch) => ({
     toggleProgressBar: (status) => dispatch(ToggleProgressBar(status)),
     getGroupSuricataList: (groupID) => dispatch(GetGroupSuricataList(groupID)),
     changeSuricataStatus: () => dispatch(ChangeSuricataStatus()),    
+    syncAllSuricataGroup: (groupID) => dispatch(SyncAllSuricataGroup(groupID)),    
 })
 
 const withProps = connect(mapStateToProps, mapDispatchToProps);

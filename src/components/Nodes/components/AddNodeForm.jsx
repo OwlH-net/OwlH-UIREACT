@@ -3,9 +3,11 @@ import { connect } from 'react-redux';
 import { Enroll } from '../../../store/node/actions'
 import { ToggleProgressBar } from '../../../store/webUtilities/actions'
 import { EditNode, ToggleAddNodeForm } from '../../../store/node/actions'
+import Tags from "./Tags"
+import Groups from "./Groups"
+import Organizations from "./Organizations"
 
 const AddNodeForm = (props) =>  {
-    const [groupsSelected, setGroupsSelected] = useState([])
     const [formData, setFormData] = useState({
         name: "",
         ip: "",
@@ -35,39 +37,33 @@ const AddNodeForm = (props) =>  {
         }
     },[props.isEditNode])
 
-    const groupItems = (props.allGroupList || []).map(group => {
-        return <ul className="checkbox-grid" key={group["guuid"]}>
-            <input type="checkbox" value={group["guuid"]} name={group["gname"]} onChange={handleCheck}/>
-            <label htmlFor={group["gname"]}>&nbsp;{group["gname"]}</label>
-        </ul>
-    })
-
-    const getData = () => {             
+    //add node button
+    const getData = () => {
         const enrollData = {
             Node:formData,
-            Group:groupsSelected,
+            Tags:props.tagsSelected,
+            Group:props.groupsSelected,
+            Orgs:props.orgsSelected,
             Suricata:{}
-        }   
+        }
+
+        console.log(enrollData);
+        console.log(enrollData);
+        console.log(enrollData);
+        console.log(enrollData);
 
         props.toggleProgressBar(true)
-        props.enroll(enrollData)
+        // //check if node is creating or editing
+        // {
+        //     props.nodeToEdit.id == undefined || props.nodeToEdit.id == null || props.nodeToEdit.id == ""
+        //     ?
+        //     props.enroll(enrollData)
+        //     :
+        //     props.editNode(editData)
+        // }
         props.toggleAddNodeForm()
     }
 
-    const editNodeData = () => {
-        props.toggleProgressBar(true)
-        formData.id = props.nodeToEdit.id    
-        props.editNode(formData)
-    }
-
-    function handleCheck(e){
-        if(!groupsSelected.includes(event.target.value)){
-            setGroupsSelected([...groupsSelected, event.target.value])
-        }else{
-            setGroupsSelected(groupsSelected.filter((e) => ( e !== event.target.value )))
-        }
-    }
-    
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -78,13 +74,13 @@ const AddNodeForm = (props) =>  {
     return (
         <div>
             <div>
-                <form> 
+                <form>
                     {
                         props.nodeToEdit.id == undefined || props.nodeToEdit.id == null || props.nodeToEdit.id == ""
-                        ?                 
-                        <h4>Add node form</h4>      
+                        ?
+                        <h4>Add node form</h4>
                         :
-                        <h4>Edit node form</h4>      
+                        <h4>Edit node form</h4>
                     }
                     <div className="form-row">
                         <div className="form-group col-md-6">
@@ -133,36 +129,37 @@ const AddNodeForm = (props) =>  {
                         </div>
                     </div>
 
+                    <Tags suggestions={props.allTagsList}/>
+                    <Organizations/>
+                    <Groups form={formData}/>
+
+                    {/* Display button according to edit status */}
+                    <div className="text-right">
                     {
                         props.nodeToEdit.id == undefined || props.nodeToEdit.id == null || props.nodeToEdit.id == ""
                         ?
-                        <div>
-                            <br/>
-                            <h4>Available groups</h4>      
-                            <div >
-                                {groupItems}
-                            </div>
-                            <br/><br/><br/>
-                            <div className="text-right">
-                                <a className="btn btn-primary float-right text-decoration-none text-white right" onClick={() => {getData()}}>Add</a>
-                            </div>
-                        </div>
+                        <a className="btn btn-primary float-right text-decoration-none text-white right" onClick={() => {getData()}}>Add</a>
                         :
-                        <div className="text-right">
-                            <a className="btn btn-primary float-right text-decoration-none text-white right" onClick={() => {editNodeData()}}>Edit</a>
-                        </div>   
-                                            
-                    }                    
+                        <a className="btn btn-primary float-right text-decoration-none text-white right" onClick={() => {getData()}}>Edit</a>
+                    }
+                    </div>
+
                 </form>
             </div>
         </div>
-    )}
+    )
+}
 
 const mapStateToProps = (state) => {
     return {
         allGroupList: state.groups.allGroupList,
         nodeToEdit: state.node.nodeToEdit,
         isEditNode: state.node.isEditNode,
+        allTagsList: state.node.allTagsList,
+        allNodesList: state.node.allNodesList,
+        tagsSelected: state.node.tagsSelected,
+        groupsSelected: state.node.groupsSelected,
+        orgsSelected: state.config.orgsSelected,
     }
 }
 

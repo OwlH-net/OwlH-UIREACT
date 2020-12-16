@@ -14,6 +14,11 @@ const initialState = {
   isAddNodesToGroup: false,
   showSuricataConfigPath: false,
   isEdit: false,
+  showNodeFiles: false,
+  showMasterFiles: false,
+  nodeFileListSelected: '',
+  masterFile: '',
+  masterPath: '',
 }
 
 function getAllGroups(state, data) {
@@ -23,14 +28,21 @@ function getAllGroups(state, data) {
     }
 }
 
-function DisplayGroupForm(state) {
+function displayMasterFiles(state) {
+    return {
+      ...state,
+      showMasterFiles: !state.showMasterFiles
+    }
+}
+
+function displayGroupForm(state) {
     return {
       ...state,
       isShowGroupForm: true
     }
 }
 
-function SaveGroupSelected(state, data) {
+function saveGroupSelected(state, data) {
   return {
       ...state,
       groupToEdit: data
@@ -53,7 +65,7 @@ function showEditForm(state) {
     }
 }
 
-function GroupToDetails(state, data) {
+function groupToDetails(state, data) {
   return {
       ...state,
       groupToDetails: data,
@@ -76,7 +88,7 @@ function hideAllNodesGroup(state) {
     }
 }
 
-function GetGroupSuricataList(state, data) {
+function getGroupSuricataList(state, data) {
   return {
       ...state,
       SuricataGroupList: data,
@@ -118,36 +130,76 @@ function displayRulesetList(state, data) {
     }
 }
 
+function toggleNodeFiles(state,node) {
+  return {
+      ...state,
+      showNodeFiles: !state.showNodeFiles,
+      nodeFileListSelected: node
+    }
+}
+
+function resetDisplayNodeFiles(state) {
+  return {
+      ...state,
+      showNodeFiles: false,
+      nodeFileListSelected: ''
+    }
+}
+
+function saveMasterFile(state, data) {
+  return {
+      ...state,
+      masterFile: data
+    }
+}
+
+function saveMasterPath(state, data) {
+  return {
+      ...state,
+      masterPath: data
+    }
+}
+
 export default function webUtilities(state = initialState, action) {
     switch(action.type) {
       case ActionTypes.GET_ALL_GROUPS:  
         return getAllGroups(state, action.payload);
       case ActionTypes.DISPLAY_FORM_GROUP:  
-        return DisplayGroupForm(state);
+        return displayGroupForm(state);
       case ActionTypes.SAVE_EDIT_FORM:  
-        return SaveGroupSelected(state, action.payload);
+        return saveGroupSelected(state, action.payload);
       case ActionTypes.CLEAR_EDIT_FORM:  
         return clearGroupFormData(state);
       case ActionTypes.SHOW_EDIT_FORM:  
         return showEditForm(state);
       case ActionTypes.GROUP_TO_DETAILS:  
-        return GroupToDetails(state, action.payload);
+        return groupToDetails(state, action.payload);
       case ActionTypes.GET_NODES_GROUP:  
         return getAllNodesGroup(state, action.payload);
       case ActionTypes.HIDE_EDIT_FORM:  
         return hideAllNodesGroup(state);
       case ActionTypes.GET_ALL_SURICATA_GROUP:  
-        return GetGroupSuricataList(state, action.payload);
+        return getGroupSuricataList(state, action.payload);
       case ActionTypes.SHOW_PATH_INPUT:  
         return showInputPathSuricata(state);
       case ActionTypes.HIDE_PATH_INPUT:  
         return hideInputPathSuricata(state);
+      case ActionTypes.TOGGLE_SHOW_NODE_FILES:  
+        return toggleNodeFiles(state, action.payload);
       case ActionTypes.GET_MD5_FILES:  
         return getMD5Files(state, action.payload);
       case ActionTypes.DISPLAY_RULESET_LIST:  
         return displayRulesetList(state, action.payload);
       case ActionTypes.GET_RULESET_LIST:  
         return getRulesetList(state, action.payload);
+      case ActionTypes.DISPLAY_MASTER_FILES:  
+        return displayMasterFiles(state);
+      case ActionTypes.RESET_DISPLAY_NODE_FILES:  
+        return resetDisplayNodeFiles(state);
+      case ActionTypes.MASTER_FILE_NAME:  
+        return saveMasterFile(state, action.payload);
+      case ActionTypes.MASTER_FILE_PATH:  
+        return saveMasterPath(state, action.payload);
       default:
         return state;
     }

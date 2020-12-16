@@ -28,7 +28,7 @@ const ModalWindow = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        modal: state.webUtilities.modal
+        modal: state.webUtilities.modal,
     }
 }
 

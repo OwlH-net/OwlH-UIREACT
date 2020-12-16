@@ -1,7 +1,7 @@
 import * as ActionTypes from './action-types';
 import axios from 'axios'
 import {SetToken, RemoveToken} from '../../components/Shared/CheckToken'
-import {hideSpinner} from '../webUtilities/actions'
+import {hideSpinner, toggleAlert, AddAlertToAlertList} from '../webUtilities/actions'
 // import Spinner from '../../components/Shared/Spinner'
 
 const config = {
@@ -15,12 +15,23 @@ export function userLogin(credentials) {
   return (dispatch)  => {
     axios.put('/api/login', JSON.stringify(credentials), config)
       .then(resp => {
-        //set token
         resp.data.ack == "true" ? SetToken(resp.data.token) : RemoveToken()
-        dispatch(hideSpinner())
 
-        //dispatch
-        dispatch(getLoginToken(resp.data))
+        // if(resp.data.ack != "true"){
+        //   dispatch(AddAlertToAlertList({
+        //     id: new Date() / 1000+'-valid',
+        //     title: "Login Error! ",
+        //     subtitle: "Invalid username or password",
+        //     variant: "danger"
+        //   }))
+        //   dispatch(toggleAlert(true))
+        // }else{
+          //hide login button spinner
+          dispatch(hideSpinner())
+  
+          //get token
+          dispatch(getLoginToken(resp.data))
+        // }
     })
   }
 }

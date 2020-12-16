@@ -1,6 +1,6 @@
 import * as ActionTypes from './node-action-types';
-import {GetUserName, GetToken} from '../../components/Shared/CheckToken'
-import {ToggleProgressBar} from '../webUtilities/actions'
+import {GetUserName, GetToken, RemoveToken} from '../../components/Shared/CheckToken'
+import {ToggleProgressBar, AddAlertToAlertList, toggleAlert, PermissionsAlert} from '../webUtilities/actions'
 import axios from 'axios'
 
 const config = {
@@ -9,7 +9,7 @@ const config = {
   }
 }
 
-export function getAllNodes() {
+export function GetAllNodes() {
     const token = GetToken()
     const username = GetUserName()
   
@@ -23,9 +23,24 @@ export function getAllNodes() {
     return (dispatch) => {
       axios.get('/api/nodes', newConfig)
       .then(resp => {
-        //check token for pending reg
+        console.log(resp.data);
         dispatch(ToggleProgressBar(false))
-        dispatch(accGetAllNodes(resp.data))
+
+        if(resp.data.token == "none"){RemoveToken()}
+        if(resp.data.permissions == "none"){
+          dispatch(PermissionsAlert())
+        }else if(resp.data.ack == "false"){
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Error getting nodes! ",
+            subtitle: resp.data.error,
+            variant: "danger"
+          }))
+          dispatch(toggleAlert(true))
+        }else if(resp.data.Nodes != null){
+          dispatch(accGetAllNodes(resp.data.Nodes))
+        }
+
       })
     }
   }
@@ -36,39 +51,48 @@ function accGetAllNodes(data) {
     }
 }
 
-// export function PingNode(nodeUUID) {
-//     const token = GetToken()
-//     const username = GetUserName()
+export function GetAllTags() {
+    const token = GetToken()
+    const username = GetUserName()
+  
+    let newHeaders = {
+      ...config.headers, 
+      'user': username,
+      'token': token
+    }
+    let newConfig = {headers: newHeaders}
 
-//     let newHeaders = {
-//       ...config.headers, 
-//       'user': username,
-//       'token': token,
-//     }
-//     let newConfig = {headers: newHeaders}
-      
-//     return (dispatch) => {
-//       axios.get('/api/pingNode/'+nodeUUID, newConfig)
-//       .then(resp => {
-//         //manage node status request
-//         if("ack" in resp.data){
-//           dispatch(accPingNode("offline", nodeUUID))
-//         }else{
-//           dispatch(accPingNode("online", nodeUUID))
-//         }
-//       })
-//     }
-//   }
-// function accPingNode(data, nodeUUID) {
-//     return {
-//       type: ActionTypes.PING_NODE,
-//       payload: {id:nodeUUID, status:data}
-//     }
-// }
+    return (dispatch) => {
+      axios.get('/api/tags', newConfig)
+      .then(resp => {
+        dispatch(ToggleProgressBar(false))
+
+        if(resp.data.token == "none"){RemoveToken()}
+        if(resp.data.permissions == "none"){
+          dispatch(PermissionsAlert())
+        }else if(resp.data.ack == "false"){
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Error getting node tags! ",
+            subtitle: resp.data.error,
+            variant: "danger"
+          }))
+          dispatch(toggleAlert(true))
+        }else{
+          dispatch(accGetAllTags(resp.data))
+        }
+
+      })
+    }
+  }
+function accGetAllTags(data) {
+    return {
+      type: ActionTypes.GET_ALL_TAGS,
+      payload: data
+    }
+}
 
 export function SetLoading(id) {
-    console.log("JAL - Set Loading action")
-    console.log(id)
     return (dispatch) => {
         dispatch(setLoadingNode(id))
     }
@@ -80,11 +104,7 @@ function setLoadingNode(id) {
     }
 }
 
-
 export function ResetLoading(id) {
-    console.log("JAL - Reset Loading action")
-    console.log(id)
-
     return (dispatch) => {
         dispatch(resetLoadingNode(id))
     }
@@ -111,7 +131,21 @@ export function DeleteNode(nodeUUID) {
     axios.delete('/api/deleteNode/'+nodeUUID, newConfig)
     .then(resp => {
       dispatch(ToggleProgressBar(false))
-      dispatch(getAllNodes())
+
+      if(resp.data.token == "none"){RemoveToken()}
+      if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
+        dispatch(AddAlertToAlertList({
+          id: new Date() / 1000+'-valid',
+          title: "Error deleting node ",
+          subtitle: resp.data.error,
+          variant: "danger"
+        }))
+        dispatch(toggleAlert(true))
+      }else{
+        dispatch(GetAllNodes())
+      }
     })
   }
 }
@@ -130,12 +164,29 @@ export function RegisterNode(nodeUUID) {
 
   return (dispatch)  => {
     axios.put('/api/registerNode/'+nodeUUID, {} ,newConfig)
-      .then(resp => {
+      .then(resp => {        
+        
         dispatch(ToggleProgressBar(false))
-        dispatch(getAllNodes())
+        
+        if(resp.data.token == "none"){RemoveToken()}
+        if(resp.data.permissions == "none"){
+          dispatch(PermissionsAlert())
+        }else if(resp.data.ack == "false"){
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Register node error ",
+            subtitle: resp.data.error,
+            variant: "danger"
+          }))
+          dispatch(toggleAlert(true))
+        }else{
+          dispatch(GetAllNodes())
+        }
     })
   }
 }
+
+
 
 export function Enroll(data) {
   const token = GetToken()
@@ -151,9 +202,23 @@ export function Enroll(data) {
 
   return (dispatch)  => {
     axios.post('/api/enrollNode', JSON.stringify(data) ,newConfig)
-      .then(resp => {
+      .then(resp => {        
         dispatch(ToggleProgressBar(false))
-        dispatch(getAllNodes())
+
+        if(resp.data.token == "none"){RemoveToken()}
+        if(resp.data.permissions == "none"){
+          dispatch(PermissionsAlert())
+        }else if(resp.data.ack == "false"){
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Enroll node error ",
+            subtitle: resp.data.error,
+            variant: "danger"
+          }))
+          dispatch(toggleAlert(true))
+        }else{
+          dispatch(GetAllNodes())
+        }
     })
   }
 }
@@ -212,8 +277,44 @@ export function EditNode(node) {
     //check default credentials
     axios.put('/api/editNode', JSON.stringify(node), newConfig)
     .then(resp => {
-      dispatch(ToggleAddNodeForm())
-      dispatch(getAllNodes())
+
+      dispatch(ToggleProgressBar(false))
+      if(resp.data.token == "none"){RemoveToken()}
+      if(resp.data.permissions == "none"){
+        dispatch(PermissionsAlert())
+      }else if(resp.data.ack == "false"){
+        dispatch(AddAlertToAlertList({
+          id: new Date() / 1000+'-valid',
+          title: "Error editing node ",
+          subtitle: resp.data.error,
+          variant: "danger"
+        }))
+        dispatch(toggleAlert(true))
+      }else{
+        dispatch(AddAlertToAlertList({
+          id: new Date() / 1000+'-valid',
+          title: "Edit node ",
+          subtitle: "The node has been edited successfully!",
+          variant: "success"
+        }))
+        dispatch(toggleAlert(true))
+        dispatch(GetAllNodes())
+      }
+      
     })
+  }
+}
+
+export function SaveSelectedTags(data) {
+  return {
+    type: ActionTypes.SAVE_SELECTED_TAGS,
+    payload: data
+  }
+}
+
+export function SaveGroupsSelected(data) {
+  return {
+    type: ActionTypes.SAVE_SELECTED_GROUPS,
+    payload: data
   }
 }

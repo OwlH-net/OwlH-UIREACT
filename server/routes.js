@@ -3,14 +3,6 @@ const OwlHService = require('./owlh-service')
 
 const router = express.Router()
 
-
-// router.get('/login', async (req, res, next) => {
-//   console.log('GET')
-//   console.log(req.body)
-//   const login = await OwlHService.getLogin(req.body)
-//   console.log(login)
-//   res.status(200).json(login)
-// })
 router.put('/login', async (req, res, next) => {
   const login = await OwlHService.getLogin(req.body)
   res.status(200).json(login)
@@ -26,18 +18,22 @@ router.put('/pass', async (req, res, next) => {
   res.status(200).json(pass)
 })
 
+router.put('/saveNewFileContent', async (req, res, next) => {
+  const pass = await OwlHService.saveNewFileContent(req)
+  res.status(200).json(pass)
+})
+
 router.get('/nodes', async (req, res, next) => {
   const nodes = await OwlHService.getNodes(req)
   res.status(200).json(nodes)
 })
 
-// router.get('/pingNode/:uuid', async (req, res, next) => {
-//   const ping = await OwlHService.pingNode(req)
-//   res.status(200).json(ping)
-// })
+router.get('/tags', async (req, res, next) => {
+  const tags = await OwlHService.getTags(req)
+  res.status(200).json(tags)
+})
 
 router.delete('/deleteExpertGroupRuleset', async (req, res, next) => {
-  console.log(req.body)
   const del = await OwlHService.DeleteExpertGroupRuleset(req)
   res.status(200).json(del)
 })
@@ -77,8 +73,8 @@ router.post('/group', async (req, res, next) => {
   res.status(200).json(reg)
 })
 
-router.get('/groups', async (req, res, next) => {
-  const reg = await OwlHService.getGroups(req)
+router.post('/syncPathGroup', async (req, res, next) => {
+  const reg = await OwlHService.SyncPathGroup(req)
   res.status(200).json(reg)
 })
 
@@ -95,6 +91,11 @@ router.put('/editNode', async (req, res, next) => {
 router.put('/addGroupNodes', async (req, res, next) => {
   const reg = await OwlHService.AddGroupNodes(req)
   res.status(200).json(reg)
+})
+
+router.get('/getAllOrganizations/:uuid', async (req, res, next) => {
+  const ping = await OwlHService.GetAllOrganizationNodes(req)
+  res.status(200).json(ping)
 })
 
 router.get('/getAllNodesGroup/:uuid', async (req, res, next) => {
@@ -137,9 +138,45 @@ router.put('/addRulesetsToGroup', async (req, res, next) => {
   res.status(200).json(reg)
 })
 
+router.put('/syncGroupRulesets', async (req, res, next) => {
+  const reg = await OwlHService.SyncGroupRulesets(req)
+  res.status(200).json(reg)
+})
+
+router.put('/getFileContent', async (req, res, next) => {
+  const reg = await OwlHService.GetFileContent(req)
+  res.status(200).json(reg)
+})
+
+router.put('/syncAllSuricataGroup', async (req, res, next) => {
+  const reg = await OwlHService.SyncAllSuricataGroup(req)
+  res.status(200).json(reg)
+})
+
+router.put('/editOrganization', async (req, res, next) => {
+  const reg = await OwlHService.EditOrganization(req)
+  res.status(200).json(reg)
+})
+
 router.get('/getGroupSelectedRulesets/:uuid', async (req, res, next) => {
   const ping = await OwlHService.GetGroupSelectedRulesets(req)
   res.status(200).json(ping)
 })
+
+router.get('/getAllOrganizations', async (req, res, next) => {
+  const ping = await OwlHService.GetAllOrganizations(req)
+  res.status(200).json(ping)
+})
+
+router.delete('/deleteOrg/:uuid', async (req, res, next) => {
+  const del = await OwlHService.DeleteOrg(req)
+  res.status(200).json(del)
+})
+
+router.put('/addOrganization', async (req, res, next) => {
+  const reg = await OwlHService.AddOrganization(req)
+  res.status(200).json(reg)
+})
+
 
 module.exports = router

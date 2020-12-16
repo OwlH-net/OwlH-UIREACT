@@ -7,12 +7,10 @@ import { connect, useStore } from 'react-redux';
 
 const Master = (props) => {
   const masterDelete = (masterID) => {
-    console.log(masterID)
     props.masterDeleteProp(masterID)
   }
 
   const activeMaster = (masterList, masterID) => {
-    console.log(masterID)
     const newActiveMaster = masterList.filter(master => master.name == masterID);
 
     props.loginSetActiveMaster(newActiveMaster)
