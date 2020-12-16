@@ -46,16 +46,21 @@ const AddNodeForm = (props) =>  {
             Orgs:props.orgsSelected,
             Suricata:{}
         }
+
         console.log(enrollData);
+        console.log(enrollData);
+        console.log(enrollData);
+        console.log(enrollData);
+
         props.toggleProgressBar(true)
-        //check if node is creating or editing
-        {
-            props.nodeToEdit.id == undefined || props.nodeToEdit.id == null || props.nodeToEdit.id == ""
-            ?
-            props.enroll(enrollData)
-            :
-            props.editNode(editData)
-        }
+        // //check if node is creating or editing
+        // {
+        //     props.nodeToEdit.id == undefined || props.nodeToEdit.id == null || props.nodeToEdit.id == ""
+        //     ?
+        //     props.enroll(enrollData)
+        //     :
+        //     props.editNode(editData)
+        // }
         props.toggleAddNodeForm()
     }
 

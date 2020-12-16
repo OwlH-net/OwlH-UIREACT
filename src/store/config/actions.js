@@ -99,6 +99,9 @@ export function GetAllOrgs() {
     }
   }
   function accGetAllOrgs(data) {
+    console.log(data);
+    console.log(data);
+    console.log(data);
     return {
       type: ActionTypes.GET_ALL_ORGS,
       payload: data
