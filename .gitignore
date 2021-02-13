@@ -1,4 +1,4 @@
 # ignore
-/.vscode
-/.vscode/sftp.json
-/.vscode/*
+.vscode
+.vscode/sftp.json
+.vscode/*
