@@ -97,7 +97,6 @@ export function loadCurrentMasters(){
   return (dispatch) => {
     // axios.get('/api/config')
     // .then(resp => {
-    //   console.log("------>"+resp)
     //   const config = resp.data 
     //   dispatch(getLoadConfiguration(config))
     // })

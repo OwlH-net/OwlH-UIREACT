@@ -23,9 +23,7 @@ export function GetAllNodes() {
     return (dispatch) => {
       axios.get('/api/nodes', newConfig)
       .then(resp => {
-        console.log(resp.data);
         dispatch(ToggleProgressBar(false))
-
         if(resp.data.token == "none"){RemoveToken()}
         if(resp.data.permissions == "none"){
           dispatch(PermissionsAlert())
@@ -37,7 +35,8 @@ export function GetAllNodes() {
             variant: "danger"
           }))
           dispatch(toggleAlert(true))
-        }else if(resp.data.Nodes != null){
+        // }else if(resp.data.Nodes != null){
+        }else{
           dispatch(accGetAllNodes(resp.data.Nodes))
         }
 
@@ -144,6 +143,7 @@ export function DeleteNode(nodeUUID) {
         }))
         dispatch(toggleAlert(true))
       }else{
+        dispatch(ToggleProgressBar(true))
         dispatch(GetAllNodes())
       }
     })
@@ -274,34 +274,45 @@ export function EditNode(node) {
   let newConfig = {headers: newHeaders}
 
   return (dispatch) => {    
-    //check default credentials
-    axios.put('/api/editNode', JSON.stringify(node), newConfig)
-    .then(resp => {
 
-      dispatch(ToggleProgressBar(false))
-      if(resp.data.token == "none"){RemoveToken()}
-      if(resp.data.permissions == "none"){
-        dispatch(PermissionsAlert())
-      }else if(resp.data.ack == "false"){
-        dispatch(AddAlertToAlertList({
-          id: new Date() / 1000+'-valid',
-          title: "Error editing node ",
-          subtitle: resp.data.error,
-          variant: "danger"
-        }))
-        dispatch(toggleAlert(true))
-      }else{
-        dispatch(AddAlertToAlertList({
-          id: new Date() / 1000+'-valid',
-          title: "Edit node ",
-          subtitle: "The node has been edited successfully!",
-          variant: "success"
-        }))
-        dispatch(toggleAlert(true))
-        dispatch(GetAllNodes())
-      }
-      
-    })
+    //check for errors
+    if(node.error){
+      dispatch(AddAlertToAlertList({
+        id: new Date() / 1000+'-valid',
+        title: "Error editing node ",
+        subtitle: node.error,
+        variant: "danger"
+      }))
+    }else{
+      //check default credentials
+      axios.put('/api/editNode', JSON.stringify(node), newConfig)
+      .then(resp => {
+  
+        dispatch(ToggleProgressBar(false))
+        if(resp.data.token == "none"){RemoveToken()}
+        if(resp.data.permissions == "none"){
+          dispatch(PermissionsAlert())
+        }else if(resp.data.ack == "false"){
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Error editing node ",
+            subtitle: resp.data.error,
+            variant: "danger"
+          }))
+          dispatch(toggleAlert(true))
+        }else{
+          dispatch(AddAlertToAlertList({
+            id: new Date() / 1000+'-valid',
+            title: "Edit node ",
+            subtitle: "The node has been edited successfully!",
+            variant: "success"
+          }))
+          dispatch(toggleAlert(true))
+          dispatch(GetAllNodes())
+        }
+        
+      })
+    }
   }
 }
 

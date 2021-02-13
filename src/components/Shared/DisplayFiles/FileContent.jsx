@@ -24,7 +24,6 @@ const FileContent = (props) => {
 
     useEffect(() => {
         var content = validateJSON(props.fileContentObject.fileContent)
-        console.log(content);
         if (content){
             var data = JSON.parse(props.fileContentObject.fileContent);
             SetJSONObject(data)

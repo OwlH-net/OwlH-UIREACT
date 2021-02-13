@@ -19,11 +19,8 @@ const NewMaster = (props) => {
   })
 
   useEffect(() => {
-    console.log('Master modified')
-
     if (Object.entries(props.editMaster).length === 0) { return }
 
-    console.log('will modify master')
     setMaster({
       // ...props.editMaster[0]
       name: props.editMaster[0].name,
@@ -104,7 +101,6 @@ const mapStateToProps = (state) => {
 
 // export default NewMaster;
 const mapDispatchToProps = dispatch => {
-  console.log("dispatch to props")
   const addNewMaster = (master) => {return newMaster(master)}
   return {
     addMaster: (master) => dispatch(addNewMaster(master))

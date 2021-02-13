@@ -99,9 +99,6 @@ export function GetAllOrgs() {
     }
   }
   function accGetAllOrgs(data) {
-    console.log(data);
-    console.log(data);
-    console.log(data);
     return {
       type: ActionTypes.GET_ALL_ORGS,
       payload: data
@@ -160,7 +157,6 @@ export function AddNewOrg(data) {
     return (dispatch)  => {
       axios.put('/api/addOrganization', JSON.stringify(data) ,newConfig)
         .then(resp => {        
-          console.log(resp.data);
           dispatch(ToggleProgressBar(false))
           
           if(resp.data.token == "none"){RemoveToken()}
