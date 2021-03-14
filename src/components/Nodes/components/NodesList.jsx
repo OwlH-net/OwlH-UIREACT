@@ -5,6 +5,7 @@ import ModalWindow from '../../Shared/ModalWindow'
 import { SetLoading, GetAllNodes, DeleteNode, NodeToEdit } from '../../../store/node/actions'
 import { ToggleModalWindow, ModalButtonClicked } from '../../../store/webUtilities/actions'
 import { connect } from 'react-redux';
+import { Link, NavLink } from 'react-router-dom';
 
 const NodesList = (props) => {
 
@@ -153,7 +154,8 @@ const NodesList = (props) => {
                     </td>
                     <td key={val.uuid+'-actions'}>
                         <span>
-                            <FaBoxOpen size={21} className="iconBlue"/> Manage node <br/>
+                            {/* <nav><NavLink to="manageNode" className="nav-link"><FaBoxOpen size={21} className="iconBlue"/></NavLink> Manage node </nav> <br/> */}
+                            <nav><Link to="manageNode" className="nav-link"><FaBoxOpen size={21} className="iconBlue"/> Manage node </Link> </nav>  <br/>
                             <hr style={{ color: "dodgerblue", backgroundColor: "dodgerblue", height: 1}}/>
                             <FaEdit size={21} className="iconBlue" onClick={() => {modifyCurrentNode(val.uuid, val)}}/> Modify node<br/>
                             <FaTrashAlt size={21} className="iconRed" onClick={() => {deleteCurrentNode(val.name, val.uuid)}}/> Delete node <br/>

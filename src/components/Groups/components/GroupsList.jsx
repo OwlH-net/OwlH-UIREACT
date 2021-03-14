@@ -63,7 +63,7 @@ const GroupsList = (props) => {
                     <td key={id+'-actions'}>
                         <div>
                             <FaEdit size={21} className="iconBlue" onClick={() => {showEditGroup(val)}}/> &nbsp;
-                            <NavLink to="GroupDetails"  onClick={() => {props.groupToDetails(val)}}><FaEye size={21} className="iconBlue" onClick={() => {loadDetails(val)}}/></NavLink>&nbsp;
+                            <NavLink to="GroupDetails" onClick={() => {props.groupToDetails(val)}}><FaEye size={21} className="iconBlue" onClick={() => {loadDetails(val)}}/></NavLink>&nbsp;
                             <FaTrashAlt size={21} className="iconRed" onClick={() => {accDeleteGroup(val.gname, val.guuid)}}/>
                         </div>
                     </td>
