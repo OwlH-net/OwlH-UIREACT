@@ -85,7 +85,7 @@ const ManagerNodeTabs = () => {
   return (
     <div className="container">
       <Tabs defaultActiveKey="suricata" id="uncontrolled-tab-example">
-        <Tab eventKey="suricata" title="Suricata"><Suricata></Suricata></Tab>
+        <Tab eventKey="suricata" title="Suricata"><p>1</p></Tab>
         <Tab eventKey="zeek" title="Zeek"><p>2</p></Tab>
         <Tab eventKey="snort" title="Snort"><p>3</p></Tab>
         <Tab eventKey="transport-wazuh" title="Transport - Wazuh"><p>3</p></Tab>
